@@ -1,0 +1,7 @@
+iPhoneX 适配
+import { TabbarSafeBottomMargin } from '../../utils/Device';
+<View style={styles.safeBottom}></View>
+safeBottom: {
+    backgroundColor: 'white',
+    height: TabbarSafeBottomMargin
+},

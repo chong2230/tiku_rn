@@ -1,0 +1,828 @@
+题库接口文档v0.2
+v0.2 修改点：
+1. /home/list接口中添加subtype
+
+参考ishare文档v1.1
+
+1【首页】接口
+1.1 资源集合接口
+1.2 顶部轮播图
+1.3 题库列表（subject）
+1.4 题库详情
+1.5 题目详情
+1.6 购买题库
+1.7 答题点评
+1.8 题目解析
+1.9 答题卡
+1.10 参加的考试，分类列表
+1.11 考试科目列表
+
+
+2【资讯】接口
+2.1 资讯列表
+
+3【个人】接口
+3.1 登录
+3.2 注册
+3.3 获取用户信息
+3.4 更新用户信息
+3.5 获取验证码（暂不实现）
+3.6 账户（TODO：未实现）
+3.7 已购
+3.8 礼券（是否开启待定）
+3.9 我的笔记（第二期）
+3.10 点击<我的笔记>里面的指定专栏笔记
+3.11 我的收藏（第二期）
+3.12 我的下载 （第二期）
+3.13 找回密码
+3.14 找回密码重置密码
+3.15 修改密码
+3.16 文件上传
+3.17 充值列表
+3.18 充值接口
+3.19 第三方登录
+
+1.【首页】接口
+1.1 首页资源集合接口（进入首页时请求）
+接口地址：/home/list
+传入参数：
+名称 示例值 是否必须 描述
+token 8d16e8b459 NO token用来标识用户是否登录
+返回数据举例
+{
+    "msg": "SUCCESS",
+    "code": 0,
+    "data": [
+
+        {
+            title: "热门内容",
+            type: 1,
+            contents : [
+                {
+                    id: 101,
+                    subtype: 'daily',
+                    title: "每日一练",
+                    image: "icon/1.png"
+                },
+                {
+                    id: 102,
+                    subtype: 'history',
+                    title: "历年真题",
+                    image: "icon/2.png"
+                }
+                {
+                    id: 103,
+                    subtype: 'exam',
+                    title: "模拟考试",
+                    image: "icon/3.png"
+                }
+                {
+                    id: 104,
+                    subtype: 'practice',
+                    title: "章节练习",
+                    image: "icon/4.png"
+                }                    
+            ],
+        },
+        {
+            title: "我的题库",
+            type: 2,
+            accuracy: 0,    // 正确率
+            contents : [
+                {
+                    id: 201,
+                    subtype: 'collect',
+                    title: "试题收藏",
+                    image: "icon/1.png"
+                },
+                {
+                    id: 202,
+                    subtype: 'record',
+                    title: "做题记录",
+                    image: "icon/2.png"
+                }
+                {
+                    id: 203,
+                    subtype: 'wrong',
+                    title: "错题库",
+                    image: "icon/3.png"
+                }
+                {
+                    id: 204,
+                    subtype: 'note',
+                    title: "题库笔记",
+                    image: "icon/4.png"
+                } 
+            ],
+        }    
+    ]   
+}
+返回参数说明：
+名称 示例值 是否必须 描述
+title 我的题库 No 新闻标题
+type 1 YES 资源类型：1热门内容 2我的题库
+contents YES 资源列表
+
+1.2 顶部轮播图
+接口地址：/home/slide
+传入参数：
+名称 示例值 是否必须 描述
+token 8d16e8b459 NO token用来标识用户是否登录
+返回数据举例
+{
+    "code": "0",
+    "msg": "",
+    "data": [
+        {
+            subjectId: 1,
+            name: "你好",
+            image: "img/banner/1.jpg"
+        }
+    ]
+}
+返回参数说明：
+名称 示例值 是否必须 描述
+subjectId 1 Y 题库id
+image imgs/icon_2.jpg Y 轮播图像位置
+注意：点击轮播图，根据subjectId跳转到对应的题库详情页面，或只做展示，不做跳转
+
+1.3 题库列表
+接口地址：/subject/list
+参数：
+category 题库分类，1每日一练 2历年真题 3模拟试卷 4章节练习 5知识点练习 6高频考点 7高频错题 8论文范文
+pageNumber 页数
+pageSize 每页大小
+order 排序方式，可选值：DESC（倒序）、ASC（正序）；默认值：DESC
+举例：
+注意：根据用户是否登录、是否购买，返回不同的数据。
+返回数据举例
+{
+    "code": "0",
+    "msg": "",
+    "data": [
+        {
+            id: 1,
+            category: 1,    // 题库分类，1每日一练 2历年真题 3模拟试卷 4章节练习 5知识点练习 6高频考点 7高频错题 8论文范文
+            type: 1,        // 题库类型，1 客观题 2 主观题
+            name: "2019年10月01日系统架构师每日一练",
+            subtype: "1",   // subtype对应初级、中级、高级
+            status: 1,      // 状态，未开始，进行中，已完成
+            price: 0,       // 价格
+            hasPurchase: 0, // 是否已支付，价格>0时需要购买才能使用
+        }
+    ]
+}
+
+1.4 题库详情
+接口地址：/subject/info?id=xxx
+参数：id（题库id）
+返回数据举例
+{
+    "code": "0",
+    "msg": "",
+    "data": {
+        id: 1,
+        category: 1,    // 题库分类，1每日一练 2历年真题 3模拟试卷 4章节练习 5知识点练习 6高频考点 7高频错题 8论文范文
+        type: 1,        // 题库类型，1 客观题 2 主观题
+        name: "2019年10月01日系统架构师每日一练",
+        subtype: "1",   // subtype对应初级、中级、高级
+        status: 1,      // 状态，未开始，进行中，已完成
+        price: 0,       // 价格
+        hasPurchase: 0, // 是否已支付，价格>0时需要购买才能使用
+    }
+}
+
+1.5 题目详情
+接口地址：/timu/info?id=xxx
+参数：id（题目id）
+返回数据举例
+{
+    "code": "0",
+    "msg": "",
+    "data": {
+        id: 1,
+        content: "IP报头包括哪些内容？",
+        category: "单选题",   // 单选题、多选题、判断题、问答题
+        imgs: ["timu/icon/1.png", "timu/icon/2.png"],    // 题目附带图片
+        choices: [
+            {
+                A: "",
+                B: "",
+                C: "",
+                D: "",
+                E: "",    // 预留，多选
+                F: "",
+                G: "",
+                H: "",
+            },
+            {
+                A: "",
+                B: "",
+                C: "",
+                D: "",
+            }
+        ],    
+        answers: ['A', 'B'],    // 回答   
+    }
+}
+
+1.6 购买题库
+接口地址：/subject/buy
+参数：
+id：题库id
+userVoucherId: 用户优惠券id
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        balance: 100
+    }
+}
+返回数据说明：
+balance：购买后的余额
+
+1.7 答题点评
+接口地址：/subject/result
+参数：
+id：题库id
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        totalCount: 10, // 总题数
+        rightCount: 4,  // 正确题数
+        wrongCount: 6,  // 错误题数
+        undoCount: 0,   // 未做题数
+        score: 55,      // 得分
+        totalScore: 100,    // 总分
+        costTime: 52,       // 答题时间，分钟
+        averageScore: 58,   // 平均得分
+    }
+}
+
+1.8 题目解析
+接口地址：/timu/analyse
+参数：
+id: 题目id
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        id: 1,
+        type: 1,        // 题库类型，1 客观题 2 主观题
+        content: "IP报头包括哪些内容？",
+        subtype: "1",   // subtype对应初级、中级、高级
+        imgs: ["timu/icon/1.png", "timu/icon/2.png"],    // 题目附带图片
+        choices: [
+            {
+                A: "",
+                B: "",
+                C: "",
+                D: "",
+                E: "",    // 预留，多选
+                F: "",
+                G: "",
+                H: "",
+            },
+            {
+                A: "",
+                B: "",
+                C: "",
+                D: "",
+            }
+        ],    
+        answers: ['A', 'B'], 
+        daans: ['B', 'C'],   
+        daanImgs: ["answer/icon/1.png", "answer/icon/2.png"],     // 答案附带图片  
+        detail: "POA是对象实现与ORB其他组件之间的中介，它将客户请求传送到伺服对象，按需创建子POA，提供管理伺服对象的策略。"
+    }
+}
+
+1.9 答题卡
+接口地址：/subject/card
+参数：
+id: 题库id
+timuId: 题目id
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {
+        hasCollect: 1,  // 是否已收藏，1 已收藏 0 未收藏
+        costTime: 100,      // 花费时间，单位秒
+        list: [ // 题目列表
+            {
+                timuId: 1,
+                status: 1,  // 状态，1 当前 2 已做 3 未做 4 标记  
+            }
+        ]
+    }
+}
+
+1.10 参加的考试，分类列表
+接口地址：/category/list
+参数：
+无
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {        
+        list: [ // 考试分类
+            {
+                id: 1,
+                name: '软考',
+                sublist: [
+                    {
+                        id: 1,
+                        name: '软考高级',
+                        contents: [
+                            {
+                                id: 1,
+                                name: '系统分析师'
+                            },
+                            {
+                                id: 2,
+                                name: '信息系统项目管理师'
+                            },
+                            {
+                                id: 3,
+                                name: '网络规划设计师'
+                            },
+                            {
+                                id: 4,
+                                name: '系统架构设计师'
+                            },
+                            {
+                                id: 5,
+                                name: '系统规划与管理师'
+                            },
+                        ]
+                    },
+                    {
+                        id: 2,
+                        name: '软考中级'
+                    },
+                    {
+                        id: 3,
+                        name: '软考初级'
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: '通信',
+                contents: [
+                    {
+                        id: 1,
+                        name: '初级通信工程师'
+                    },
+                    {
+                        id: 2,
+                        name: '中级通信工程师'
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: '建筑工程'
+            },
+            {
+                id: 4,
+                name: '会计'
+            },
+            {
+                id: 5,
+                name: '药师'
+            }
+        ]
+    }
+}
+
+
+1.11 考试科目列表
+接口地址：/exam/list
+参数：
+id: categoryId
+返回数据举例
+{
+    "code": 0,
+    "msg": "",
+    "data": {        
+        list: [ // 考试科目 软考高级
+            {
+                id: 1,
+                name: '系统分析师'
+            },
+            {
+                id: 2,
+                name: '信息系统项目管理师'
+            },
+            {
+                id: 3,
+                name: '网络规划设计师'
+            },
+            {
+                id: 4,
+                name: '系统架构设计师'
+            },
+            {
+                id: 5,
+                name: '系统规划与管理师'
+            }
+        ]
+    }
+}
+
+
+2【发现】接口
+2.1 发现列表
+接口地址：/discover/list
+传入参数：无
+
+2.2 ～（列表详情及章节参考专栏数据）
+
+3.【个人】接口
+3.1 登录
+接口地址：/user/login
+传入参数：
+名称 示例值 是否必须 描述
+phone 13011035808 YES 用于登录手机号
+password 0 YES 登录密码/或者验证码
+返回数据举例
+{
+"code":0,
+"msg":"SUCCESS",
+"data":
+
+{
+    "id":1,
+    "nickName":"jodon",
+    "avatarImage":"img/author/1.jpg",
+    "phone":"15911158932",
+    "email":null,
+    "sex":0,
+    "birthday":null,
+    "education":null,
+    "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MzY1OTc1NTEsInVzZXJJZCI6MX0.owZzqXAsFRz8IRrxtsgxVf0pMvfPJWcQbMCyN7g3RUA",
+    "gmtCreate":"2018-08-2422:47:13.0",
+    "gmtModified":"2018-08-24 22:47:13.0",
+    "balance": 0
+    }
+}
+返回参数说明：
+balance: 用户余额
+后续凡是涉及用户相关的接口，请在header带上token,格式如下：
+Authorization: Bearer
+类似代码如下：
+request.header("Authorization","Bearer ");
+
+3.2 注册
+接口地址：/user/register
+传参和返回参考登录接口
+
+3.3 获取用户信息
+接口地址：/user/info
+传入参数：
+名称 示例值 是否必须 描述
+token xxx YES 在header里面的Authorization传递“Bearer ”
+返回参考登录接口
+
+3.4 更新用户信息
+接口地址：/user/update
+传入参数：
+名称 示例值 是否必须 描述
+token xxx YES 在header里面的Authorization传递“Bearer ”
+nickName 昵称
+avatarImage 头像
+phone 手机号
+email 邮箱
+sex 性别 1男 2女
+birthday 生日 格式：yyyy-MM-dd
+education 学历 1高中 2专科 3本科 4硕士 5博士
+所有参数非必须，传入对应参数，则修改对应的用户信息
+
+3.5 获取验证码（暂不实现）
+接口地址：/user/getCode
+传入参数：
+名称 示例值 是否必须 描述
+phone 13011035808 YES 用于接收短信的手机号
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": "",
+}
+返回参数说明：
+名称 示例值 是否必须 描述
+code 0 YES 0：表示成功，1：表示失败
+
+3.6 账户（TODO：未实现，废弃，余额在用户信息里显示）
+接口地址：/user/recharge
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+money 5 YES 充值金额
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": [
+"balance":98.00
+],
+}
+返回参数说明：
+名称 示例值 是否必须 描述
+code 0 YES 0：表示成功，1：表示失败
+balance 98.00 YES 表示充值完成之后账户余额
+
+3.7 已购
+接口地址：/user/hadsubColumnList
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+pageNumber 1 NO 默认从第一页开始
+pageSize 20 NO 每页大小，默认20
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": {
+list: [
+
+      {
+        "id": 2,
+        "category": "parent_child_reading",
+        "title": "和孩子一起学习古诗词·上篇",
+        "subtitle": "学习小学阶段古诗词",
+        "image": "img/parent_child_reading/58c372eeab9949e9add3e3613653d746.jpg",
+        "authorName": "四叶草",
+        "authorAvatarImage": "img/parent_child_reading/eefcbfdcd8e14bada7cc7331a40013bb.jpg",
+        "authorTitle": "教育者",
+        "gmtCreate": "2018-08-24 14:07:25.0",
+        "gmtModified": "2018-08-24 14:07:25.0"
+    }
+    ]
+}
+}
+返回参数内容同首页资源数据
+
+3.8 礼券
+接口地址：/user/voucher
+传入参数：
+名称 示例值 是否必须 描述
+pageNumber 1 NO 第几页, 默认是1
+pageSize 10 NO 每页数量，默认是10
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": [
+
+      { 
+        "id":39,
+        "voucherId":1,
+        "title":"新人礼券",
+        "content":"仅限购买超过60元的商品",
+        "startDate":"2018.10.01",
+        "endDate":"2018.05.01",
+        "price":30,
+        "status":0
+      }
+    ],
+}
+返回参数说明：
+名称 示例值 是否必须 描述
+id 39 YES 用户优惠券id
+voucherId 1 YS 优惠券id
+title 23 YES 优惠劵名称
+content 仅限购买超过10元的商品 YES 优惠劵使用说明
+startDate 2018.05.01 YES 开始时间
+endDate 2018.10.01 YES 结束时间
+price 66 YES 优惠金额
+status 0 未使用 1 已使用
+
+3.9 我的笔记
+接口地址：/note/all
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+返回数据举例
+{
+"code": 0,
+"msg": "SUCCESS",
+"data": [
+{
+"category": "parent_child_reading",
+"alias": "专栏",
+"list": [
+{
+"columnId": 1,
+"title": "Service Mesh实践指南",
+"image": "img/subject/1.jpg",
+"total": 2
+},
+{
+"columnId": 2,
+"title": "深入浅出gRPC",
+"image": "img/subject/2.jpg",
+"total": 1
+}
+]
+},
+{
+"category": "other",
+"alias": "课程",
+"list": [
+{
+"columnId": 1,
+"title": "快速上手Kotlin开发",
+"image": "img/course/1.jpg",
+"total": 1
+},
+{
+"columnId": 3,
+"title": "零基础学Python",
+"image": "img/course/3.jpg",
+"total": 1
+}
+]
+}
+]
+}
+
+返回参数说明：
+名称 示例值 是否必须 描述
+
+3.10 点击<我的笔记>里面的指定专栏笔记
+接口地址：/note/listByColumn
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+columnId 1 YES 专栏ID
+pageNumber 1 NO 当前页，默认1
+pageSize 10 NO 每页数量，默认10
+返回数据举例
+{
+"code": 0,
+"msg": "SUCCESS",
+"data": [
+{
+"id": 1,
+"content": "不错",
+"fromArticleId": 2,
+"fromArticleTitle": "01|架构是什么",
+"content": "多读书多读书多读书多读书多读书多读书多读书",
+"gmtCreate": "2018-08-24 15:07:24.0",
+"gmtModified": "2018-08-24 15:07:24.0"
+},
+{
+"id": 2,
+"content": "很好",
+"fromArticleId": 3,
+"fromArticleTitle": "02|奋斗",
+"content": "多读书多读书多读书多读书",
+"gmtCreate": "2018-08-24 15:07:25.0",
+"gmtModified": "2018-08-24 15:07:26.0"
+}
+]
+}
+
+3.11 我的收藏（暂时不做）
+接口地址：/user/collect
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": ""
+}
+
+3.12 我的下载 （暂时不做）
+接口地址：/user/downloads
+传入参数：
+名称 示例值 是否必须 描述
+token 88we884f54t24 YES 用户登录的token
+返回数据举例
+{
+"code": "0",
+"msg": "",
+"data": ""
+}
+
+3.13 找回密码
+接口地址：/user/findPassword
+参数：
+email 电子邮箱
+返回数据举例
+{
+"code": "0",
+"msg": ""
+}
+
+3.14 找回密码重置密码:
+接口地址：/user/resetPassword
+参数:
+email
+code 邮件里面的验证码
+newPassword 新密码
+
+3.15 修改密码:
+接口地址：/user/modifyPassword
+参数:
+oldPassword 旧密码
+newPassword 新密码
+
+3.16 文件上传
+接口地址：/file/upload
+参数：
+token
+file 文件（暂时只支持单个文件）
+classify 分类（英文，例如：图片下面存在的分类为头像/专栏etc）
+返回数据举例：
+{
+"msg": "SUCCESS",
+"code": 0,
+"data": "img/author/cbosif.jpeg"
+}
+
+3.17 充值列表
+接口地址：/recharge/list
+参数：无
+返回数据举例：
+{
+"msg": "SUCCESS",
+"code": 0,
+"data": [
+
+        {
+            "id": "com.redatoms.imojo.sg.r001",
+            "name": "60元宝",
+            "money": "6",
+            "rm": "60",
+            "discountMoney": "6",
+            "discount": null,
+            "description": null,
+            "type": "1",
+            "status": 0,
+            "subId": null,
+            "firstRechargeMonth": 1,
+            "firstRechargeFactor": 2
+        },
+        {
+            "id": "com.redatoms.imojo.sg.r002",
+            "name": "320元宝",
+            "money": "30",
+            "rm": "320",
+            "discountMoney": "30",
+            "discount": null,
+            "description": null,
+            "type": "1",
+            "status": 0,
+            "subId": null,
+            "firstRechargeMonth": 1,
+            "firstRechargeFactor": 2
+        }
+    ]
+},
+返回参数说明：
+id：商品id
+money：支付多少钱
+rm：获得多少知币
+discountMoney：折扣价
+discount：几折
+type：商品类型，0：月卡等 1：普通商品
+status：状态，0：未购买 1：已购买
+subId：前缀标识，month_ticket：月卡 vip_recharge：vip
+firstRechargeMonth：首冲翻倍 or 按月首冲翻倍
+firstRechargeFactor：倍数
+
+3.18 苹果支付验证接口
+接口地址：/recharge/appleverify
+参数：receipt 验证数据
+返回数据举例：
+{
+"code": 0,
+"msg": "SUCCESS",
+"data": 1000 // 余额
+}
+
+3.19 第三方登录
+接口地址：/user/thirdPartyLogin
+参数：
+type 微信：'wx', QQ：'qq', 微博：'wb'
+openid
+accessToken
+返回数据举例：
+{
+"code": 0,
+"msg": "SUCCESS",
+"data": {
+token: 'jlsjlsk'
+}
+}
