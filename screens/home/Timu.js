@@ -15,6 +15,7 @@ import Bar from '../../components/Bar';
 import Header from '../../components/Header';
 import TimuCardModal from './TimuCardModal';
 import Button from '../../components/Button';
+import Toast from '../../components/Toast';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
@@ -107,6 +108,7 @@ export default class Timu extends Component {
 					info = Object.assign({}, result.data, info);
 					console.log('info ', info);
 					this.setState({
+						index: index || 1,	// 不传则默认为1
 						info: info,
                         askList: result.data.askList
 					});
@@ -129,6 +131,12 @@ export default class Timu extends Component {
 	}
 
 	_getAnalyse = () => {
+		let { state } = this.props.navigation;
+		if (!state.params.isAnalyse &&
+			(state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')) {
+            this.toast.show('答题时不能查看解析哦~');
+			return;
+		}
 		let showAnalyse = this.state.showAnalyse;
 		showAnalyse[this.state.index - 1] = !showAnalyse[this.state.index - 1];
 		this.setState({
@@ -205,22 +213,13 @@ export default class Timu extends Component {
 	_getPrev = () => {
 		if (this.state.index == 1) return;
 		let id = this.state.list[this.state.index-2].id
-		this._getTimu(id);
-		let index = this.state.index - 1;
-		this.setState({
-			index: index
-		});
+		this._getTimu(id, this.state.index - 1);
 	}
 
 	_getNext = () => {
 		if (this.state.index == this.state.total) return;
 		let id = this.state.list[this.state.index].id;
-		this._getTimu(id);
-		let index = this.state.index + 1;
-		this.setState({
-			index: index
-		})
-		
+		this._getTimu(id, this.state.index + 1);
 	}
 
 	// 保存答题记录
@@ -311,10 +310,7 @@ export default class Timu extends Component {
 
     _chooseTimu = (index) => {
     	let id = this.state.list[index-1].id;
-		this._getTimu(id);
-		this.setState({
-			index: index
-		});
+		this._getTimu(id, index);
     }
 
     _handlePaper = () => {
@@ -354,8 +350,11 @@ export default class Timu extends Component {
     _renderQuestions = () => {
         switch (this.state.info.type) {
 			case '单选题':
+            case '单项选择题':
 			case '多选题':
+            case '多项选择题':
             case '不定项':
+            case '不定项选择题':
             case '判断题':
             	return this._renderChoiceQuestions();
                 break;
@@ -372,7 +371,7 @@ export default class Timu extends Component {
 		}
 	}
 
-	// 单选题/多选题/不定项
+	// 单选题/多选题/不定项/判断题
     _renderChoiceQuestions = () => {
         let info = this.state.info;
         let questionsView = [];
@@ -381,13 +380,20 @@ export default class Timu extends Component {
             let choicesView = [];
             for (let key in choice) {
                 if (key) {
+                	let choiceText = choice[key];
+                	if (choiceText.indexOf(key.toUpperCase() + '.') != 0
+                		&& choiceText.indexOf(key.toUpperCase() + '、') != 0
+                		&& choiceText.indexOf(key.toUpperCase() + ' ') != 0
+                		&& choiceText.indexOf(key.toUpperCase() + '．') != 0) {
+                			choiceText = key.toUpperCase() + '. ' + choice[key];
+                    }
                     let choiceView = (
                         <TouchableOpacity onPress={()=>{this._choose(key, i)}} key={info.id + '_choice_' + i + '_' + key}>
                             <View>
                                 <Text style={[styles.choiceText,
                                     this.state.currentAnswers[i] && this.state.currentAnswers[i].indexOf(key) != -1 ?
                                         styles.selectChoiceText : null]}>
-                                    {key.toUpperCase() + '. ' + choice[key]}
+                                    {choiceText}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -399,9 +405,7 @@ export default class Timu extends Component {
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
 					{
-                        this.state.askList[i].ask ?
-						<Text style={styles.title}>{this.state.askList[i].ask}</Text>
-						: null
+                        this._renderAsk(i)
 					}
                     <TouchableOpacity onPress={()=>{}}>
                         <View>{choicesView}</View>
@@ -412,28 +416,6 @@ export default class Timu extends Component {
         }
         return questionsView;
     }
-
-    // 判断题
-	_renderTrueFalseQuestions = () => {
-        let info = this.state.info;
-        let questionsView = [];
-        for (let i in info.choices) {
-            let choice = info.choices[i];
-            let choicesView = [];
-            let questionView = (
-                <View style={styles.question} key={info.id + '_choice_' + i}>
-                    {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
-                    {
-                        this.state.askList[i].ask ?
-                            <Text style={styles.title}>{this.state.askList[i].ask}</Text>
-                            : null
-                    }
-                </View>
-            );
-            questionsView.push(questionView);
-        }
-        return questionsView;
-	}
 
 	// 填空题
 	_renderFillBlankQuestions = () => {
@@ -447,6 +429,9 @@ export default class Timu extends Component {
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
+                    {
+                        this._renderAsk(i)
+                    }
                     <TextInput
                         editable={!state.params.isAnalyse ? true : false}
                         onChangeText={(text)=>{this._onChangeText(text, i)}}
@@ -472,9 +457,7 @@ export default class Timu extends Component {
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
                     {
-                        this.state.askList[i].ask ?
-                            <Text style={styles.title}>{this.state.askList[i].ask}</Text>
-                            : null
+                        this._renderAsk(i)
                     }
                     <TextInput
                         editable={!state.params.isAnalyse ? true : false}
@@ -490,22 +473,26 @@ export default class Timu extends Component {
         return questionsView;
 	}
 
+	_renderAsk = (index) => {
+		return (
+            this.state.askList[index].ask ?
+                <Text style={styles.title}>{this.state.index + '. ' + this.state.askList[index].ask.replace(/^\d*\./, '')}</Text>
+                : null
+		);
+	}
 
     // 解析
 	_renderAnalysis = () => {
         let info = this.state.info;
         let answer = info.answers;
         if (answer && answer instanceof Array) answer = answer.join('    ');
-        let analysis = info.analysis;
+        let analysis = isJson(info.analysis) ? JSON.parse(info.analysis) : info.analysis;
         let analysisView = [];
-        if (isJson(info.analysis)) {
-            analysis = JSON.parse(info.analysis);
-            if (analysis && analysis instanceof Array) {
-                for (let i in analysis) {
-                    analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i]}</Text>)
-                }
-            }
-        }
+		if (analysis && analysis instanceof Array) {
+			for (let i in analysis) {
+				analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i].replace(/^\d*\./, '')}</Text>)
+			}
+		}
         // 适配答案有一图和多图的情况
         let answerImgView = [];
         if (info.answerImg && info.answerImg instanceof Array) {
@@ -620,6 +607,7 @@ export default class Timu extends Component {
                         </Modal> 
                     </View>: null
                 }
+                <Toast ref={(ref)=>this.toast = ref} position="center" />
 			</View>
 		);
 	}
@@ -647,8 +635,9 @@ const styles = StyleSheet.create({
 		// height: 20,
         lineHeight: 20,
         marginTop: 10,
-		marginBottom: 10
-	},
+		marginBottom: 10,
+        paddingRight: 10
+    },
 	questionText: {
 		fontSize: 15,
 		color: Colors.highlight,
@@ -681,7 +670,7 @@ const styles = StyleSheet.create({
 		height: 300
 	},
 	analyseView: {
-		height: 20,
+		// height: 20,
 		marginTop: 10,
 		marginBottom: 10
 	},
@@ -697,10 +686,13 @@ const styles = StyleSheet.create({
         color: Colors.highlight
 	},
 	analyseContent: {
+		width: width - 20,
 		fontSize: 15,
-		height: 20,
-		marginTop: 10
-	},
+		// height: 20,
+        lineHeight: 20,
+		marginTop: 10,
+        paddingRight: 10
+    },
 	bottom: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',

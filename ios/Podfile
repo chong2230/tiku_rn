@@ -36,7 +36,7 @@ target 'tiku_rn' do
 
   pod 'RNIap', :path => '../node_modules/react-native-iap'
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker/react-native-image-picker.podspec'
-  pod 'Picker', :path => '../node_modules/react-native-picker'
+#  pod 'Picker', :path => '../node_modules/react-native-picker'
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
   pod 'RNIap', :path => '../node_modules/react-native-iap'
   pod 'react-native-video', :path => '../node_modules/react-native-video/react-native-video.podspec'

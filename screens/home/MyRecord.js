@@ -34,7 +34,7 @@ let pageSize = 10;
 let hasMore = false;
 let isLoading = false;  // 加载更多
 
-export default class Subject extends PureComponent{
+export default class MyRecord extends PureComponent{
 
     // 构造器
     constructor(props){
@@ -44,6 +44,7 @@ export default class Subject extends PureComponent{
             refreshing: false,
             flatHeight: 0,
             indexText: '',
+            hasLoad: false
         };
     }
 
@@ -60,8 +61,8 @@ export default class Subject extends PureComponent{
         let param = {
             pageNumber: pageNumber,
             pageSize: pageSize,
-            professionId: params.course.professionId,
-            courseId: params.course.id
+            professionId: global.course.professionId,
+            courseId: global.course.courseId || global.course.id
         }
         Common.getMyRecord(params, (result)=>{
             console.log('getMyRecord ', result);
@@ -78,7 +79,8 @@ export default class Subject extends PureComponent{
                     data = list;
                 }
                 this.setState({
-                    listData: data
+                    listData: data,
+                    hasLoad: true // 控制加载前的第一次渲染，不显示显示空内容
                 });
             }
         });
@@ -146,6 +148,7 @@ export default class Subject extends PureComponent{
 
     // userStatus: 1 未做过 2 已做过 3 已做完
     _renderItem = (item) =>{
+        let { state } = this.props.navigation;
         let rowData = item.item;
         let btnText = '开始做题';
         if (rowData.userStatus == 2) btnText = '继续做题';
@@ -165,25 +168,39 @@ export default class Subject extends PureComponent{
                     />
                     <Text style={styles.level}>{rowData.level}</Text>
                     <View style={{flex: 1}}></View>
-                    <Button text={btnText}
-                            style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
-                            onPress={()=>{this._startPractise(rowData)}}></Button>
+                    {
+                        rowData.userStatus == 3 ?
+                            <Button text={'查看解析'}
+                                    style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
+                                    onPress={()=>{this._startPractise(rowData, true)}}></Button>
+                            : null
+                    }
+                    {
+                        rowData.userStatus == 3 &&
+                        (rowData.functionName == '历年真题' || rowData.functionName == '模拟试卷') ? null :
+                            <Button text={btnText}
+                                    style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
+                                    onPress={()=>{this._startPractise(rowData)}}></Button>
+                    }
                 </View>
             </View>
         );
     };
 
-    _startPractise = (data) => {
+    _startPractise = (data, isAnalyse) => {
         console.log('start ', data);
         const { navigate, state } = this.props.navigation;
         if (global.token) {
-            navigate("Timu", {id: data.id, isVisible: false, callback:()=>{
+            navigate("Timu", {id: data.id, functionName: state.params.title, functionId: state.params.functionId,
+                type: isAnalyse ? 1 : 2,
+                isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
                     this._reload();
-                }});
+                }
+            });
         } else {
-            navigate('Login', { isVisiable: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
+            navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
                     if (token != null) {
-                        this._getList();
+                        this._reload();
                     }
                 } });
         }
@@ -208,28 +225,31 @@ export default class Subject extends PureComponent{
                     }
                     goBack();
                 }}></Header>
-                <FlatList
-                    ref={ ref => this.flatList = ref }
-                    data={ this.state.listData }
-                    extraData={ this.state.selected }
-                    keyExtractor={ this._keyExtractor }
-                    renderItem={ this._renderItem }
-                    // 初始加载的条数，不会被卸载
-                    initialNumToRender={10}
-                    // 决定当距离内容最底部还有多远时触发onEndReached回调；数值范围0~1，例如：0.5表示可见布局的最底端距离content最底端等于可见布局一半高度的时候调用该回调
-                    onEndReachedThreshold={0.1}
-                    // 当列表被滚动到距离内容最底部不足onEndReacchedThreshold设置的距离时调用
-                    onEndReached={ this._onEndReached }
-                    //ListHeaderComponent={ this._renderHeader }
-                    // ListFooterComponent={ this._renderFooter }
-                    ItemSeparatorComponent={ this._renderItemSeparatorComponent }
-                    ListEmptyComponent={ this._renderEmptyView }
-                    onLayout={this._setFlatListHeight}
-                    refreshing={ this.state.refreshing }
-                    onRefresh={ this._renderRefresh }
-                    // 是一个可选的优化，用于避免动态测量内容；+50是加上Header的高度
-                    //getItemLayout={(data, index) => ( { length: 40, offset: (40 + 1) * index + 50, index } )}
-                />
+                {
+                    this.state.hasLoad ?
+                        <FlatList
+                            ref={ ref => this.flatList = ref }
+                            data={ this.state.listData }
+                            extraData={ this.state.selected }
+                            keyExtractor={ this._keyExtractor }
+                            renderItem={ this._renderItem }
+                            // 初始加载的条数，不会被卸载
+                            initialNumToRender={10}
+                            // 决定当距离内容最底部还有多远时触发onEndReached回调；数值范围0~1，例如：0.5表示可见布局的最底端距离content最底端等于可见布局一半高度的时候调用该回调
+                            onEndReachedThreshold={0.1}
+                            // 当列表被滚动到距离内容最底部不足onEndReacchedThreshold设置的距离时调用
+                            onEndReached={ this._onEndReached }
+                            //ListHeaderComponent={ this._renderHeader }
+                            // ListFooterComponent={ this._renderFooter }
+                            ItemSeparatorComponent={ this._renderItemSeparatorComponent }
+                            ListEmptyComponent={ this._renderEmptyView }
+                            onLayout={this._setFlatListHeight}
+                            refreshing={ this.state.refreshing }
+                            onRefresh={ this._renderRefresh }
+                            // 是一个可选的优化，用于避免动态测量内容；+50是加上Header的高度
+                            //getItemLayout={(data, index) => ( { length: 40, offset: (40 + 1) * index + 50, index } )}
+                        /> : null
+                }
                 <View style={styles.safeBottom}></View>
                 <Toast
                     ref="toast"
@@ -243,7 +263,7 @@ export default class Subject extends PureComponent{
     }
 }
 
-Subject.navigationOptions = {
+MyRecord.navigationOptions = {
     header: null,
 };
 

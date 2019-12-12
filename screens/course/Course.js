@@ -4,23 +4,14 @@
 
 import React, { Component } from 'react';
 import {
-    Platform,
     StyleSheet,
     Text,
-    // Button,
-    MenuButton,
     Image,
-    Alert,
     View,
-    StatusBar,
-    ScrollView,
-    ListView,
     FlatList,
-    TouchableOpacity,
     TouchableWithoutFeedback,
     Dimensions
 } from 'react-native';
-// import Orientation from 'react-native-orientation';
 import * as RNIap from 'react-native-iap';
 
 import Bar from '../../components/Bar';
@@ -33,7 +24,6 @@ import Storage from '../../utils/Storage';
 import { removeReceipt } from '../../utils/Util';
 import News from "../news/News";
 import {TabbarSafeBottomMargin} from "../../utils/Device";
-// import HomeNews from './homeNews';
 
 const deviceW = Dimensions.get('window').width;
 const bannerHeight = deviceW*180/375;
@@ -55,7 +45,6 @@ export default class Course extends React.Component {
             pageHasChanged: (p1, p2) => p1 !== p2
         });
         this._onItemClick = this._onItemClick.bind(this);
-        let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         // 实际的DataSources存放在state中
         this.state = {
             selectedNews: 0,

@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import Bar from '../../components/Bar';
+import Header from '../../components/Header';
 import SafeAccountItem from './safeAccountItem';
 
 export default class SafeAccount extends Component {
@@ -44,6 +45,10 @@ export default class SafeAccount extends Component {
         return (
             <View>
                 <Bar />
+                <Header title={'账号安全'} goBack={()=>{
+                        let { goBack } = this.props.navigation;
+                        goBack();
+                    }} bottomLineColor={'rgba(0, 0, 0)'} />
                 <SafeAccountItem txt1 = '修改密码' style={{marginTop: 10}} onPress={this._changePwd}/>
                 <SafeAccountItem txt1 = '更换手机号' onPress={this._changePhone}/>
                 <SafeAccountItem txt1 = '绑定微信' onPress={this._bindWx}/>

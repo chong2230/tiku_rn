@@ -114,184 +114,189 @@ const MockData = {
     },
 	// 专业列表
 	'/profession/list': {
-	    "code":0,
-	    "data":[
-	        {
-	            "comments":"各种会计考试",
-	            "courseCategory":[
-	                {
-	                    "courses":[
-	                        {
-	                            "category":"初级",
-	                            "comments":"",
-	                            "gmtCreate":"2019-10-10 00:00:00.0",
-	                            "gmtModified":"2019-10-10 00:00:00.0",
-	                            "id":1,
-	                            "image":"",
-	                            "name":"初级会计师1",
-	                            "professionId":1,
-	                            "status":1
-	                        },
-	                        {
-	                            "category":"初级",
-	                            "comments":"",
-	                            "gmtCreate":"2019-10-10 00:00:00.0",
-	                            "gmtModified":"2019-10-10 00:00:00.0",
-	                            "id":5,
-	                            "image":"",
-	                            "name":"初级会计师2",
-	                            "professionId":1,
-	                            "status":1
-	                        }
-	                    ],
-	                    "name":"初级"
-	                },
-	                {
-	                    "courses":[
-	                        {
-	                            "category":"中级",
-	                            "comments":"",
-	                            "gmtCreate":"2019-10-10 00:00:00.0",
-	                            "gmtModified":"2019-10-10 00:00:00.0",
-	                            "id":2,
-	                            "image":"",
-	                            "name":"中级会计师",
-	                            "professionId":1,
-	                            "status":1
-	                        }
-	                    ],
-	                    "name":"中级"
-	                },
-	                {
-	                    "courses":[
-	                        {
-	                            "category":"高级",
-	                            "comments":"",
-	                            "gmtCreate":"2019-10-10 00:00:00.0",
-	                            "gmtModified":"2019-10-10 00:00:00.0",
-	                            "id":3,
-	                            "image":"",
-	                            "name":"高级会计师",
-	                            "professionId":1,
-	                            "status":1
-	                        }
-	                    ],
-	                    "name":"高级"
-	                }
-	            ],
-	            "id":1,
-	            "image":"",
-	            "name":"会计专业",
-	            "status":1
-	        },
-	        {
-	            "comments":"各种通信考证",
-	            "courseCategory":[
-	                {
-	                    "courses":[
-	                        {
-	                            "category":"默认",
-	                            "comments":"",
-	                            "gmtCreate":"2019-10-10 00:00:00.0",
-	                            "gmtModified":"2019-10-10 00:00:00.0",
-	                            "id":4,
-	                            "image":"",
-	                            "name":"系统分析师",
-	                            "professionId":2,
-	                            "status":1
-	                        }
-	                    ],
-	                    "name":"默认"
-	                }
-	            ],
-	            "id":2,
-	            "image":"",
-	            "name":"通信专业",
-	            "status":1
-	        }
-	    ],
-	    "msg":"SUCCESS"
-	},
+        "code": 0,
+        "data": [
+            {
+                "comments": "",
+                "courseCategory": [
+                    {
+                        "courses": [
+                            {
+                                "category": "传输",
+                                "comments": "",
+                                "curriculums": [
+                                    {
+                                        "comments": "",
+                                        "courseId": 16,
+                                        "gmtCreate": "2019-11-26 19:56:47",
+                                        "gmtModified": "2019-11-26 19:56:51",
+                                        "id": 7,
+                                        "image": "",
+                                        "name": "传输L1",
+                                        "professionId": 8,
+                                        "status": 1
+                                    }
+                                ],
+                                "gmtCreate": "2019-11-26 19:56:46",
+                                "gmtModified": "2019-11-26 19:56:46",
+                                "id": 16,
+                                "image": "",
+                                "name": "传输L1",
+                                "professionId": 8,
+                                "status": 1
+                            }
+                        ],
+                        "name": "传输"
+                    }
+                ],
+                "id": 8,
+                "image": "",
+                "name": "中国移动通信集团技能认证",
+                "status": 1
+            },
+            {
+                "comments": "",
+                "courseCategory": [
+                    {
+                        "courses": [
+                            {
+                                "category": "初级",
+                                "comments": "",
+                                "curriculums": [
+                                    {
+                                        "comments": "",
+                                        "courseId": 11,
+                                        "gmtCreate": "2019-11-24 16:25:39",
+                                        "gmtModified": "2019-12-03 16:42:06",
+                                        "id": 1,
+                                        "image": "",
+                                        "name": "会计实务",
+                                        "professionId": 5,
+                                        "status": 1
+                                    },
+                                    {
+                                        "comments": "",
+                                        "courseId": 11,
+                                        "gmtCreate": "2019-11-24 16:25:40",
+                                        "gmtModified": "2019-12-03 16:42:06",
+                                        "id": 2,
+                                        "image": "",
+                                        "name": "会计实务2",
+                                        "professionId": 5,
+                                        "status": 1
+                                    },
+                                    {
+                                        "comments": "",
+                                        "courseId": 11,
+                                        "gmtCreate": "2019-12-02 22:23:51",
+                                        "gmtModified": "2019-12-04 00:23:35",
+                                        "id": 8,
+                                        "image": "",
+                                        "name": "经济法基础",
+                                        "professionId": 5,
+                                        "status": 1
+                                    },
+                                    {
+                                        "comments": "",
+                                        "courseId": 11,
+                                        "gmtCreate": "2019-12-04 00:23:06",
+                                        "gmtModified": "2019-12-04 00:23:24",
+                                        "id": 9,
+                                        "image": "",
+                                        "name": "初级会计实务",
+                                        "professionId": 5,
+                                        "status": 1
+                                    }
+                                ],
+                                "gmtCreate": "2019-11-24 16:10:35",
+                                "gmtModified": "2019-12-04 00:22:59",
+                                "id": 11,
+                                "image": "",
+                                "name": "初级会计师",
+                                "professionId": 5,
+                                "status": 1
+                            }
+                        ],
+                        "name": "初级"
+                    }
+                ],
+                "id": 5,
+                "image": "",
+                "name": "会计专业",
+                "status": 1
+            }
+        ],
+        "msg": "SUCCESS"
+    },
 	// 科目列表
 	'/course/list': {
-	    "code":0,
-	    "data":[
-	        {
-	            "comments":"",
-	            "gmtCreate":"2019-10-10 00:00:00.0",
-	            "gmtModified":"2019-10-10 00:00:00.0",
-	            "id":1,
-	            "image":"",
-	            "name":"初级会计师1",
-	            "professionId":1,
-	            "status":1
-	        },
-	        {
-	            "comments":"",
-	            "gmtCreate":"2019-10-10 00:00:00.0",
-	            "gmtModified":"2019-10-10 00:00:00.0",
-	            "id":2,
-	            "image":"",
-	            "name":"中级会计师",
-	            "professionId":1,
-	            "status":1
-	        },
-	        {
-	            "comments":"",
-	            "gmtCreate":"2019-10-10 00:00:00.0",
-	            "gmtModified":"2019-10-10 00:00:00.0",
-	            "id":3,
-	            "image":"",
-	            "name":"高级会计师",
-	            "professionId":1,
-	            "status":1
-	        },
-	        {
-	            "comments":"",
-	            "gmtCreate":"2019-10-10 00:00:00.0",
-	            "gmtModified":"2019-10-10 00:00:00.0",
-	            "id":4,
-	            "image":"",
-	            "name":"系统分析师",
-	            "professionId":2,
-	            "status":1
-	        },
-	        {
-	            "comments":"",
-	            "gmtCreate":"2019-10-10 00:00:00.0",
-	            "gmtModified":"2019-10-10 00:00:00.0",
-	            "id":5,
-	            "image":"",
-	            "name":"初级会计师2",
-	            "professionId":1,
-	            "status":1
-	        }
-	    ],
-	    "msg":"SUCCESS"
-	},
-	// 选择科目 params: {professionId, category}
-	'/course/list': {
-	    "code":0,
-	    "data":[
-	        {
-	            "courses":[
-	                {
-	                    "category":"中级",
-	                    "comments":"",
-	                    "gmtCreate":"2019-10-10 00:00:00.0",
-	                    "gmtModified":"2019-10-10 00:00:00.0",
-	                    "id":2,
-	                    "image":"",
-	                    "name":"中级会计师",
-	                    "professionId":1,
-	                    "status":1
-	                }
-	            ],
-	            "name":"中级"
-	        }
-	    ],
-	    "msg":"SUCCESS"
-	},
+        "code": 0,
+        "data": [
+            {
+                "courses": [
+                    {
+                        "category": "初级",
+                        "comments": "",
+                        "curriculums": [
+                            {
+                                "comments": "",
+                                "courseId": 11,
+                                "gmtCreate": "2019-11-24 16:25:39",
+                                "gmtModified": "2019-12-03 16:42:06",
+                                "id": 1,
+                                "image": "",
+                                "name": "会计实务",
+                                "professionId": 5,
+                                "status": 1
+                            },
+                            {
+                                "comments": "",
+                                "courseId": 11,
+                                "gmtCreate": "2019-11-24 16:25:40",
+                                "gmtModified": "2019-12-03 16:42:06",
+                                "id": 2,
+                                "image": "",
+                                "name": "会计实务2",
+                                "professionId": 5,
+                                "status": 1
+                            },
+                            {
+                                "comments": "",
+                                "courseId": 11,
+                                "gmtCreate": "2019-12-02 22:23:51",
+                                "gmtModified": "2019-12-04 00:23:35",
+                                "id": 8,
+                                "image": "",
+                                "name": "经济法基础",
+                                "professionId": 5,
+                                "status": 1
+                            },
+                            {
+                                "comments": "",
+                                "courseId": 11,
+                                "gmtCreate": "2019-12-04 00:23:06",
+                                "gmtModified": "2019-12-04 00:23:24",
+                                "id": 9,
+                                "image": "",
+                                "name": "初级会计实务",
+                                "professionId": 5,
+                                "status": 1
+                            }
+                        ],
+                        "gmtCreate": "2019-11-24 16:10:35",
+                        "gmtModified": "2019-12-04 00:22:59",
+                        "id": 11,
+                        "image": "",
+                        "name": "初级会计师",
+                        "professionId": 5,
+                        "status": 1
+                    }
+                ],
+                "name": "初级"
+            }
+        ],
+        "msg": "SUCCESS"
+    },
 	'/home/slide': {
 	    "code":0,
 	    "msg":"SUCCESS",

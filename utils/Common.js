@@ -18,6 +18,7 @@ export default class Common {
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'http://static.youzhi.tech/';
 
+    static isPreAlpha = false;   // 预览版
     static isHack = false;   // 默认为false，不使用mock数据
     static netStatus = 'unknown';
     static _netObserver = [];
@@ -74,6 +75,7 @@ export default class Common {
         };
         if (!method) method = params ? 'POST' : 'GET';
         params = params || {};
+        if (params.pageNumber) params.pageNum = params.pageNumber;
         let bodyParams = '';
         let str = Common.parseObj(params);
         if (method == 'GET') {
@@ -166,6 +168,14 @@ export default class Common {
     // 获取参加的考试（专业列表）
     static getCategoryList(params, cb) {
         Common.httpRequest('/profession/list', params).then((result)=>{
+            // console.log(result);
+            cb(result);
+        })
+    }
+
+    // 获取课程
+    static getClassesList(params, cb) {
+        Common.httpRequest('/course/curriculumList', params).then((result)=>{
             // console.log(result);
             cb(result);
         })

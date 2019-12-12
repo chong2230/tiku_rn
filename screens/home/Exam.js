@@ -38,6 +38,8 @@ export default class Exam extends PureComponent{
             flatHeight: 0,
             indexText: '',
         };
+        this.courses = [];
+        this.courseName = '';
     }
 
     // 渲染完成钩子
@@ -46,17 +48,21 @@ export default class Exam extends PureComponent{
     }
 
     _getList = () => {
+        let self = this;
         let { state } = this.props.navigation;
         let params = {
             professionId: state.params.professionId,
-            category: state.params.category
+            category: state.params.category,
+            courseId: state.params.courseId
         };
         Common.getExamList(params, (result)=>{
             if (result.code == 0) {
                 if (result.data && result.data.length > 0) {
+                    this.courses = result.data[0].courses;
+                    this.courseName = this.courses[0].name;
                     this.setState({
                         name: result.data[0].name,
-                        sourceData: result.data[0].courses
+                        sourceData: this.courses[0].curriculums.length > 1 ? this.courses[0].curriculums : this.courses
                     })
                 }
             }
@@ -71,7 +77,11 @@ export default class Exam extends PureComponent{
     );
 
     _renderItem = (item) =>{
+        let { state } = this.props.navigation;
         let rowData = item.item;
+        if (!rowData.category) {
+            rowData.category = state.params.category;
+        }
         return(
         	<TouchableOpacity onPress={()=>{this._choose(rowData)}}>
 	            <View style={styles.item}>
@@ -84,7 +94,8 @@ export default class Exam extends PureComponent{
     _choose = (data) => {
 		const { state, goBack } = this.props.navigation;
         state.params.chooseCallback(data);
-        goBack();
+        let returnKey = state.params.returnKey;
+        returnKey ? goBack(returnKey) : goBack();
     }
 
     _setFlatListHeight = (e) => {
@@ -95,7 +106,8 @@ export default class Exam extends PureComponent{
     };
 
     render() {
-        let { state, goBack } = this.props.navigation;        
+        let { state, goBack } = this.props.navigation;
+        let course = state.params.course;
         return (
 	        <View style={styles.container}>
                 <Bar></Bar> 
@@ -105,6 +117,12 @@ export default class Exam extends PureComponent{
                     }
                     goBack();
                 }}></Header>
+                {
+                    this.courses[0] && this.courses[0].curriculums.length > 1 ?
+                    <View style={styles.titleBar}>
+                        <Text style={styles.title}>{this.courseName}</Text>
+                    </View> : null
+                }
 	            <FlatList style={styles.list}
 	                ref={ ref => this.flatList = ref }
 	                data={ this.state.sourceData }
@@ -147,6 +165,22 @@ const styles = StyleSheet.create({
     },
     list: {
         
+    },
+    titleBar: {
+        borderBottomColor: '#e0e0e0',
+        borderBottomWidth: 1,
+        margin: 8,
+        height: 54,
+        flexDirection: 'row'
+    },
+    title: {
+        flexWrap: 'wrap',
+        fontSize: 18,
+        color: 'black',
+        flex: 1,
+        marginTop: 15,
+        marginLeft: 8,
+        height: 30,
     },
     item: {
         flexDirection: 'row',

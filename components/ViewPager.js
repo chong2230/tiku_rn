@@ -12,8 +12,11 @@ var {
   TouchableOpacity,
   PanResponder,
   Animated,
-  StyleSheet,
+  StyleSheet
 } = ReactNative;
+
+import { ViewPropTypes as RNViewPropTypes } from 'react-native'
+
 
 var StaticRenderer = require('react-native/Libraries/Components/StaticRenderer');
 var TimerMixin = require('react-timer-mixin');
@@ -21,6 +24,8 @@ var TimerMixin = require('react-timer-mixin');
 var DefaultViewPageIndicator = require('./DefaultViewPageIndicator');
 var deviceWidth = Dimensions.get('window').width;
 var ViewPagerDataSource = require('./ViewPagerDataSource');
+
+const ViewPropTypes = RNViewPropTypes || View.propTypes
 
 var ViewPager = createReactClass({
   mixins: [TimerMixin],
@@ -317,7 +322,7 @@ var ViewPager = createReactClass({
 });
 
 ViewPager.propTypes = {
-    ...View.propTypes,
+    ...ViewPropTypes,
     dataSource: PropTypes.instanceOf(ViewPagerDataSource).isRequired,
     renderPage: PropTypes.func.isRequired,
     onChangePage: PropTypes.func,

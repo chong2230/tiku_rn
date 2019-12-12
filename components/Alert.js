@@ -95,6 +95,11 @@ export default class Alert extends React.Component {
         this.setState({modalVisible:false})
     }
 
+    cancel(){
+        this.props.cancel();
+        this.setState({modalVisible:false})
+    }
+
     render(){
         return(
             <View>
@@ -179,7 +184,7 @@ export default class Alert extends React.Component {
                             }
                             {
                                 this.props.showCancelBtn ?
-                                <TouchableOpacity style={{flex: 1}} onPress={()=>this.setState({modalVisible:false})}>
+                                <TouchableOpacity style={{flex: 1}} onPress={()=>this.cancel()}>
                                     <View style={{
                                         flex: 1,
                                         alignItems: 'center',

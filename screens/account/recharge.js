@@ -21,6 +21,7 @@ import * as RNIap from 'react-native-iap';
 
 // import HTMLView from 'react-native-htmlview';
 import Bar from '../../components/Bar';
+import Header from '../../components/Header';
 import HTMLView from '../../components/HTMLView';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
@@ -141,6 +142,11 @@ export default class Recharge extends Component {
         return (
             <ScrollView style={styles.container}>
                 <Bar />
+                <Header title={'账户'} goBack={()=>{
+                        let { goBack } = this.props.navigation;
+                        goBack();
+                    }}
+                        bottomLineColor={'rgba(0, 0, 0)'} />
                 <View style={styles.top}>
                     <Text style={styles.money}>￠ {this.state.money || 0.00}</Text>
                     <Text style={styles.title}>账户余额</Text>

@@ -74,7 +74,7 @@ export default class MyCollect extends PureComponent {
 
     _renderItem = (item) => {
         let rowData = item.item;
-        let question = rowData.askList && rowData.askList.length > 0 ? rowData.askList[0].ask : '';
+        let question = rowData.askList && rowData.askList.length > 0 ? rowData.askList[0].ask.replace(/^\d*\./, '') : '';
         return (
             <TouchableOpacity onPress={()=>{this._onItemClick(rowData)}}>
                 <View style={styles.item}>

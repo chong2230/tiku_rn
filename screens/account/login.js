@@ -130,9 +130,14 @@ export default class Login extends Component {
                 <Bar />
                 {/*<Navigator1 leftText = '返回' centerText = '密码登录'  rightText = '' leftAction = {()=>this.leftAction()} rightAction = {() => this.rightAction()}/>*/}
                 <Header
+                    leftBtnIsHidden={true}
                     title={'登录'}
-                    goBack={()=>{this.leftAction()}}
-                    bottomLineColor={'rgba(0, 0, 0, 0)'}
+                    // goBack={()=>{this.leftAction()}}
+                    rightSource={require('../../images/account/loginDismiss.png')}
+                    onRight={()=>{
+                        this.leftAction();
+                    }}
+                    bottomLineColor={'rgba(0, 0, 0)'}
                 />
                 <TextInput placeholder="输入手机号" keyboardType='numeric' style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
                 <TextInput placeholder="输入密码" secureTextEntry={true} style={styles.password} onChangeText={(text)=>this.setState({pwd: text})}  />

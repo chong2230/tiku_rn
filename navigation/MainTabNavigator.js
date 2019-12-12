@@ -3,7 +3,6 @@ import {Platform, YellowBox, Dimensions} from 'react-native';
 import { createBottomTabNavigator} from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 
-
 import TabBarIcon from '../components/TabBarIcon';
 import Home from '../screens/home/Home';
 import Exam from '../screens/home/Exam';
@@ -46,6 +45,7 @@ import Message from '../screens/account/message';
 import Suggest from '../screens/account/suggest';
 import Colors from '../constants/Colors';
 import ImageButton from '../components/ImageButton';
+import Common from '../utils/Common';
 
 YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 // YellowBox.ignoreWarnings(['react-native-i18n module is not correctly linked', 'Module react-native-i18n']);
@@ -171,7 +171,7 @@ const CourseStack = createStackNavigator(
     config
 );
 
-HomeStack.path = '';
+CourseStack.path = '';
 
 const NewsStack = createStackNavigator(
     {
@@ -279,17 +279,32 @@ const AccountStack = createStackNavigator(
 
 AccountStack.path = '';
 
-const Stacks = [HomeStack, /*CourseStack,*/ NewsStack, AccountStack];
-const tabBarLabels = ['题库', /*'课程',*/ '资讯', '我的'];
-const tabBarIcons = [
+let Stacks = [HomeStack, NewsStack, AccountStack];
+let tabBarLabels = ['题库', '资讯', '我的'];
+let tabBarIcons = [
     Platform.OS === 'ios' ? 'ios-home' : 'md-home',
-    // Platform.OS === 'ios' ? 'ios-paper' : 'md-paper',
     Platform.OS === 'ios' ? 'ios-navigate' : 'md-navigate',
     Platform.OS === 'ios' ? 'ios-person' : 'md-person'
 ];
+let stackParams = {
+    HomeStack,
+    NewsStack,
+    AccountStack,
+};
+if (Common.isPreAlpha) {
+    Stacks.splice(1, 0, CourseStack);
+    tabBarLabels.splice(1, 0, '课程');
+    tabBarIcons.splice(1, 0, Platform.OS === 'ios' ? 'ios-paper' : 'md-paper');
+    stackParams = {
+        HomeStack,
+        CourseStack,
+        NewsStack,
+        AccountStack,
+    };
+}
 Stacks.forEach((item, index) => {
     item.navigationOptions = ({navigation}) => {
-        let tabBarVisible = true
+        let tabBarVisible = true;
         if (navigation.state.index > 0) {
             tabBarVisible = false
         }
@@ -306,11 +321,7 @@ Stacks.forEach((item, index) => {
     }
 });
 
-const tabNavigator = createBottomTabNavigator({
-    HomeStack,
-    NewsStack,
-    AccountStack,
-}, {
+const tabNavigator = createBottomTabNavigator(stackParams, {
     defaultNavigationOptions: ({navigation}) => ({
         tabBarVisible: Stacks.forEach
     }),

@@ -1,7 +1,23 @@
-iPhoneX 适配
+1. iPhoneX 适配
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 <View style={styles.safeBottom}></View>
 safeBottom: {
     backgroundColor: 'white',
     height: TabbarSafeBottomMargin
-},
+}
+
+2. android.support.annotation.Nullable
+Android工程中javax annotation Nullable找不到的替代方案
+我们在某些Android开源库中会遇到下面的引用找不到的问题：
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+其实Android实现了javax的类似注解，可以使用下面的引用替换：
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+当然，后者需要引入库的声明：
+dependencies {
+    compile 'com.android.support:support-annotations:21.0.2'
+}
+

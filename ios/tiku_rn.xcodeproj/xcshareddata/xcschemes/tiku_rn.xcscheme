@@ -29,17 +29,17 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "tiku_rn.app"
+               BuildableName = "&#x6709;&#x77e5;&#x5b66;&#x5802;.app"
                BlueprintName = "tiku_rn"
                ReferencedContainer = "container:tiku_rn.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
+            buildForTesting = "NO"
+            buildForRunning = "NO"
             buildForProfiling = "NO"
             buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
@@ -56,22 +56,12 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "tiku_rnTests.xctest"
-               BlueprintName = "tiku_rnTests"
-               ReferencedContainer = "container:tiku_rn.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tiku_rn.app"
+            BuildableName = "&#x6709;&#x77e5;&#x5b66;&#x5802;.app"
             BlueprintName = "tiku_rn"
             ReferencedContainer = "container:tiku_rn.xcodeproj">
          </BuildableReference>
@@ -94,7 +84,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tiku_rn.app"
+            BuildableName = "&#x6709;&#x77e5;&#x5b66;&#x5802;.app"
             BlueprintName = "tiku_rn"
             ReferencedContainer = "container:tiku_rn.xcodeproj">
          </BuildableReference>
@@ -113,7 +103,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "tiku_rn.app"
+            BuildableName = "&#x6709;&#x77e5;&#x5b66;&#x5802;.app"
             BlueprintName = "tiku_rn"
             ReferencedContainer = "container:tiku_rn.xcodeproj">
          </BuildableReference>

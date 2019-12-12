@@ -22,8 +22,10 @@ import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
+import Alert from '../../components/Alert';
 import Toast from '../../components/Toast';
 import {TabbarSafeBottomMargin} from "../../utils/Device";
+import Storage from "../../utils/Storage";
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 const emptyHeight = screenWidth/screenHeight * 289;
@@ -40,6 +42,7 @@ export default class Category extends Component{
             indexText: '',
             chooseObj: {}
         };
+        this.chooseData = {};
     }
 
     componentDidMount() {
@@ -127,8 +130,32 @@ export default class Category extends Component{
 
     _choose = (data) => {
         console.log('choose ', data);
-		const { state, goBack } = this.props.navigation;
-        state.params.chooseCallback(data);
+        this.chooseData = data;
+        // 课程多于一个时，弹框提示是否选择课程
+        if (data.curriculums && data.curriculums.length > 1) {
+            this.alert.show();
+        } else {
+            this._chooseCategory();
+        }
+    }
+
+    _chooseExam = () => {
+        let course = this.chooseData;
+        const { navigate, state } = this.props.navigation;
+        navigate("Exam", { isVisible: false, professionId: course.professionId,
+            category: course.category,
+            course: course,
+            courseId: course.id,
+            returnKey: state.key,
+            chooseCallback:(data)=>{
+                state.params.chooseCallback(data);
+            }
+        });
+    }
+
+    _chooseCategory = () => {
+        const {state, goBack} = this.props.navigation;
+        state.params.chooseCallback(this.chooseData);
         goBack();
     }
 
@@ -169,6 +196,19 @@ export default class Category extends Component{
                     extraData={this.state}
 	            />
                 <View style={styles.safeBottom}></View>
+                <Alert
+                    ref={(ref)=>this.alert = ref}
+                    modalWidth={270}
+                    modalHeight={124}
+                    titleText="是否去选择课程？"
+                    titleFontSize={16}
+                    titleFontWeight={"bold"}
+                    cancelText={'跳过'}
+                    cancel={this._chooseCategory}
+                    okText={'选择'}
+                    confirm={this._chooseExam}
+                    okFontColor={'#4789F7'}
+                />
 	            <Toast
 	                ref="toast"
 	                style={{backgroundColor:'black'}}

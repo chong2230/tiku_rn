@@ -44,6 +44,7 @@ export default class Subject extends PureComponent{
             refreshing: false,
             flatHeight: 0,
             indexText: '',
+            hasLoad: false
         };
     }
 
@@ -62,8 +63,14 @@ export default class Subject extends PureComponent{
             pageSize: pageSize,
             functionId: state.params.id,
             professionId: global.course.professionId,
-            courseId: global.course.id
+            courseId: global.course.courseId || global.course.id
         };
+        // 根据专业、科目和课程ids来获取数据
+        if (!global.course.curriculums) {
+            let ids = [];
+            ids.push(global.course.id);
+            params.curriculumIds = ids.join(',');
+        }
         Common.getSubjectList(params, (result)=>{
             console.log('getSubjectList ', result);
             if (result.code == 0) {
@@ -79,7 +86,8 @@ export default class Subject extends PureComponent{
                     data = list;
                 }
                 this.setState({
-                    listData: data
+                    listData: data,
+                    hasLoad: true
                 });
             }
         });
@@ -98,10 +106,11 @@ export default class Subject extends PureComponent{
 
     // 空布局
     _renderEmptyView = () => (
+        this.state.hasLoad ?
         <View style={{backgroundColor: '#F8F8F8', justifyContent: 'center', alignItems: 'center'}}>
             <Image source={require('../../images/empty/empty-bought.png')} resizeMode={'contain'} style={{width: screenWidth, height: emptyHeight, top: 120}} />
             <Text style={{marginTop: 105, marginBottom: 10}}>暂无内容</Text>
-        </View>
+        </View> : null
     );
 
     // Footer布局
@@ -146,7 +155,9 @@ export default class Subject extends PureComponent{
     }
 
     // userStatus: 1 未做过 2 已做过 3 已做完
+    // 历年真题和模拟试卷不能重新开始，避免知道答案重新开始可以轻松获得100分的问题
     _renderItem = (item) =>{
+        let { state } = this.props.navigation;
         let rowData = item.item;
         let btnText = '开始做题';
         if (rowData.userStatus == 2) btnText = '继续做题';
@@ -172,9 +183,14 @@ export default class Subject extends PureComponent{
                                     onPress={()=>{this._startPractise(rowData, true)}}></Button>
                             : null
                     }
-                    <Button text={btnText} 
-                        style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
-                        onPress={()=>{this._startPractise(rowData)}}></Button>
+                    {
+                        rowData.userStatus == 3 &&
+                        (state.params.title == '历年真题' || state.params.title == '模拟试卷') ? null :
+                            <Button text={btnText}
+                                    style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
+                                    onPress={()=>{this._startPractise(rowData)}}></Button>
+                    }
+
                 </View>
             </View>
         );
@@ -184,16 +200,16 @@ export default class Subject extends PureComponent{
         console.log('start ', data);
         const { navigate, state } = this.props.navigation;
         if (global.token) {
-            navigate("Timu", {id: data.id, functionId: state.params.functionId,
+            navigate("Timu", {id: data.id, functionName: state.params.title, functionId: state.params.functionId,
                 type: isAnalyse ? 1 : 2,
                 isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
                     this._reload();
                 }
             });
         } else {
-            navigate('Login', { isVisiable: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
+            navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
                 if (token != null) {
-                    this._getList();
+                    this._reload();
                 }
             } });
         }        

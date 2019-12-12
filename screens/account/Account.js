@@ -81,7 +81,7 @@ export default class Account extends Component {
         const { navigate } = this.props.navigation;
         switch (type) {
             case 0:
-            navigate('Profile', {isVisiable: true, title: '个人信息', info: JSON.stringify(this.state.info),
+            navigate('Profile', {isVisible: true, title: '个人信息', info: JSON.stringify(this.state.info),
                 refresh: (data)=>{
                     // console.log(data);
                     this.setState({
@@ -90,7 +90,7 @@ export default class Account extends Component {
                 }});
                 break;
             case 1:
-                navigate('Recharge', {money: this.state.info.balance, isVisiable: true, title: '账户', refresh: (money)=>{
+                navigate('Recharge', {money: this.state.info.balance, isVisible: false, title: '账户', refresh: (money)=>{
                     if (money != null) {
                         self.setState({
                             info: Object.assign({}, self.state.info, {balance: money})
@@ -99,7 +99,7 @@ export default class Account extends Component {
                 }});
                 break;
             case 2:
-                navigate('Column', {from: 'purchase', isVisiable: true, title: '已购'});
+                navigate('Column', {from: 'purchase', isVisible: true, title: '已购'});
                 break;
             case 4:
             case 7:
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     person: {
-        height: 150
+        height: 200
     },
     avatar: {
         flexDirection:'row', 

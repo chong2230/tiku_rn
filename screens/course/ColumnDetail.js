@@ -132,7 +132,7 @@ export default class ColumnDetail extends Component {
     _readFree = () => {
         let detail = this.state.detail;
         const { navigate } = this.props.navigation;
-        navigate('Articles', { isVisiable: true, title: detail.title, columnId: detail.id, hadSub: detail.hadSub, price: detail.price, transition: 'forVertical'});
+        navigate('Articles', { isVisible: true, title: detail.title, columnId: detail.id, hadSub: detail.hadSub, price: detail.price, transition: 'forVertical'});
     }
 
     // 开始学习
@@ -152,14 +152,14 @@ export default class ColumnDetail extends Component {
 
     _goLogin = () => {
         const { navigate } = this.props.navigation;
-        navigate('Login', { isVisiable: true, title: '密码登录', transition: 'forVertical', callback: ()=>{
+        navigate('Login', { isVisible: true, title: '密码登录', transition: 'forVertical', callback: ()=>{
                 this._getColumnInfo();
             }});
     }
 
     _goBalance = () => {
         const { navigate, state } = this.props.navigation;
-        navigate('Balance', { isVisiable: true, title: '结算台', 
+        navigate('Balance', { isVisible: true, title: '结算台',
             detail: JSON.stringify(this.state.detail), columnId: this.state.detail.id, 
             type: state.params.type, callback: ()=>{
                 this._getColumnInfo();

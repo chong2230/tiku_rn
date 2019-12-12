@@ -160,17 +160,21 @@ export default class SingleTimu extends Component {
     _renderQuestions = () => {
         switch (this.state.info.type) {
             case '单选题':
+            case '单项选择题':
             case '多选题':
+            case '单项选择题':
             case '不定项':
+            case '不定项选择题':
+            case '判断题':
                 return this._renderChoiceQuestions();
                 break;
-            case '判断题':
-                break;
             case '填空题':
+                return this._renderFillBlankQuestions();
                 break;
             case '简答题':
             case '计算分析题':
             case '综合题':
+                return this._renderShortAnswerQuestions();
                 break;
             default:
                 break;
@@ -186,12 +190,19 @@ export default class SingleTimu extends Component {
             let choicesView = [];
             for (let key in choice) {
                 if (key) {
+                    let choiceText = choice[key];
+                    if (choiceText.indexOf(key.toUpperCase() + '.') != 0
+                        && choiceText.indexOf(key.toUpperCase() + '、') != 0
+                        && choiceText.indexOf(key.toUpperCase() + ' ') != 0
+                        && choiceText.indexOf(key.toUpperCase() + '．') != 0) {
+                        choiceText = key.toUpperCase() + '. ' + choice[key];
+                    }
                     let choiceView = (
                         <View key={info.id + '_choice_' + i + '_' + key}>
                             <Text style={[styles.choiceText,
                                 (info.answers[i] == key) ?
                                     styles.selectChoiceText : null]}>
-                                {key.toUpperCase() + '. ' + choice[key]}
+                                {choiceText}
                             </Text>
                         </View>
                     );
@@ -202,32 +213,9 @@ export default class SingleTimu extends Component {
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
                     {
-                        this.state.askList[i].ask ?
-                            <Text style={styles.title}>{this.state.askList[i].ask}</Text>
-                            : null
+                        this._renderAsk(i)
                     }
-                    <TouchableOpacity onPress={()=>{}}>
-                        <View>{choicesView}</View>
-                    </TouchableOpacity>
-                </View>
-            );
-            questionsView.push(questionView);
-        }
-        return questionsView;
-    }
-
-    // 判断题
-    _renderTrueFalseQuestions = () => {
-        let info = this.state.info;
-        let questionsView = [];
-        for (let i in info.choices) {
-            let choice = info.choices[i];
-            let choicesView = [];
-            let questionView = (
-                <View style={styles.question} key={info.id + '_choice_' + i}>
-                    {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
-                    <ImageButton/>
-                    <ImageButton/>
+                    <View>{choicesView}</View>
                 </View>
             );
             questionsView.push(questionView);
@@ -245,6 +233,9 @@ export default class SingleTimu extends Component {
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
+                    {
+                        this._renderAsk(i)
+                    }
                     <TextInput
                         onChangeText={(text)=>{this._onChangeText(text, index)}}
                         style={[styles.input]}></TextInput>
@@ -266,6 +257,9 @@ export default class SingleTimu extends Component {
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
+                    {
+                        this._renderAsk(i)
+                    }
                     <TextInput
                         multiline={true}
                         onChangeText={(text)=>{this._onChangeText(text)}}
@@ -277,20 +271,24 @@ export default class SingleTimu extends Component {
         return questionsView;
     }
 
+    _renderAsk = (index) => {
+        return (
+            this.state.askList[index].ask ?
+                <Text style={styles.title}>{this.state.askList[index].ask.replace(/^\d*\./, '')}</Text>
+                : null
+        );
+    }
 
     // 解析
     _renderAnalysis = () => {
         let info = this.state.info;
         let answer = info.answers;
         if (answer && answer instanceof Array) answer = answer.join('    ');
-        let analysis = info.analysis;
+        let analysis = isJson(info.analysis) ? JSON.parse(info.analysis) : info.analysis;
         let analysisView = [];
-        if (isJson(info.analysis)) {
-            analysis = JSON.parse(info.analysis);
-            if (analysis && analysis instanceof Array) {
-                for (let i in analysis) {
-                    analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i]}</Text>)
-                }
+        if (analysis && analysis instanceof Array) {
+            for (let i in analysis) {
+                analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i].replace(/^\d*\./, '')}</Text>)
             }
         }
         // 适配答案有一图和多图的情况
@@ -369,7 +367,8 @@ const styles = StyleSheet.create({
         // height: 20,
         lineHeight: 20,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        paddingRight: 10
     },
     questionText: {
         fontSize: 15,
@@ -399,7 +398,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     analyseView: {
-        height: 20,
+        // height: 20,
         marginTop: 10,
         marginBottom: 10
     },
@@ -415,9 +414,12 @@ const styles = StyleSheet.create({
         color: Colors.highlight
     },
     analyseContent: {
+        width: width - 20,
         fontSize: 15,
-        height: 20,
-        marginTop: 10
+        // height: 20,
+        lineHeight: 20,
+        marginTop: 10,
+        paddingRight: 10
     },
     bottom: {
         flexDirection: 'row',

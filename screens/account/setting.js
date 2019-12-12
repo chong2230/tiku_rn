@@ -67,7 +67,7 @@ export default class Setting extends Component {
     _safeAccount = () => {
         const { state, navigate } = this.props.navigation;
         if (this.state.token == null) {
-            navigate('Login', { isVisiable: false, title: '密码登录', transition: 'forVertical',
+            navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical',
                 refresh: (token)=>{
                     if (token) {
                         if (state.params.refresh instanceof Function) state.params.refresh(token);
@@ -75,7 +75,7 @@ export default class Setting extends Component {
                 }
             });
         } else {
-            navigate('SafeAccount', {isVisible: true, title: "账户安全"});    
+            navigate('SafeAccount', {isVisible: false, title: "账户安全"});
         }        
     }
 
@@ -88,7 +88,7 @@ export default class Setting extends Component {
     }
 
     _appraise = () => {
-        let appId = '1438765718';
+        let appId = '1487972395';
         // iOS 7以下的版本 itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=APP_ID
         // iOS 7 itms-apps://itunes.apple.com/app/idAPP_ID
         // iOS 8+ itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id=APP_ID&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software";
@@ -101,12 +101,12 @@ export default class Setting extends Component {
 
     _suggest = () => {
         const { navigate } = this.props.navigation;
-        navigate('Suggest', {isVisiable: true, title: '意见与建议'});
+        navigate('Suggest', {isVisible: true, title: '意见与建议'});
     }
     
     _about = () => {
         const { navigate } = this.props.navigation;
-        navigate('About', {isVisiable: true, title: '关于我们'});
+        navigate('About', {isVisible: true, title: '关于我们'});
     }
 
     _share = () => {
@@ -119,7 +119,7 @@ export default class Setting extends Component {
             const { navigate, state } = this.props.navigation;
             setTimeout(function() {
                 if (state.params.refresh) state.params.refresh(null);
-                navigate('Login', { isVisiable: false, title: '密码登录',
+                navigate('Login', { isVisible: false, title: '密码登录',
                     from: 'setting', returnKey: state.key, transition: 'forVertical',
                     refresh: (token)=>{
                         if (token != null) {
@@ -152,7 +152,7 @@ export default class Setting extends Component {
                         let { goBack } = this.props.navigation;
                         goBack();
                     }}
-                    bottomLineColor={'rgba(0, 0, 0, 0)'} />
+                    bottomLineColor={'rgba(0, 0, 0)'} />
                 <ScrollView style={{marginBottom:0}}>
                     <SettingItem txt1 = '账号安全' onPress={this._safeAccount}/>
                     <View style={styles.separator}></View>

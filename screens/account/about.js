@@ -32,12 +32,12 @@ export default class About extends Component {
 
     _contact = () => {
         const { navigate } = this.props.navigation;
-        navigate('Contact', {isVisiable: true, title: '联系我们'});
+        navigate('Contact', {isVisible: true, title: '联系我们'});
     }
 
     _service = () => {
         const { navigate } = this.props.navigation;
-        navigate('Service', {isVisiable: true, title: ''});
+        navigate('Service', {isVisible: false, title: ''});
     }
 
     render() {
@@ -45,7 +45,7 @@ export default class About extends Component {
             <View style={styles.container}>
                 <View style={styles.top}>
                     <Image source={require('../../images/logo.png')} style={styles.logo} />
-                    <Text style={styles.topTitle}>有知学堂-提升你的知识水平</Text>
+                    <Text style={styles.topTitle}>有知学堂-考证无忧</Text>
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.versionLabel}>版本信息</Text>
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         height: 50,
         position: 'absolute',
         marginTop: 30,
-        borderRadius: 25,
+        borderRadius: 8,
         alignSelf: 'center'
     },
     item: {

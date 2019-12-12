@@ -21,6 +21,7 @@ class setup extends Component {
                 log: () => {},
                 warn: () => {},
                 error: () => {},
+                assert: () => {},
             };
             global.alert = () => {}
         } else {

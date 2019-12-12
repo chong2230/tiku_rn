@@ -10,7 +10,7 @@ import {
     ToastAndroid
 } from 'react-native'
 
-var ImagePicker = require('react-native-image-picker');
+import ImagePicker from 'react-native-image-picker';
 import Common from '../utils/Common';
 
 const options = {

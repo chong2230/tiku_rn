@@ -34,7 +34,9 @@ class Header extends Component {
         bgColor: 'white',
         leftBtnIsHidden: false,
         rightSource: undefined,
-        bottomLineColor: '#E0E0E0'
+        bottomLineColor: '#E0E0E0',
+        goBack: ()=>{},
+        onRight: ()=>{}
     }
 
     render() {
@@ -45,7 +47,7 @@ class Header extends Component {
             }
         }
         return (
-            <View style={[styles.header, {backgroundColor: this.props.bgColor, borderColor: this.props.bottomLineColor}]}>
+            <View style={[styles.header, {backgroundColor: this.props.bgColor, borderBottomColor: this.props.bottomLineColor}]}>
                 <View style={styles.headerCon}>
                     {this._renderLeftButton()}
                     <View style={styles.titleView}><Text style={[styles.title, specTextStyle]}>{this.props.title}</Text></View>
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
     header: {
         width: width,
         backgroundColor: "#fff",
-        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomWidth: 1,//StyleSheet.hairlineWidth,
         borderColor: "#E0E0E0",
         top: 0,
         // zIndex: 10

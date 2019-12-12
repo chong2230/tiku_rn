@@ -5,21 +5,15 @@ import {
   View,
   Platform,
   ScrollView,
-  ListView,
-  FlatList,
   StyleSheet,
-  TouchableOpacity,
   TouchableWithoutFeedback,
-  StatusBar,
   Modal,
   Dimensions
 } from 'react-native';
 
 import Bar from '../../components/Bar';
-import { MonoText } from '../../components/StyledText';
 import ViewPager from '../../components/ViewPager';
 import SwitchModal from '../../components/SwitchModal';
-import ImageButton from '../../components/ImageButton';
 import Alert from '../../components/Alert';
 import Toast from '../../components/Toast';
 import Colors from '../../constants/Colors';
@@ -32,18 +26,7 @@ const deviceW = Dimensions.get('window').width;
 const deviceH = Dimensions.get('window').height;
 const bannerImgHeight = (deviceW-20)*410/900;
 const bannerHeight = bannerImgHeight + 20;
-// const BANNER_IMGS = [];
-const len = 160;
-const subjectWidth = 300;
-const mallWidth = 100;
-const microWidth = 100; // 微课
-const hotWidth = 150;
-const hotHeight = hotWidth*156/292;
-
-const BANNER_IMGS = [
-    '../../images/banner/1.png',
-    '../../images/banner/2.png'
-];
+const itemWidth = deviceW/3 - 30;
 
 export default class Home extends Component {
 
@@ -58,15 +41,11 @@ export default class Home extends Component {
             selectedNews: 0,
             showModal: false,
             showSwitchModal: false,
-            dataSource: null,//dataSource.cloneWithPages(BANNER_IMGS),
+            dataSource: null,
             hotData: [],
             listData: [],
             myData: {},
-            curCourse: {
-                // professionId: 2,
-                // category: '默认',
-                // name: '系统分析师'
-            }
+            curCourse: {}
         }
     }
 
@@ -110,8 +89,6 @@ export default class Home extends Component {
         };
         Common.getBanners(params, (result)=>{
             if (result.code == 0) {
-                // For test
-                // result.data = BANNER_IMGS;
                 this.timer && clearInterval(this.timer);
                 var dataSource = new ViewPager.DataSource({
                     pageHasChanged: (p1, p2) => p1 !== p2
@@ -124,9 +101,6 @@ export default class Home extends Component {
         Common.getHomeFunc((result)=>{
             console.log('getHomeFunc ', result);
             if (result.code == 0) {
-                // for (let i in result.data) {
-                //     result.data[i].image = '../../images/entrance_'+(i+1)+'.png';
-                // }
                 this.setState({
                     hotData: result.data
                 })
@@ -135,10 +109,6 @@ export default class Home extends Component {
         Common.getHomeMy((result)=>{
             console.log('getHomeMy ', result);
             if (result.code == 0) {
-                // let arr = ['my_collect', 'my_course', 'my_data', 'my_library', 'my_mock', 'my_note', 'my_problem'];
-                // for (let i in result.data.contents) {
-                //     result.data.contents[i].image = '../../images/'+arr[i]+'.png';
-                // }
                 this.setState({
                     myData: result.data
                 })
@@ -158,7 +128,9 @@ export default class Home extends Component {
         const { navigate } = this.props.navigation;
         if (type == 1) {
             navigate("Exam", { isVisible: false, professionId: course.professionId,
-                category: course.category, 
+                category: course.category,
+                courseId: course.courseId || course.id, // course可能是科目，也可能是课程，优先先取courseId
+                course: course,
                 chooseCallback:(data)=>{
                     global.course = data;
                     Storage.save('course', data);
@@ -182,7 +154,7 @@ export default class Home extends Component {
         // console.log('_renderPage ', data);
         return (
             <TouchableWithoutFeedback
-                onPress={() => this._onBannerClick(data, pageID)}>
+                onPress={() => this._onBannerClick(data, pageID)} key={'page-' + data.id}>
                     <Image
                         source={{uri : Common.baseUrl + data.image}}
                         style={styles.page} />
@@ -203,7 +175,7 @@ export default class Home extends Component {
             headerView = <ViewPager
                     dataSource={this.state.dataSource}
                     renderPage={this._renderPage.bind(this)}
-                    initialPage={1}
+                    initialPage={0}
                     isLoop={true}
                     autoPlay={true}/>;
         }
@@ -294,11 +266,9 @@ export default class Home extends Component {
                 navigate("MyCollect", {id: data.id, course: this.state.curCourse, isVisible: false});
                 break;
             case '做题记录':
-                this._getWrongTimuList();
-                // navigate("MyRecord", {id: data.id, course: this.state.curCourse, isVisible: false});
+                navigate("MyRecord", {id: data.id, course: this.state.curCourse, isVisible: false});
                 break;
             case '错题库':
-                // navigate("WrongTimu", {id: data.id, course: this.state.curCourse, isVisible: false});
                 this._getWrongTimuList(data);
                 break;
             case '题库笔记':
@@ -306,12 +276,11 @@ export default class Home extends Component {
             default:
                 break;
         }
-        // navigate("Subject", {id: data.id, isVisible: false}); 
     }
 
     _goLogin = () => {
         let { navigate } = this.props.navigation;
-        navigate('Login', { isVisiable: false, title: '密码登录', transition: 'forVertical' });
+        navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical' });
     }
 
     _getWrongTimuList = (data) => {
@@ -479,171 +448,16 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: deviceW/4 - 20,
+        width: itemWidth,
         height: 80,
         marginLeft: 10,
         marginRight: 10,
         marginBottom: 15
     },
-    icon: {
-        width: 50,
-        height: 50
-    },
     name: {
         marginTop: 10,
-        width: deviceW/4 - 20,
+        width: itemWidth,
         textAlign: 'center'
-    },
-    list: {
-        backgroundColor:'#ECEFF2'
-    },
-    // contents: {
-    //     backgroundColor: 'white',
-    // },
-    viewAll: {
-        marginTop: 10,
-        marginRight: 10,
-        color: '#a4a4a4',
-        fontSize: 13
-    },
-    subjectItem: {
-        marginTop: 10,
-        marginLeft: 10,
-        borderRadius: 5,
-        backgroundColor: 'white',
-        borderBottomColor: '#e0e0e0',
-        borderBottomWidth: 1
-    },
-    subjectTitle: {
-        position: 'absolute',
-        width: subjectWidth,
-        top: 45,
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16
-    },
-    subjectImg: {
-        width: subjectWidth,
-        height: 100,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5
-    },
-    subjectMask: {
-        width: subjectWidth,
-        height: 100,
-        backgroundColor: 'black',
-        opacity: .6,
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
-        position: 'absolute',
-        top: 0,
-        left: 0
-    },
-    newIcon: {
-        width: 19,
-        height: 21,
-        position: 'absolute',
-        top: 10,
-        left: 10
-    },
-    subjectInfo: {
-        width: subjectWidth - 20,
-        // marginLeft: 10,
-        flexDirection: 'row'
-    },
-    subjectName: {
-        flex: 1,
-        fontSize: 15
-    },
-    subjectAuthor: {
-        flexDirection: 'row',
-        height: 50,
-        margin: 10,
-        paddingTop: 15,
-        borderTopColor: '#e0e0e0',
-        borderTopWidth: .5
-    },
-    subjectCost: {
-        marginTop: 10,
-        fontSize: 15
-    },
-    avatarImage: {
-        width: 40,
-        height: 40,
-        borderRadius: 20
-    },
-    authorName: {
-        fontSize: 13,
-        color: 'black',
-        marginTop: 10,
-        marginLeft: 10
-    },
-    authorHonor: {
-        fontSize: 13,
-        color: '#828282',
-        marginTop: 10,
-        // marginLeft: 10
-    },
-    courseItem: {
-        marginTop: 10,
-        flexDirection: 'row'
-    },
-    courseImg: {
-        marginLeft: 10,
-        width: 120,
-        height: 130,
-    },
-    courseInfo: {
-        // marginLeft: 10
-    },
-    courseBottom: {
-        flexDirection: 'row',
-        width: deviceW - 130
-    },
-    authorInfo: {
-        flexDirection: 'row',
-    },
-    item: {
-        flex:1,
-        alignItems:'flex-start'
-    },
-    img: {
-        width:len,
-        height:len
-    },
-    itemName: {
-        flexWrap: 'wrap',
-        // flex: 1,
-        fontSize: 15,
-        color: 'black',
-        marginTop: 8,
-        marginLeft: 10,
-        height: 30,
-    },
-    description: {
-        fontSize: 13,
-        color: '#828282',
-        marginLeft: 10
-    },
-    period: {
-        flex: 1,
-        fontSize: 13,
-        color: '#828282',
-        marginTop: 20,
-        marginLeft: 10
-    },
-    cost: {
-        fontSize: 12,
-        color: Colors.highlight,
-        marginLeft: 10,
-        marginRight: 10
-    },
-    playBtn: {
-        position: 'absolute',
-        width: 40,
-        height: 40,
-        top: hotHeight/2 - 20,
-        left: hotWidth/2 - 20
     },
     mineContents: {
         backgroundColor: 'white',  
@@ -654,12 +468,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 60,
+        width: itemWidth,
         height: 80,
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: 10,
+        marginRight: 10,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 15
     },
     separator: {
         backgroundColor: '#f2f2f2',

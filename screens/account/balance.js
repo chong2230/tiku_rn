@@ -85,7 +85,7 @@ export default class Balance extends Component {
     _chooseTicket = () => {
         let self = this;
         const { navigate } = this.props.navigation;
-        navigate('Ticket', {isVisiable: true, title: '使用礼券', type: 'choose', callback: (data)=>{
+        navigate('Ticket', {isVisible: true, title: '使用礼券', type: 'choose', callback: (data)=>{
             if (!data) return;
             self.setState({
                 voucher: data,
@@ -103,7 +103,7 @@ export default class Balance extends Component {
         }
      	if (this.state.money < cost) {
     		const { navigate } = this.props.navigation;
-        	navigate('Recharge', {isVisiable: true, title: '账户', refresh: (money)=>{
+        	navigate('Recharge', {isVisible: true, title: '账户', refresh: (money)=>{
         		// 更新余额
                 self.setState({
                     money : money

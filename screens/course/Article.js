@@ -113,12 +113,12 @@ export default class Article extends Component {
 
     _goLogin = () => {
         const { navigate } = this.props.navigation;
-        navigate('Login', { isVisiable: true, title: '密码登录', transition: 'forVertical'});
+        navigate('Login', { isVisible: true, title: '密码登录', transition: 'forVertical'});
     }
 
     _goBalance = () => {
         const { navigate, state } = this.props.navigation;
-        navigate('Balance', { isVisiable: true, title: '结算台', 
+        navigate('Balance', { isVisible: true, title: '结算台',
             detail: JSON.stringify(this.state.detail), columnId: state.params.columnId,
             callback: ()=>{
                 this._getColumnInfo();
@@ -147,7 +147,7 @@ export default class Article extends Component {
     _addComment = () => {
         let self = this;
         const { navigate } = this.props.navigation;
-        navigate('Comment', { id: this.state.data.id, isVisiable: true, refresh: () => {
+        navigate('Comment', { id: this.state.data.id, isVisible: true, refresh: () => {
             pageNumber = 1;
             self._load();
         }});
