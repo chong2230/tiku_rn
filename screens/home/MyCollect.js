@@ -35,7 +35,8 @@ export default class MyCollect extends PureComponent {
         super(props);
 
         this.state = {
-            listData: []
+            listData: [],
+            hasLoad: false
         }
     }
 
@@ -66,7 +67,8 @@ export default class MyCollect extends PureComponent {
                     data = list;
                 }
                 this.setState({
-                    listData: data
+                    listData: data,
+                    hasLoad: true
                 });
             }
         });
@@ -92,10 +94,10 @@ export default class MyCollect extends PureComponent {
 
     // 空布局
     _renderEmptyView = () => {
-        return <View style={{height: this.state.flatHeight, backgroundColor: '#F8F8F8', justifyContent: 'center', alignItems: 'center'}}>
+        return this.state.hasLoad ? <View style={{height: this.state.flatHeight, backgroundColor: '#F8F8F8', justifyContent: 'center', alignItems: 'center'}}>
             <Image source={require('../../images/empty/empty-bought.png')} resizeMode={'contain'} style={{width: screenWidth, height: emptyHeight, top: 120}} />
             <Text style={{marginTop: 105, marginBottom: 10}}>暂无收藏</Text>
-        </View>
+        </View> : null
     }
 
     _footer = () => {

@@ -51,9 +51,9 @@ export default class SafeAccount extends Component {
                     }} bottomLineColor={'rgba(0, 0, 0)'} />
                 <SafeAccountItem txt1 = '修改密码' style={{marginTop: 10}} onPress={this._changePwd}/>
                 <SafeAccountItem txt1 = '更换手机号' onPress={this._changePhone}/>
-                <SafeAccountItem txt1 = '绑定微信' onPress={this._bindWx}/>
-                <SafeAccountItem txt1 = '绑定QQ'  onPress={this._bindQq}/>
-                <SafeAccountItem txt1 = '绑定微博' onPress={this._bindWeibo}/>
+                {/*<SafeAccountItem txt1 = '绑定微信' onPress={this._bindWx}/>*/}
+                {/*<SafeAccountItem txt1 = '绑定QQ'  onPress={this._bindQq}/>*/}
+                {/*<SafeAccountItem txt1 = '绑定微博' onPress={this._bindWeibo}/>*/}
             </View>
         );
     }

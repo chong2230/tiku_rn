@@ -41,6 +41,8 @@ target 'tiku_rn' do
   pod 'RNIap', :path => '../node_modules/react-native-iap'
   pod 'react-native-video', :path => '../node_modules/react-native-video/react-native-video.podspec'
 
+  pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+
   target 'tiku_rnTests' do
     inherit! :search_paths
     # Pods for testing

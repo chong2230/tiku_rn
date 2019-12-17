@@ -9,6 +9,7 @@ import {
 
 import Timu from './Timu';
 import Colors from '../../constants/Colors';
+import Common from '../../utils/Common';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 
 const {width, height} = Dimensions.get('window');
@@ -37,8 +38,43 @@ export default class WrongTimu extends Timu {
     }
 
     _load = () => {
-        this._getTimu();
+        this._getTimuList();
     }
+
+    _getTimuList = () => {
+        let { state } = this.props.navigation;
+        if (state.params.list) {
+            this.doNext(state.params.list);
+        } else {
+            let params = {
+                professionId: global.course.professionId,
+                courseId: global.course.id
+            };
+            Common.getWrongTimuList(params, (result)=>{
+                console.log('getTimuList ', result);
+                if (result.code == 0) {
+                    this.doNext(result.data);
+                }
+            });
+        }
+    }
+
+    doNext = (list) => {
+        let showAnalyse = [];
+        if (state.params.isAnalyse) {
+            for (let i in list) {
+                showAnalyse[i] = true;
+            }
+        }
+        this.setState({
+            list: list,
+            total: list.length,
+            showAnalyse: showAnalyse
+        }, ()=>{
+            this._getTimu();
+        });
+    }
+
 }
 
 const styles = StyleSheet.create({

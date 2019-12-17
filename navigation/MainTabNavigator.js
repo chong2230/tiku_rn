@@ -271,8 +271,31 @@ const AccountStack = createStackNavigator(
         Suggest: {
             screen: Suggest,
             navigationOptions: ({navigation}) => StackOptions({navigation})
-        }
-
+        },
+        MyCollect: {
+            screen: MyCollect,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        SingleTimu: {
+            screen: SingleTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        MyRecord: {
+            screen: MyRecord,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Timu: {
+            screen: Timu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Report: {
+            screen: Report,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        WrongTimu: {
+            screen: WrongTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
     },
     config
 );

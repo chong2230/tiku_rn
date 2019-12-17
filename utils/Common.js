@@ -12,9 +12,9 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    // static httpServer = 'https://practice.youzhi.tech';
-    // QA Env
-    static httpServer = 'http://pre-practice.youzhi.tech';
+    static httpServer = 'http://practice.youzhi.tech';
+    // TEST Env
+    // static httpServer = 'http://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'http://static.youzhi.tech/';
 
@@ -94,7 +94,12 @@ export default class Common {
         })
             .then((resp) => resp.json())
             .then((json) => {
-                Common.inError = false;           
+                Common.inError = false;
+                // token 失效
+                if (json.code == 2) {
+                    global.token = null;
+                    Storage.delete('token');
+                }
                 console.log('url ', url, bodyParams, json); // TODO: need to delete
                 return Common.isHack ? MockData[url] : json;
             })

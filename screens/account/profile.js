@@ -10,6 +10,7 @@ import {
     View,
     Image,
     TouchableOpacity,
+    TouchableWithoutFeedback,
     Dimensions,
     ScrollView,
     Platform,
@@ -50,8 +51,16 @@ export default class Profile extends Component {
         const {state} = this.props.navigation;
         let info = JSON.parse(state.params.info);
         this.setState({
-            info : info
+            info : info,
+            uname: info.nickName,
+            email: info.email
         });
+    }
+
+    _onPress = () => {
+        console.log('onPress in profile');
+        this.nameInput.blur();
+        this.emailInput.blur();
     }
 
     _updateNickname = () => {
@@ -235,33 +244,47 @@ export default class Profile extends Component {
         }
         let education = this._getEducation();
         return (
-            <View style={styles.container}>
-                <View style={styles.avatar}>
-                    
-                    <CameraButton style={styles.cameraBtn}
-                        avatarImage={this.state.info.avatarImage}
-                        photos={[]}
-                        onFileUpload={this.onFileUpload} />
+            <TouchableWithoutFeedback onPress={this._onPress.bind(this)}>
+                <View style={styles.container} keyboardShouldPersistTaps={'always'}>
+                    <View style={styles.avatar}>
+
+                        <CameraButton style={styles.cameraBtn}
+                            avatarImage={this.state.info.avatarImage}
+                            photos={[]}
+                            onFileUpload={this.onFileUpload} />
+                    </View>
+                    <View style={styles.separator}></View>
+                    <DisplayItem txt1="昵称" />
+                    <TextInput ref={(ref)=>{this.nameInput=ref}}
+                        placeholder={this.state.uame}
+                               placeholderTextColor={Colors.gray}
+                               value={this.state.uname}
+                               style={[styles.inputStyle, styles.nameInputStyle]}
+                               onChangeText={(text)=>this.setState({uname: text})}
+                               onBlur={this._updateNickname} />
+                    <DisplayItem txt1="性别" txt3={sex} onPress={this._showSexModal} />
+                    <DisplayItem txt1="电子邮箱" />
+                    <TextInput ref={(ref)=>{this.emailInput = ref;}}
+                               placeholder={this.state.email || "未设定"}
+                               placeholderTextColor={Colors.gray}
+                               value={this.state.email}
+                               style={[styles.inputStyle, styles.emailInputStyle]}
+                               onChangeText={(text)=>this.setState({email: text})}
+                               onBlur={this._updateEmail} />
+                    {birthView}
+                    <View style={styles.separator}></View>
+                    <DisplayItem txt1="学历" txt3={education}  onPress={this._showEducationModal}  />
+                    <Modal
+                        animationType='slide'
+                        transparent={true}
+                        visible={this.state.show}
+                    >
+                        { this.state.showSex ? <SexModal showOnclick = {(sex)=>this._updateSex(sex)} /> : null }
+                        { this.state.showEducation ? <EducationModal showOnclick = {(education)=>this._updateEducation(education)} /> : null }
+                    </Modal>
+                    <Toast ref="toast" position="center" />
                 </View>
-                <View style={styles.separator}></View>
-                <DisplayItem txt1="昵称" />
-                <TextInput placeholder={this.state.info.nickName} placeholderTextColor={Colors.gray} style={[styles.inputStyle, styles.nameInputStyle]} onChangeText={(text)=>this.setState({uname: text})} onBlur={this._updateNickname} />
-                <DisplayItem txt1="性别" txt3={sex} onPress={this._showSexModal} />
-                <DisplayItem txt1="电子邮箱" />
-                <TextInput ref="emailInput" placeholder={this.state.info.email || "未设定"} placeholderTextColor={Colors.gray} style={[styles.inputStyle, styles.emailInputStyle]} onChangeText={(text)=>this.setState({email: text})} onBlur={this._updateEmail} />
-                {birthView}
-                <View style={styles.separator}></View>
-                <DisplayItem txt1="学历" txt3={education}  onPress={this._showEducationModal}  /> 
-                <Modal
-                    animationType='slide'
-                    transparent={true}
-                    visible={this.state.show}
-                >
-                    { this.state.showSex ? <SexModal showOnclick = {(sex)=>this._updateSex(sex)} /> : null }
-                    { this.state.showEducation ? <EducationModal showOnclick = {(education)=>this._updateEducation(education)} /> : null }
-                </Modal>   
-                <Toast ref="toast" position="center" />            
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 
@@ -269,7 +292,8 @@ export default class Profile extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        flex: 1
     },
     avatar: {
         flexDirection:'row',

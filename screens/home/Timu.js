@@ -71,6 +71,8 @@ export default class Timu extends Component {
 				}, ()=>{
 					this._getTimu();
 				});
+			} else {
+                this.toast.show(result.msg);
 			}
 		});
 	}
@@ -103,7 +105,7 @@ export default class Timu extends Component {
                         info.answersImg.push(ask.answerImg);
                         info.analysis.push(ask.analysis);
                         info.analysisImg.push(ask.analysisImg);
-                        if (result.data.askList.length == 1) info.question = ask.question || '';
+                        // if (result.data.askList.length == 1) info.question = ask.question || '';
 					}
 					info = Object.assign({}, result.data, info);
 					console.log('info ', info);
@@ -145,6 +147,12 @@ export default class Timu extends Component {
 	}
 
 	_collect = () => {
+        let { state } = this.props.navigation;
+        if (!state.params.isAnalyse &&
+            (state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')) {
+            this.toast.show('答题时不能收藏哦~');
+            return;
+        }
 		let self = this;
 		let info = this.state.info;
 		let params = {
@@ -164,6 +172,7 @@ export default class Timu extends Component {
 		})
 	}
 
+	// list数据字段有修改，current只会取第一个 TODO：确认需求，是否要修改为未做的第一题
 	_getCurrent = () => {
 		let list = this.state.list;
 		if (list && list.length > 0) {
@@ -184,7 +193,8 @@ export default class Timu extends Component {
 		let { state } = this.props.navigation;
 		if (state.params.isAnalyse) return;
 		let currentAnswers = this.state.currentAnswers;
-		if (this.state.info.type == '单选题' || this.state.info.type == '判断题') {
+		if (this.state.info.type == '单选题' || this.state.info.type == '单项选择题'
+			|| this.state.info.type == '判断题') {
             currentAnswers[index] = key;
         } else {
 			// 多选题或不定项选择题，如果用户已经选取，则取消；否则进行选取操作
@@ -212,12 +222,14 @@ export default class Timu extends Component {
 
 	_getPrev = () => {
 		if (this.state.index == 1) return;
-		let id = this.state.list[this.state.index-2].id
+        clearTimeout(this.nextTimeout);
+		let id = this.state.list[this.state.index-2].id;
 		this._getTimu(id, this.state.index - 1);
 	}
 
 	_getNext = () => {
 		if (this.state.index == this.state.total) return;
+        clearTimeout(this.nextTimeout);
 		let id = this.state.list[this.state.index].id;
 		this._getTimu(id, this.state.index + 1);
 	}
@@ -281,8 +293,10 @@ export default class Timu extends Component {
 				this.setState({
 					list: list
 				});
-                if (this.state.info.type == '单选题' || this.state.info.type == '判断题') {
-                	setTimeout(()=>{
+                if (this.state.info.type == '单选题'|| this.state.info.type == '单项选择题'
+					|| this.state.info.type == '判断题') {
+                	clearTimeout(this.nextTimeout);
+                	this.nextTimeout = setTimeout(()=>{
                         this._getNext();
 					}, 1000);
                 }
@@ -403,10 +417,8 @@ export default class Timu extends Component {
             }
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
-                    {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
-					{
-                        this._renderAsk(i)
-					}
+                    { this._renderQuestionText(i) }
+                    { this._renderAsk(i) }
                     <TouchableOpacity onPress={()=>{}}>
                         <View>{choicesView}</View>
                     </TouchableOpacity>
@@ -428,10 +440,8 @@ export default class Timu extends Component {
             let value = this.state.currentAnswers[i];
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
-                    {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
-                    {
-                        this._renderAsk(i)
-                    }
+                    { this._renderQuestionText(i) }
+                    { this._renderAsk(i) }
                     <TextInput
                         editable={!state.params.isAnalyse ? true : false}
                         onChangeText={(text)=>{this._onChangeText(text, i)}}
@@ -455,10 +465,8 @@ export default class Timu extends Component {
             let value = this.state.currentAnswers[i];
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
-                    {/*<Text style={styles.questionText}>问题{parseInt(i)+1}</Text>*/}
-                    {
-                        this._renderAsk(i)
-                    }
+					{ this._renderQuestionText(i) }
+                    { this._renderAsk(i) }
                     <TextInput
                         editable={!state.params.isAnalyse ? true : false}
                         placeholder={'请输入您的答案'}
@@ -473,10 +481,19 @@ export default class Timu extends Component {
         return questionsView;
 	}
 
+	_renderQuestionText = (index) => {
+        let info = this.state.info;
+		return info.choices.length > 1 ?
+			<Text style={styles.questionText}>问题{parseInt(index)+1}</Text>
+			: null;
+	}
+
 	_renderAsk = (index) => {
+		let ask = this.state.askList[index].ask.replace(/^\d*\./, '');
+		// 一题多问，问题不显示序号
 		return (
             this.state.askList[index].ask ?
-                <Text style={styles.title}>{this.state.index + '. ' + this.state.askList[index].ask.replace(/^\d*\./, '')}</Text>
+                <Text style={styles.title}>{(this.state.askList.length > 1 ? '' : this.state.index + '. ') + ask}</Text>
                 : null
 		);
 	}
@@ -527,6 +544,8 @@ export default class Timu extends Component {
         return analyseView;
 	}
 
+	_render
+
 	_renderBottom = () => {
 		let collectText = '收藏';
 		let collectBtnStyle = { color: Colors.gray };
@@ -567,7 +586,7 @@ export default class Timu extends Component {
 		return (
 			<View style={styles.container}>
 				<Bar></Bar> 
-                <Header title="" goBack={()=>{
+                <Header title={state.params.name || ''} goBack={()=>{
                 	let { state, goBack } = this.props.navigation;
                     if (state.params.callback instanceof Function) {
                         state.params.callback();
@@ -576,7 +595,7 @@ export default class Timu extends Component {
                 }}></Header>
 				<ScrollView style={styles.content}>
 					<Text style={styles.type}>{info.type}</Text>
-					{/*<Text style={styles.title}>{info.question}</Text>*/}
+					{ info.name ? <Text style={styles.title}>{this.state.index + info.name}</Text> : null }
 					{this._renderQuestions()}
 					{this.state.showAnalyse[this.state.index - 1] ? this._renderAnalysis() : null}
 				</ScrollView>
@@ -613,6 +632,7 @@ export default class Timu extends Component {
 	}
 
     componentWillUnmount() {
+    	clearTimeout(this.nextTimeout);
         clearTimeout(this.inputTimeout);
     }
 }

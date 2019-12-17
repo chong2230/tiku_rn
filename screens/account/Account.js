@@ -29,7 +29,7 @@ export default class Account extends Component {
             token: null,
             info: {},
             showNote: false,        // 显示日记
-            showFavor: false,     // 显示收藏
+            showFavor: true,     // 显示收藏
             showDownload: false,    // 显示下载
             showShare: false,        // 显示分享
             showMessage: false
@@ -102,7 +102,6 @@ export default class Account extends Component {
                 navigate('Column', {from: 'purchase', isVisible: true, title: '已购'});
                 break;
             case 4:
-            case 7:
             case 8:
                 Alert.alert('', '程序小哥正在快马加鞭，敬请期待噢~');
                 break;
@@ -115,7 +114,37 @@ export default class Account extends Component {
             case 6:
                 navigate('Message', {isVisible: true, title: '我的留言'});
                 break;
+            case 7:
+                navigate("MyCollect", { course: global.course, isVisible: false});
+                break;
+            case 9:
+                navigate("MyRecord", {course: global.course, isVisible: false});
+                break;
+            case 10:
+                this._getWrongTimuList();
+                break;
         }
+    }
+
+    _getWrongTimuList = () => {
+        let { state, navigate } = this.props.navigation;
+        let params = {
+            professionId: global.course.professionId,
+            courseId: global.course.id
+        };
+        Common.getWrongTimuList(params, (result)=>{
+            console.log('getTimuList ', result);
+            if (result.code == 0) {
+                if (result.data && result.data.length == 0) {
+                    this.toast.show('还没有错题哦~');
+                } else {
+                    navigate("WrongTimu", {course: global.course,
+                        list: result.data, isVisible: false});
+                }
+            } else {
+                this.toast.show(result.msg);
+            }
+        });
     }
 
     _showInfo = () => {
@@ -176,7 +205,7 @@ export default class Account extends Component {
                     <View style={styles.separator}></View>
                     <AccountItem txt1 = "账户" count={this.state.money} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
                     <AccountItem txt1 = "已购" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
-                    <AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} />
+                    {/*<AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} />*/}
                     {shareView}
                     <View style={styles.separator}></View>                    
                     
@@ -185,6 +214,9 @@ export default class Account extends Component {
                     {favorView}
                     {downloadView}
                     {/*<View style={styles.separator}></View>*/}
+                    <AccountItem txt1 = "做题记录" source = {require('../../images/account/publish.png')} onPress={()=>this._onPress(9)} />
+                    {/*<AccountItem txt1 = "错题库" source = {require('../../images/account/note.png')} onPress={()=>this._onPress(10)} />*/}
+                    <View style={styles.separator}></View>
                     <AccountItem txt1 = "设置" source = {require('../../images/account/set.png')} onPress={this._goSetting}/>                    
                 </ScrollView>
                 <View style={styles.safeBottom}></View>

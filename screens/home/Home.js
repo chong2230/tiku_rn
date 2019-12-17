@@ -11,6 +11,8 @@ import {
   Dimensions
 } from 'react-native';
 
+import SplashScreen from 'react-native-splash-screen';
+
 import Bar from '../../components/Bar';
 import ViewPager from '../../components/ViewPager';
 import SwitchModal from '../../components/SwitchModal';
@@ -26,7 +28,7 @@ const deviceW = Dimensions.get('window').width;
 const deviceH = Dimensions.get('window').height;
 const bannerImgHeight = (deviceW-20)*410/900;
 const bannerHeight = bannerImgHeight + 20;
-const itemWidth = deviceW/3 - 30;
+const itemWidth = deviceW/3;
 
 export default class Home extends Component {
 
@@ -50,6 +52,7 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        SplashScreen.hide();
         this._initData();
     }
 
@@ -345,6 +348,7 @@ export default class Home extends Component {
                     {this._renderHotContent()}
                     <View style={styles.separator}></View>
                     {this._renderMine()}
+                    <View style={{height: 80}}></View>
                 </ScrollView>
                 <View style={styles.safeBottom}></View>
                 {this.state.showModal ? <View style={styles.shadowView}></View> : null}
@@ -450,8 +454,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: itemWidth,
         height: 80,
-        marginLeft: 10,
-        marginRight: 10,
         marginBottom: 15
     },
     name: {
@@ -470,8 +472,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: itemWidth,
         height: 80,
-        marginLeft: 10,
-        marginRight: 10,
         marginTop: 10,
         marginBottom: 15
     },

@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderColor: Colors.special,
         borderWidth: 1,
-        marginRight: 30,
+        marginRight: 15,
         justifyContent: 'center',
         alignItems: 'center',
         width: 80,

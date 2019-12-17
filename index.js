@@ -15,7 +15,6 @@ class setup extends Component {
     _init() {
         if (!__DEV__) {
             Common.isHack = false;
-            // Common.httpServer = 'https://riab.luokuang.com';
             global.console = {
                 info: () => {},
                 log: () => {},
@@ -24,8 +23,6 @@ class setup extends Component {
                 assert: () => {},
             };
             global.alert = () => {}
-        } else {
-            // Common.httpServer = 'https://testriab.luokuang.com';
         }
     }
 

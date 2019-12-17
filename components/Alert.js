@@ -80,6 +80,8 @@ export default class Alert extends React.Component {
         okText: '确定',
         showOkBtn: true,
         showCancelBtn: true,
+        confirm: ()=>{},
+        cancel:()=>{}
     }
 
     show(){

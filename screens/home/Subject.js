@@ -200,7 +200,8 @@ export default class Subject extends PureComponent{
         console.log('start ', data);
         const { navigate, state } = this.props.navigation;
         if (global.token) {
-            navigate("Timu", {id: data.id, functionName: state.params.title, functionId: state.params.functionId,
+            navigate("Timu", {id: data.id, name: data.name,
+                functionName: state.params.title, functionId: state.params.functionId,
                 type: isAnalyse ? 1 : 2,
                 isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
                     this._reload();
