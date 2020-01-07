@@ -11,11 +11,18 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"
+#import "OpenShareHeader.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [OpenShare connectQQWithAppId:@"101844964"];
+  [OpenShare connectWeiboWithAppKey:@"3808076800"];
+  [OpenShare connectWeixinWithAppId:@"wx1fe3c4b1d0608ef3"];
+  [OpenShare connectRenrenWithAppId:@"228525" AndAppKey:@"1dd8cba4215d4d4ab96a49d3058c1d7f"];
+  
+  
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"tiku_rn"
@@ -39,6 +46,39 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+-(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+  //第二步：添加回调
+  if ([OpenShare handleOpenURL:url]) {
+    return YES;
+  }
+  //这里可以写上其他OpenShare不支持的客户端的回调，比如支付宝等。
+  //  if ([JSHAREService handleOpenUrl:url]) {
+  //    return YES;
+  //  }
+  return YES;
+}
+
+// work in iOS(9_0)
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+  if ([OpenShare handleOpenURL:url]) {
+    return YES;
+  }
+  //  if ([JSHAREService handleOpenUrl:url]) {
+  //    return YES;
+  //  }
+  return YES;
+}
+// work in iOS(9_0,++)
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  if ([OpenShare handleOpenURL:url]) {
+    return YES;
+  }
+  //  if ([JSHAREService handleOpenUrl:url]) {
+  //    return YES;
+  //  }
+  return YES;
 }
 
 @end

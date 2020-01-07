@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text,
+  TextInput,
   Image,
   View,
   Platform,
@@ -259,10 +260,10 @@ export default class Home extends Component {
     }
 
     _goMineContent = (data) => {
-        if (!global.token) {
-            this._goLogin();
-            return;
-        }
+        // if (!global.token) {
+        //     this._goLogin();
+        //     return;
+        // }
         const { navigate } = this.props.navigation;
         switch(data.name) {
             case '试题收藏':
@@ -290,8 +291,14 @@ export default class Home extends Component {
         let { state, navigate } = this.props.navigation;
         let params = {
             professionId: global.course.professionId,
-            courseId: global.course.id
+            courseId: global.course.courseId || global.course.id
         };
+        // 根据专业、科目和课程ids来获取数据
+        if (!global.course.curriculums) {
+            let ids = [];
+            ids.push(global.course.id);
+            params.curriculumIds = ids.join(',');
+        }
         Common.getWrongTimuList(params, (result)=>{
             console.log('getTimuList ', result);
             if (result.code == 0) {
@@ -299,8 +306,11 @@ export default class Home extends Component {
                     this.toast.show('还没有错题哦~');
                 } else {
                     navigate("WrongTimu", {id: data.id, course: this.state.curCourse,
+                        isAnalyse: true,
                         list: result.data, isVisible: false});
                 }
+            } else if (result.code == 2) {
+                this.toast.show('需要登录才能使用该功能哦~');
             } else {
                 this.toast.show(result.msg);
             }
@@ -342,7 +352,7 @@ export default class Home extends Component {
                     <View style={styles.header}>
                         <Text style={styles.headerTitle}>{this.state.curCourse.name} ▼</Text>
                     </View>
-                </TouchableWithoutFeedback>                
+                </TouchableWithoutFeedback>
                 <ScrollView style={styles.scrollView}>
                     {this._renderHeader()}
                     {this._renderHotContent()}

@@ -51,7 +51,13 @@ export default class MyCollect extends PureComponent {
             pageNumber: pageNumber,
             pageSize: pageSize,
             professionId: params.course.professionId,
-            courseId: params.course.id
+            courseId: global.course.courseId || global.course.id
+        }
+        // 根据专业、科目和课程ids来获取数据
+        if (!global.course.curriculums) {
+            let ids = [];
+            ids.push(global.course.id);
+            param.curriculumIds = ids.join(',');
         }
         Common.getMyCollect(param, (result)=>{
             if (result.code == 0) {
@@ -68,6 +74,10 @@ export default class MyCollect extends PureComponent {
                 }
                 this.setState({
                     listData: data,
+                    hasLoad: true
+                });
+            } else {
+                this.setState({
                     hasLoad: true
                 });
             }

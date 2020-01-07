@@ -53,6 +53,8 @@ export default class MyRecord extends PureComponent{
 
     // 渲染完成钩子
     componentDidMount() {
+        console.log('componentDidMount')
+        pageNumber = 1;
         this._load();
     }
 
@@ -64,7 +66,13 @@ export default class MyRecord extends PureComponent{
             professionId: global.course.professionId,
             courseId: global.course.courseId || global.course.id
         }
-        Common.getMyRecord(params, (result)=>{
+        // 根据专业、科目和课程ids来获取数据
+        if (!global.course.curriculums) {
+            let ids = [];
+            ids.push(global.course.id);
+            param.curriculumIds = ids.join(',');
+        }
+        Common.getMyRecord(param, (result)=>{
             console.log('getMyRecord ', result);
             if (result.code == 0) {
                 let list = result.data || [];
@@ -80,6 +88,10 @@ export default class MyRecord extends PureComponent{
                 }
                 this.setState({
                     listData: data,
+                    hasLoad: true // 控制加载前的第一次渲染，不显示显示空内容
+                });
+            } else {
+                this.setState({
                     hasLoad: true // 控制加载前的第一次渲染，不显示显示空内容
                 });
             }
@@ -123,17 +135,13 @@ export default class MyRecord extends PureComponent{
 
     // 下拉刷新
     _renderRefresh = () => {
-        this.setState({refreshing: true}); //开始刷新
-        this.currPage = 1;
-        this._load();
-    };
-
-    // 上拉加载更多
-    _onEndReached = () => {
-        this._loadMore();
+        // this.setState({refreshing: true}); //开始刷新
+        // this.currPage = 1;
+        // this._load();
     };
 
     _loadMore = () => {
+        console.log('_loadMore');
         if (hasMore) {
             isLoading = true;
             pageNumber++;
@@ -142,6 +150,7 @@ export default class MyRecord extends PureComponent{
     }
 
     _reload = () => {
+        console.log('_reload');
         pageNumber = 1;
         this._load();
     }
@@ -191,7 +200,7 @@ export default class MyRecord extends PureComponent{
         console.log('start ', data);
         const { navigate, state } = this.props.navigation;
         if (global.token) {
-            navigate("Timu", {id: data.id, functionName: state.params.title, functionId: state.params.functionId,
+            navigate("Timu", {id: data.id, functionName: state.params.title, functionId: data.functionId,
                 type: isAnalyse ? 1 : 2,
                 isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
                     this._reload();
@@ -230,7 +239,7 @@ export default class MyRecord extends PureComponent{
                         <FlatList
                             ref={ ref => this.flatList = ref }
                             data={ this.state.listData }
-                            extraData={ this.state.selected }
+                            extraData={ this.state }
                             keyExtractor={ this._keyExtractor }
                             renderItem={ this._renderItem }
                             // 初始加载的条数，不会被卸载
@@ -238,7 +247,17 @@ export default class MyRecord extends PureComponent{
                             // 决定当距离内容最底部还有多远时触发onEndReached回调；数值范围0~1，例如：0.5表示可见布局的最底端距离content最底端等于可见布局一半高度的时候调用该回调
                             onEndReachedThreshold={0.1}
                             // 当列表被滚动到距离内容最底部不足onEndReacchedThreshold设置的距离时调用
-                            onEndReached={ this._onEndReached }
+                            onEndReached={ () => {
+                                console.log('onEndReached');
+                                if (this.isCanLoadMore) {
+                                    console.log('loadMore');
+                                    this._loadMore();
+                                    this.isCanLoadMore = false;
+                                }
+                            } }
+                            onContentSizeChange={() => {
+                                this.isCanLoadMore = true // flatview内部组件布局完成以后会调用这个方法
+                            }}
                             //ListHeaderComponent={ this._renderHeader }
                             // ListFooterComponent={ this._renderFooter }
                             ItemSeparatorComponent={ this._renderItemSeparatorComponent }
@@ -284,14 +303,14 @@ const styles = StyleSheet.create({
     },
     type: {
         color: Colors.highlight,
-        fontSize: 15,
+        fontSize: 16,
         alignSelf: 'center',
         marginLeft: 10
     },
     title: {
         color: '#1A1A1A',
         marginLeft: 10,
-        fontSize: 15,
+        fontSize: 16,
         alignSelf: 'center'
     },
     bottom: {

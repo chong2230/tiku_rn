@@ -102,6 +102,7 @@ export default class Recharge extends Component {
     }
 
     async componentDidMount(): void {
+        let self = this;
         try {
           const result = await RNIap.initConnection();
           await RNIap.consumeAllItemsAndroid();
@@ -137,10 +138,10 @@ export default class Recharge extends Component {
                     // RNIap.finishTransaction();
                 });
                 const ackResult = await finishTransaction(purchase);
-                global.mLoadingComponentRef.setState({ showLoading: false });
+                  global.mLoadingComponentRef.show(false);
               } catch (ackErr) {
                 console.warn('ackErr', ackErr);
-                  global.mLoadingComponentRef.setState({ showLoading: false });
+                  global.mLoadingComponentRef.show(false);
               }
 
               this.setState({receipt}, () => this.goNext());
@@ -152,7 +153,7 @@ export default class Recharge extends Component {
           (error: PurchaseError) => {
             console.log('purchaseErrorListener', error);
             // Alert.alert('purchase error', JSON.stringify(error));
-              Alert.alert('购买失败');
+              Alert.alert(error.message);
           },
         );
       }
@@ -187,8 +188,8 @@ export default class Recharge extends Component {
           }
         } catch (err) {
           console.warn(err.code, err.message);
-          // Alert.alert(err.message);
-          Alert.alert('获得可用的购买失败~');
+          Alert.alert(err.message);
+          // Alert.alert('获得可用的购买失败~');
         }
       };
 
@@ -196,8 +197,8 @@ export default class Recharge extends Component {
         try {
           RNIap.requestSubscription(sku);
         } catch (err) {
-          // Alert.alert(err.message);
-            Alert.alert('购买失败');
+          Alert.alert(err.message);
+            // Alert.alert('购买失败');
         }
       };
 
@@ -209,6 +210,10 @@ export default class Recharge extends Component {
     }
 
     pay() {
+        if (!global.token) {
+            this.toast.show('需要登录才能支付哦~');
+            return;
+        }
         let payIndex = 0;
         let self = this;
         if (Platform.os == 'android') {
@@ -228,7 +233,7 @@ export default class Recharge extends Component {
             }
         }
         this.requestSubscription(this.state.selectId);
-        global.mLoadingComponentRef.setState({ showLoading: true });      
+        global.mLoadingComponentRef.show(true);
     }
 
     render() {      
@@ -253,12 +258,13 @@ export default class Recharge extends Component {
             <ScrollView style={styles.container}>
                 <Bar />
                 <Header title={'账户'} goBack={()=>{
+                        global.mLoadingComponentRef.show(false);
                         let { goBack } = this.props.navigation;
                         goBack();
                     }}
                         bottomLineColor={'rgba(0, 0, 0)'} />
                 <View style={styles.top}>
-                    <Text style={styles.money}>￠ {this.state.money || 0.00}</Text>
+                    <Text style={styles.money}> {this.state.money || 0.00} 学币</Text>
                     <Text style={styles.title}>账户余额</Text>
                 </View>
                 <View style={styles.center}>
@@ -301,7 +307,8 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 15,
         color: '#828282',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 5
     },
     center: {
         flexDirection: 'row',

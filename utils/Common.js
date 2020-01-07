@@ -6,17 +6,17 @@ import {
     AsyncStorage,
     Platform
 } from 'react-native';
-// import DeviceInfo from 'react-native-device-info';
+import DeviceInfo from 'react-native-device-info';
 import MockData from '../mockdata/mockdata';
 import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    static httpServer = 'http://practice.youzhi.tech';
+    static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    // static httpServer = 'http://test-practice.youzhi.tech';
+    // static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
-    static baseUrl = 'http://static.youzhi.tech/';
+    static baseUrl = 'https://static.youzhi.tech/';
 
     static isPreAlpha = false;   // 预览版
     static isHack = false;   // 默认为false，不使用mock数据
@@ -76,6 +76,14 @@ export default class Common {
         if (!method) method = params ? 'POST' : 'GET';
         params = params || {};
         if (params.pageNumber) params.pageNum = params.pageNumber;
+        // console.log(url, params);
+        // 带签名的请求不加公共参数
+        if (!params.sign) {
+            params.plt = Platform.OS;
+            params.dt = new Date().getTime();
+            params.ver = DeviceInfo.getVersion();
+            params.guid = DeviceInfo.getUniqueId();
+        }
         let bodyParams = '';
         let str = Common.parseObj(params);
         if (method == 'GET') {
@@ -100,7 +108,7 @@ export default class Common {
                     global.token = null;
                     Storage.delete('token');
                 }
-                console.log('url ', url, bodyParams, json); // TODO: need to delete
+                // console.log(json); // TODO: need to delete
                 return Common.isHack ? MockData[url] : json;
             })
             .catch((error) => {
@@ -189,6 +197,14 @@ export default class Common {
     // 获取题目列表
     static getTimuList(params, cb) {
         Common.httpRequest('/question/list', params).then((result)=>{
+            // console.log(result);
+            cb(result);
+        })
+    }
+
+    // 获取答题卡信息
+    static getScantron(params, cb) {
+        Common.httpRequest('/question/scantron', params).then((result)=>{
             // console.log(result);
             cb(result);
         })
@@ -382,7 +398,8 @@ export default class Common {
 
     // 苹果支付验证
     static checkPurchase(receiptData, cb) {
-        let receipt = receiptData.replace(/\+/g, "%2B").replace(/\\n/g, "").replace(/\\r/g, "");
+        // let receipt = receiptData.replace(/\+/g, "%2B").replace(/\\n/g, "").replace(/\\r/g, "");
+        let receipt = receiptData.replace(/\\n/g, "").replace(/\\r/g, "");
         Common.httpRequest('/recharge/appleverify', {
             receipt: receipt
         }).then((result) => {

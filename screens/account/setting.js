@@ -67,13 +67,14 @@ export default class Setting extends Component {
     _safeAccount = () => {
         const { state, navigate } = this.props.navigation;
         if (this.state.token == null) {
-            navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical',
-                refresh: (token)=>{
-                    if (token) {
-                        if (state.params.refresh instanceof Function) state.params.refresh(token);
-                    }
-                }
-            });
+            this.toast.show('需要登录才能使用该功能哦~');
+            // navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical',
+            //     refresh: (token)=>{
+            //         if (token) {
+            //             if (state.params.refresh instanceof Function) state.params.refresh(token);
+            //         }
+            //     }
+            // });
         } else {
             navigate('SafeAccount', {isVisible: false, title: "账户安全"});
         }        
@@ -160,7 +161,11 @@ export default class Setting extends Component {
                     {playView}
                     <SettingItem txt1 = '清除缓存' count = {this.state.cacheSize} showBorder = {false} onPress={this.clearCache.bind(this)}/>
                     <View style={styles.separator}></View>
-                    <SettingItem txt1 = '给应用评分' onPress={this._appraise}/>
+                    {
+                        Platform.OS == 'ios' ?
+                        <SettingItem txt1 = '给应用评分' onPress={this._appraise}/>
+                        : null
+                    }
                     <SettingItem txt1 = '意见与建议' showBorder = {false} onPress={this._suggest}/>
                     <View style={styles.separator}></View>
                     <SettingItem txt1 = '关于我们' onPress={this._about}/>

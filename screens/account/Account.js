@@ -73,9 +73,9 @@ export default class Account extends Component {
     }
 
     _onPress = (type) => {
-        if (global.token == null) {
+        if (global.token == null && type == 0) {
             this._goLogin();
-            return;
+            return;                
         }
         let self = this;
         const { navigate } = this.props.navigation;
@@ -202,9 +202,9 @@ export default class Account extends Component {
                             </View>
                         </View>    
                     </TouchableOpacity>                    
-                    <View style={styles.separator}></View>
-                    <AccountItem txt1 = "账户" count={this.state.money} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
-                    <AccountItem txt1 = "已购" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
+                    {/*<View style={styles.separator}></View>*/}
+                    {/*<AccountItem txt1 = "账户" count={this.state.money} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />*/}
+                    {/*<AccountItem txt1 = "已购" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />*/}
                     {/*<AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} />*/}
                     {shareView}
                     <View style={styles.separator}></View>                    

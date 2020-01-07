@@ -61,6 +61,7 @@ export default class WrongTimu extends Timu {
 
     doNext = (list) => {
         let showAnalyse = [];
+        let { state } = this.props.navigation;
         if (state.params.isAnalyse) {
             for (let i in list) {
                 showAnalyse[i] = true;
@@ -73,6 +74,16 @@ export default class WrongTimu extends Timu {
         }, ()=>{
             this._getTimu();
         });
+    }
+
+    // 单个题目显示答案和解析，不能选择
+    _choose = (key, index) => {
+
+    }
+
+    // 获取答题卡信息
+    _getScantron = () => {
+        this._showCard();
     }
 
 }

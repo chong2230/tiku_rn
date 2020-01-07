@@ -228,6 +228,8 @@ PODS:
     - React-cxxreact (= 0.61.4)
     - React-jsi (= 0.61.4)
     - ReactCommon/jscallinvoker (= 0.61.4)
+  - RNDeviceInfo (5.4.0):
+    - React
   - RNGestureHandler (1.5.0):
     - React
   - RNIap (4.3.0):
@@ -272,6 +274,7 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/jscallinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNIap (from `../node_modules/react-native-iap`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -340,6 +343,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNIap:
@@ -383,6 +388,7 @@ SPEC CHECKSUMS:
   React-RCTText: 21934e0a51d522abcd0a275407e80af45d6fd9ec
   React-RCTVibration: 0f76400ee3cec6edb9c125da49fed279340d145a
   ReactCommon: a6a294e7028ed67b926d29551aa9394fd989c24c
+  RNDeviceInfo: d0fff8432ccdf276cb342a52e665ea6dd311472e
   RNGestureHandler: a4ddde1ffc6e590c8127b8b7eabfdade45475c74
   RNIap: 968cacbb317c52218e6dcde98a71be0c64051cbc
   RNReanimated: b2ab0b693dddd2339bd2f300e770f6302d2e960c
@@ -390,6 +396,6 @@ SPEC CHECKSUMS:
   RNVectorIcons: 0bb4def82230be1333ddaeee9fcba45f0b288ed4
   Yoga: ba3d99dbee6c15ea6bbe3783d1f0cb1ffb79af0f
 
-PODFILE CHECKSUM: cc6f713bce25cda68f1b69551f57c343f5c0a054
+PODFILE CHECKSUM: 930b8e417ca4f1f7789806ab6dcc2a61d26ec8b9
 
 COCOAPODS: 1.7.5

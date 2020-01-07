@@ -8,22 +8,30 @@ import {
     StyleSheet,
     Dimensions,
     TouchableOpacity,
+    NativeModules
 } from 'react-native';
 
 import loadingImage from '../images/loading.gif';
 
-let wndSize = Dimensions.get('window');
+const { LKHudBridgeModule } = NativeModules;
+let {width, height} = Dimensions.get('window');
 
 class LoadingView extends Component {
     constructor(props) {
         super(props);
         this.state = {
-          showLoading: false
+            showLoading: false
         }
     }
 
     _close() {
         console.log("onRequestClose ---- ")
+    }
+
+    show(bool=true) {
+        this.setState({
+            showLoading: bool
+        });
     }
 
     render() {
@@ -32,8 +40,8 @@ class LoadingView extends Component {
             return null;
         }
         return (
-            <View style={ [styles.loadingView, {opacity: opacity || 0.3, backgroundColor: backgroundColor || 'black'}]}>
-                <View style={ styles.loadingImage }>
+            <View style={styles.container}>
+                <View style={ styles.loadingView }>
                     {
                         this.props.loadingViewClick ?
                             <TouchableOpacity onPress={ this.props.loadingViewClick }>
@@ -49,15 +57,21 @@ class LoadingView extends Component {
 }
 
 const styles = StyleSheet.create({
-    loadingView: {
+    container: {
         flex: 1,
-        left: 0,
-        top: 0,
-        width: wndSize.width,
-        height: wndSize.height,
+        position: 'absolute'
+    },
+    loadingView: {
+        left: width/2 - 40,
+        top: height/2 - 40,
+        width: 80,
+        height: 80,
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute'
+        position: 'absolute',
+        opacity: 0.5,
+        backgroundColor: 'black',
+        borderRadius: 5
     },
     loadingImage: {
         width: 30,

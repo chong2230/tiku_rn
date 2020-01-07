@@ -53,6 +53,7 @@ export default class Subject extends PureComponent{
 
     // 渲染完成钩子
     componentDidMount() {
+        pageNumber = 1;
         this._load();
     }
 
@@ -201,7 +202,7 @@ export default class Subject extends PureComponent{
         const { navigate, state } = this.props.navigation;
         if (global.token) {
             navigate("Timu", {id: data.id, name: data.name,
-                functionName: state.params.title, functionId: state.params.functionId,
+                functionName: state.params.title, functionId: state.params.id,
                 type: isAnalyse ? 1 : 2,
                 isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
                     this._reload();
@@ -276,7 +277,8 @@ Subject.navigationOptions = {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        // flex: 1,
+        height: '100%',
         backgroundColor: '#F8F8F8'
     },
     item: {
@@ -291,14 +293,14 @@ const styles = StyleSheet.create({
     },
     type: {
         color: Colors.highlight,
-        fontSize: 15,
+        fontSize: 16,
         alignSelf: 'center',
         marginLeft: 10
     },
     title: {
         color: '#1A1A1A',
         marginLeft: 10,
-        fontSize: 15,
+        fontSize: 16,
         alignSelf: 'center'
     },
     bottom: {

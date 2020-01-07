@@ -10,7 +10,7 @@ import {
     Linking
 } from 'react-native';
 
-// import openShare from 'react-native-open-share';
+import openShare from 'react-native-open-share';
 import ImageButton from './ImageButton';
 
 var deviceW = Dimensions.get('window').width;
@@ -32,7 +32,10 @@ export default  class ThirdPartyLogin extends Component {
         Linking.canOpenURL('weixin://').then(supported => {
             if (supported) {
                 // Linking.openURL('weixin://');
-                console.log('open weixin');
+                // console.log('open weixin');
+                self.setState({
+                    isWechatInstalled: true
+                });
             } else {
                 console.log('请先安装微信');
             }
@@ -65,7 +68,7 @@ export default  class ThirdPartyLogin extends Component {
         var _this = this;
         if (this.state.isWechatInstalled) {
             // console.log('Wechat Installed');
-            // openShare.wechatLogin();
+            openShare.wechatLogin();
 
         } else {
             // console.log('Wechat not installed');
@@ -94,7 +97,7 @@ export default  class ThirdPartyLogin extends Component {
         var _this = this;
         if (this.state.isQQInstalled) {
             // console.log('QQ Installed');
-            // openShare.qqLogin();
+            openShare.qqLogin();
 
         } else {
             // console.log('QQ not installed');
@@ -177,17 +180,21 @@ const styles = StyleSheet.create({
         margin: 10,
         textAlign: 'center',
         color: '#828282',
-        fontSize: 13
+        fontSize: 15
     },
     btns: {
         flexDirection: 'row',
         marginLeft: 60,
-        marginRight: 60
+        marginRight: 60,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     imageButton: {
         width: 50,
         height: 50,
-        margin: (deviceW-100-120)/4
+        marginTop: 30,
+        marginBottom: 30
+        // margin: (deviceW-100-120)/4
     }
 
 });

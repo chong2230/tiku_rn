@@ -8,8 +8,12 @@ import {
 	TouchableOpacity,
 	Modal,
 	StyleSheet,
-	Dimensions
+	Dimensions,
+	Platform,
+	NativeModules
 } from 'react-native';
+
+import DeviceInfo from 'react-native-device-info';
 
 import Bar from '../../components/Bar';
 import Header from '../../components/Header';
@@ -21,6 +25,8 @@ import Common from '../../utils/Common';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 import { isJson } from '../../utils/Util';
 import ImageButton from "../../components/ImageButton";
+
+const { ApiUtilBridgeModule } = NativeModules;
 
 const {width, height} = Dimensions.get('window');
 
@@ -37,8 +43,11 @@ export default class Timu extends Component {
 	  		currentAnswers: [],		// 当前题目的回答
 	  		showAnalyse: [],		// 是否为题目解析
 	  		showModal: false,
-	  		showCardModal: false
+	  		showCardModal: false,
 	  	};
+	  	this.showMultiChoiceTip = false;		// 多选题提示
+	  	this.showUncertainChoiceTip = false;	// 不定项选择题提示
+	  	this.isFetchScantron = false;			// 是否已经获取了答题卡接口，新版接口出来后修改为false
 	}
 
 	componentDidMount() {
@@ -58,6 +67,14 @@ export default class Timu extends Component {
 		Common.getTimuList(params, (result)=>{
 			console.log('getTimuList ', result);
 			if (result.code == 0) {
+				let list = [];
+				// 和答题卡接口数据统一
+				for (let i=0; i<result.data.length; i++) {
+					let d = {
+						id: result.data[i]
+					}
+					list.push(d);
+				} 
                 let showAnalyse = [];
 				if (state.params.isAnalyse) {
 					for (let i in result.data) {
@@ -65,7 +82,7 @@ export default class Timu extends Component {
 					}
 				}
 				this.setState({
-					list: result.data,
+					list: list,
 					total: result.data.length,
                     showAnalyse: showAnalyse
 				}, ()=>{
@@ -77,47 +94,68 @@ export default class Timu extends Component {
 		});
 	}
 
+	// sign参数签名
 	_getTimu = (id, index) => {
 		if (!id) id = this._getCurrent();
-		// 防止试卷无题目时报错
-		if (id) {
-			Common.getTimu({ questionId: id }, (result)=>{
-				if (result.code == 0) {
-					let info = {
-						question: "",
-                        choices: [],
-                        answers: [],
-                        answersImg: [],
-                        analysis: [],
-                        analysisImg: []
+		let params = { 
+			plt: Platform.OS,
+            dt: new Date().getTime(),
+            ver: DeviceInfo.getVersion(),
+            guid: DeviceInfo.getUniqueId(),
+            nonce: Math.floor(Math.random() * 100000) + 999999,
+			questionId: id 
+		};
+		// let cloneParams = Object.assign({}, params, {dt: params.dt + '', nonce: params.nonce + ''});
+		// if (ApiUtilBridgeModule) {
+  //           ApiUtilBridgeModule.getSignature(cloneParams).then((sign)=>{
+  //               params.sign = sign;
+                // console.log('sign ', params);
+                // 防止试卷无题目时报错
+				if (id) {
+					Common.getTimu(params, (result)=>{
+						if (result.code == 0) {
+							let info = {
+								question: "",
+		                        choices: [],
+		                        answers: [],
+		                        answersImg: [],
+		                        analysis: [],
+		                        analysisImg: []
 
-					};
-					for (let i in result.data.askList) {
-						let ask = result.data.askList[i];
-						let choice = {};
-						if (ask.choiceA) choice['a'] = ask.choiceA;
-                        if (ask.choiceB) choice['b'] = ask.choiceB;
-                        if (ask.choiceC) choice['c'] = ask.choiceC;
-                        if (ask.choiceD) choice['d'] = ask.choiceD;
-                        if (ask.choiceE) choice['e'] = ask.choiceE;
-                        info.choices.push(choice);
-                        info.answers.push(ask.answer);
-                        info.answersImg.push(ask.answerImg);
-                        info.analysis.push(ask.analysis);
-                        info.analysisImg.push(ask.analysisImg);
-                        // if (result.data.askList.length == 1) info.question = ask.question || '';
-					}
-					info = Object.assign({}, result.data, info);
-					console.log('info ', info);
-					this.setState({
-						index: index || 1,	// 不传则默认为1
-						info: info,
-                        askList: result.data.askList
+							};
+							for (let i in result.data.askList) {
+								let ask = result.data.askList[i];
+								let choice = {};
+								if (ask.choiceA) choice['a'] = ask.choiceA;
+		                        if (ask.choiceB) choice['b'] = ask.choiceB;
+		                        if (ask.choiceC) choice['c'] = ask.choiceC;
+		                        if (ask.choiceD) choice['d'] = ask.choiceD;
+		                        if (ask.choiceE) choice['e'] = ask.choiceE;
+		                        info.choices.push(choice);
+		                        info.answers.push(ask.answer);
+		                        info.answersImg.push(ask.answerImg);
+		                        info.analysis.push(ask.analysis);
+		                        info.analysisImg.push(ask.analysisImg);
+		                        // if (result.data.askList.length == 1) info.question = ask.question || '';
+							}
+							info = Object.assign({}, result.data, info);
+							console.log('info ', info);
+							this.setState({
+								index: index || 1,	// 不传则默认为1
+								info: info,
+		                        askList: result.data.askList
+							});
+							this._convertAnswers(result.data.askList);
+							// 切换题目时自动滑动到顶部
+							if (index) this.scrollView.scrollTo({x:0,y: 0,animated:true});
+						} else {
+							this.toast.show(result.msg);
+						}
 					});
-					this._convertAnswers(result.data.askList);
 				}
-			});
-		}
+    //         })
+        // }
+
 	}
 
 	_convertAnswers = (list) => {
@@ -315,6 +353,31 @@ export default class Timu extends Component {
 		})
 	}
 
+	// 获取答题卡信息
+	_getScantron = () => {
+		if (this.isFetchScantron) {
+			this._showCard();
+		} else {
+			let { state } = this.props.navigation;
+			let params = {
+				paperId: state.params.id,
+			};
+			Common.getScantron(params, (result)=>{
+				console.log('getTimuList ', result);
+				if (result.code == 0) {
+					this.isFetchScantron = true;
+					this.setState({
+						list: result.data,
+					}, ()=>{
+						this._showCard();
+					});
+				} else {
+	                this.toast.show(result.msg);
+				}
+			});
+		}
+	}
+
 	onRequestClose = () => {
         this.setState({
             showModal: false,
@@ -363,25 +426,15 @@ export default class Timu extends Component {
     // 一道题有多个问题和答案
     _renderQuestions = () => {
         switch (this.state.info.type) {
-			case '单选题':
-            case '单项选择题':
-			case '多选题':
-            case '多项选择题':
-            case '不定项':
-            case '不定项选择题':
-            case '判断题':
-            	return this._renderChoiceQuestions();
-                break;
             case '填空题':
                 return this._renderFillBlankQuestions();
-                break;
             case '简答题':
             case '计算分析题':
             case '综合题':
                 return this._renderShortAnswerQuestions();
-                break;
 			default:
-				break;
+				// 单选题、单项选择题、多选题、多项选择题、不定项、不定项题、不定项选择题、判断题
+				return this._renderChoiceQuestions();
 		}
 	}
 
@@ -488,8 +541,10 @@ export default class Timu extends Component {
 			: null;
 	}
 
+	// 年份被截取，暂不过滤数字+空格 /^\d*\s/
 	_renderAsk = (index) => {
-		let ask = this.state.askList[index].ask.replace(/^\d*\./, '');
+		let ask = this.state.askList[index].ask.replace(/^\d*\./, '')
+			.replace(/^\d*、/, '').replace(/^\d*．/, '');
 		// 一题多问，问题不显示序号
 		return (
             this.state.askList[index].ask ?
@@ -544,8 +599,6 @@ export default class Timu extends Component {
         return analyseView;
 	}
 
-	_render
-
 	_renderBottom = () => {
 		let collectText = '收藏';
 		let collectBtnStyle = { color: Colors.gray };
@@ -575,7 +628,7 @@ export default class Timu extends Component {
 					onPress={()=>{this._getNext()}}></Button>
 				<Button text={this.state.index + '/' + this.state.total} 
 					style={styles.button}
-				  	onPress={()=>{this._showCard()}}></Button>
+				  	onPress={()=>{this._getScantron()}}></Button>
 			</View>
 		);
 	}
@@ -583,6 +636,22 @@ export default class Timu extends Component {
 	render() {
 		let info = this.state.info;
         let { state } = this.props.navigation;
+        let tip = '';
+        if (!this.showMultiChoiceTip && (info.type == '多选题' 
+        		|| info.type == '多项题' || info.type == '多项选择题')) {
+        	setTimeout(()=>{
+        		this.showMultiChoiceTip = true;
+        	}, 50);
+        	tip = '（' + info.type + '需手动切换下一题）';
+        } else if (!this.showUncertainChoiceTip && (info.type == '不定项' || info.type == '不定项题' || info.type == '不定项选择题')) {        	
+        	setTimeout(()=>{
+        		this.showUncertainChoiceTip = true;
+        	}, 50);
+        	tip = '（' + info.type + '需手动切换下一题）';
+        }
+        let name = info.name ? info.name.replace(/^\d*\./, '')
+			.replace(/^\d*、/, '').replace(/^\d*．/, '').replace(/^\d*\s/, '') : '';
+
 		return (
 			<View style={styles.container}>
 				<Bar></Bar> 
@@ -593,9 +662,12 @@ export default class Timu extends Component {
                     }
                     goBack();
                 }}></Header>
-				<ScrollView style={styles.content}>
-					<Text style={styles.type}>{info.type}</Text>
-					{ info.name ? <Text style={styles.title}>{this.state.index + info.name}</Text> : null }
+				<ScrollView ref={(ref)=>{this.scrollView = ref;}} style={styles.content}>
+					<Text style={styles.type}>
+						{info.type}
+						{tip == '' ? null : <Text style={{color: Colors.special}}>{' ' + tip}</Text>}
+					</Text>
+					{ info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null }
 					{this._renderQuestions()}
 					{this.state.showAnalyse[this.state.index - 1] ? this._renderAnalysis() : null}
 				</ScrollView>
@@ -645,11 +717,11 @@ const styles = StyleSheet.create({
 		margin: 15
 	},
 	type: {
-		fontSize: 15,
+		fontSize: 16,
 		color: Colors.highlight
 	},
 	title: {
-		fontSize: 15,
+		fontSize: 16,
 		color: Colors.default,
 		width: width - 20,
 		// height: 20,
@@ -659,14 +731,14 @@ const styles = StyleSheet.create({
         paddingRight: 10
     },
 	questionText: {
-		fontSize: 15,
+		fontSize: 16,
 		color: Colors.highlight,
 		height: 20,
 		marginTop: 5,
 		marginBottom: 5
 	},
 	choiceText: {
-		fontSize: 15,
+		fontSize: 16,
 		color: Colors.default,
         lineHeight: 20,
 		marginTop: 5,
@@ -676,7 +748,7 @@ const styles = StyleSheet.create({
 		color: Colors.special
 	},
     input: {
-        fontSize: 15,
+        fontSize: 16,
         color: '#1a1a1a',
         width: width - 30,
 		height: 44,
@@ -695,19 +767,19 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	analyseTip: {
-		fontSize: 15,
+		fontSize: 16,
 		color: Colors.default,
 		height: 20,
 		marginBottom: 10
 	},
 	analyseAnswer: {
-		fontSize: 15,
+		fontSize: 16,
 		height: 20,
         color: Colors.highlight
 	},
 	analyseContent: {
 		width: width - 20,
-		fontSize: 15,
+		fontSize: 16,
 		// height: 20,
         lineHeight: 20,
 		marginTop: 10,

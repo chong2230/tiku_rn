@@ -21,6 +21,15 @@
 		2DCD954D1E0B4F2C00145EB5 /* tiku_rnTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* tiku_rnTests.m */; };
 		3404395B238AC2C2000AAC80 /* assets in Resources */ = {isa = PBXBuildFile; fileRef = 34043959238AC2C2000AAC80 /* assets */; };
 		3404395C238AC2C2000AAC80 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 3404395A238AC2C2000AAC80 /* main.jsbundle */; };
+		3448684123C227A900A985DA /* SocietyLoginManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683323C227A800A985DA /* SocietyLoginManager.m */; };
+		3448684223C227A900A985DA /* OpenShare.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683423C227A800A985DA /* OpenShare.m */; };
+		3448684323C227A900A985DA /* OpenShare+Renren.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683523C227A800A985DA /* OpenShare+Renren.m */; };
+		3448684423C227A900A985DA /* OpenShare+Weixin.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683623C227A800A985DA /* OpenShare+Weixin.m */; };
+		3448684523C227A900A985DA /* OpenShare+Weibo.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683823C227A800A985DA /* OpenShare+Weibo.m */; };
+		3448684623C227A900A985DA /* OpenShare+Alipay.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683B23C227A800A985DA /* OpenShare+Alipay.m */; };
+		3448684723C227A900A985DA /* OpenShare+QQ.m in Sources */ = {isa = PBXBuildFile; fileRef = 3448683E23C227A800A985DA /* OpenShare+QQ.m */; };
+		34D316BB23AF750500EC9478 /* ApiUtilBridgeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D316B823AF750500EC9478 /* ApiUtilBridgeModule.m */; };
+		34D316BE23AF761900EC9478 /* WechatPayHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D316BD23AF761900EC9478 /* WechatPayHelper.m */; };
 		872C074D8F4C426DD91F8A49 /* libPods-tiku_rn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6CDBE2A11800367222FB79 /* libPods-tiku_rn.a */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +66,26 @@
 		2D02E4901E0B4A5D006451C7 /* tiku_rn-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "tiku_rn-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34043959238AC2C2000AAC80 /* assets */ = {isa = PBXFileReference; lastKnownFileType = folder; name = assets; path = ../bundle/assets; sourceTree = "<group>"; };
 		3404395A238AC2C2000AAC80 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../bundle/main.jsbundle; sourceTree = "<group>"; };
+		3448683223C227A800A985DA /* OpenShare+Weibo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+Weibo.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Weibo.h"; sourceTree = SOURCE_ROOT; };
+		3448683323C227A800A985DA /* SocietyLoginManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SocietyLoginManager.m; path = tiku_rn/RNModule/Bridge/OpenShare/SocietyLoginManager.m; sourceTree = SOURCE_ROOT; };
+		3448683423C227A800A985DA /* OpenShare.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OpenShare.m; path = tiku_rn/RNModule/Bridge/OpenShare/OpenShare.m; sourceTree = SOURCE_ROOT; };
+		3448683523C227A800A985DA /* OpenShare+Renren.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OpenShare+Renren.m"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Renren.m"; sourceTree = SOURCE_ROOT; };
+		3448683623C227A800A985DA /* OpenShare+Weixin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OpenShare+Weixin.m"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Weixin.m"; sourceTree = SOURCE_ROOT; };
+		3448683723C227A800A985DA /* OpenShare+Weixin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+Weixin.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Weixin.h"; sourceTree = SOURCE_ROOT; };
+		3448683823C227A800A985DA /* OpenShare+Weibo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OpenShare+Weibo.m"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Weibo.m"; sourceTree = SOURCE_ROOT; };
+		3448683923C227A800A985DA /* OpenShare+QQ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+QQ.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+QQ.h"; sourceTree = SOURCE_ROOT; };
+		3448683A23C227A800A985DA /* OpenShare+Alipay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+Alipay.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Alipay.h"; sourceTree = SOURCE_ROOT; };
+		3448683B23C227A800A985DA /* OpenShare+Alipay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OpenShare+Alipay.m"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Alipay.m"; sourceTree = SOURCE_ROOT; };
+		3448683C23C227A800A985DA /* OpenShare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenShare.h; path = tiku_rn/RNModule/Bridge/OpenShare/OpenShare.h; sourceTree = SOURCE_ROOT; };
+		3448683D23C227A800A985DA /* SocietyLoginManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SocietyLoginManager.h; path = tiku_rn/RNModule/Bridge/OpenShare/SocietyLoginManager.h; sourceTree = SOURCE_ROOT; };
+		3448683E23C227A800A985DA /* OpenShare+QQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "OpenShare+QQ.m"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+QQ.m"; sourceTree = SOURCE_ROOT; };
+		3448683F23C227A900A985DA /* OpenShareHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenShareHeader.h; path = tiku_rn/RNModule/Bridge/OpenShare/OpenShareHeader.h; sourceTree = SOURCE_ROOT; };
+		3448684023C227A900A985DA /* OpenShare+Renren.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+Renren.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Renren.h"; sourceTree = SOURCE_ROOT; };
+		3448684823C230F200A985DA /* 有知学堂.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "有知学堂.entitlements"; path = "tiku_rn/有知学堂.entitlements"; sourceTree = "<group>"; };
+		34D316B623AF750500EC9478 /* ApiUtilBridgeModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiUtilBridgeModule.h; sourceTree = "<group>"; };
+		34D316B823AF750500EC9478 /* ApiUtilBridgeModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiUtilBridgeModule.m; sourceTree = "<group>"; };
+		34D316BC23AF761900EC9478 /* WechatPayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatPayHelper.h; sourceTree = "<group>"; };
+		34D316BD23AF761900EC9478 /* WechatPayHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WechatPayHelper.m; sourceTree = "<group>"; };
 		7F260B7A4D2D09AA7B170A44 /* Pods-tiku_rnTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiku_rnTests.release.xcconfig"; path = "Target Support Files/Pods-tiku_rnTests/Pods-tiku_rnTests.release.xcconfig"; sourceTree = "<group>"; };
 		9326E1480F7396C0B5702F20 /* Pods-tiku_rn-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tiku_rn-tvOS.release.xcconfig"; path = "Target Support Files/Pods-tiku_rn-tvOS/Pods-tiku_rn-tvOS.release.xcconfig"; sourceTree = "<group>"; };
 		AA4034FDA5036A095976A1A3 /* libPods-tiku_rn-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-tiku_rn-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -128,6 +157,9 @@
 		13B07FAE1A68108700A75B9A /* tiku_rn */ = {
 			isa = PBXGroup;
 			children = (
+				3448684823C230F200A985DA /* 有知学堂.entitlements */,
+				3448683123C2274B00A985DA /* OpenShare */,
+				34D316B323AF750500EC9478 /* RNModule */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -149,6 +181,56 @@
 				C07673E7F9987AB351F3537F /* libPods-tiku_rnTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3448683123C2274B00A985DA /* OpenShare */ = {
+			isa = PBXGroup;
+			children = (
+				3448683C23C227A800A985DA /* OpenShare.h */,
+				3448683423C227A800A985DA /* OpenShare.m */,
+				3448683A23C227A800A985DA /* OpenShare+Alipay.h */,
+				3448683B23C227A800A985DA /* OpenShare+Alipay.m */,
+				3448683923C227A800A985DA /* OpenShare+QQ.h */,
+				3448683E23C227A800A985DA /* OpenShare+QQ.m */,
+				3448684023C227A900A985DA /* OpenShare+Renren.h */,
+				3448683523C227A800A985DA /* OpenShare+Renren.m */,
+				3448683223C227A800A985DA /* OpenShare+Weibo.h */,
+				3448683823C227A800A985DA /* OpenShare+Weibo.m */,
+				3448683723C227A800A985DA /* OpenShare+Weixin.h */,
+				3448683623C227A800A985DA /* OpenShare+Weixin.m */,
+				3448683F23C227A900A985DA /* OpenShareHeader.h */,
+				3448683D23C227A800A985DA /* SocietyLoginManager.h */,
+				3448683323C227A800A985DA /* SocietyLoginManager.m */,
+			);
+			path = OpenShare;
+			sourceTree = "<group>";
+		};
+		34D316B323AF750500EC9478 /* RNModule */ = {
+			isa = PBXGroup;
+			children = (
+				34D316B423AF750500EC9478 /* Bridge */,
+			);
+			name = RNModule;
+			path = tiku_rn/RNModule;
+			sourceTree = "<group>";
+		};
+		34D316B423AF750500EC9478 /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				34D316B523AF750500EC9478 /* util */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
+		34D316B523AF750500EC9478 /* util */ = {
+			isa = PBXGroup;
+			children = (
+				34D316B623AF750500EC9478 /* ApiUtilBridgeModule.h */,
+				34D316B823AF750500EC9478 /* ApiUtilBridgeModule.m */,
+				34D316BC23AF761900EC9478 /* WechatPayHelper.h */,
+				34D316BD23AF761900EC9478 /* WechatPayHelper.m */,
+			);
+			path = util;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -590,7 +672,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				3448684423C227A900A985DA /* OpenShare+Weixin.m in Sources */,
+				3448684323C227A900A985DA /* OpenShare+Renren.m in Sources */,
+				3448684223C227A900A985DA /* OpenShare.m in Sources */,
+				3448684523C227A900A985DA /* OpenShare+Weibo.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				3448684123C227A900A985DA /* SocietyLoginManager.m in Sources */,
+				3448684723C227A900A985DA /* OpenShare+QQ.m in Sources */,
+				3448684623C227A900A985DA /* OpenShare+Alipay.m in Sources */,
+				34D316BE23AF761900EC9478 /* WechatPayHelper.m in Sources */,
+				34D316BB23AF750500EC9478 /* ApiUtilBridgeModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,13 +785,46 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development: yuanyong wei (HC533M5KTV)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U42K255SH7;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/FBReactNativeSpec\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
+					"\"${PODS_ROOT}/Headers/Public/RNDeviceInfo\"",
+					"\"${PODS_ROOT}/Headers/Public/RNGestureHandler\"",
+					"\"${PODS_ROOT}/Headers/Public/RNIap\"",
+					"\"${PODS_ROOT}/Headers/Public/RNReanimated\"",
+					"\"${PODS_ROOT}/Headers/Public/RNScreens\"",
+					"\"${PODS_ROOT}/Headers/Public/RNVectorIcons\"",
+					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
+					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
+					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
+					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
+					"\"${PODS_ROOT}/Headers/Public/glog\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-image-picker\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-splash-screen\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-video\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-webview\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"$(SRCROOT)/../node_modules/react-native-open-share/src",
+				);
 				INFOPLIST_FILE = tiku_rn/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -719,12 +843,45 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = U42K255SH7;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"",
+					"\"${PODS_ROOT}/Headers/Public/DoubleConversion\"",
+					"\"${PODS_ROOT}/Headers/Public/FBLazyVector\"",
+					"\"${PODS_ROOT}/Headers/Public/FBReactNativeSpec\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTRequired\"",
+					"\"${PODS_ROOT}/Headers/Public/RCTTypeSafety\"",
+					"\"${PODS_ROOT}/Headers/Public/RNDeviceInfo\"",
+					"\"${PODS_ROOT}/Headers/Public/RNGestureHandler\"",
+					"\"${PODS_ROOT}/Headers/Public/RNIap\"",
+					"\"${PODS_ROOT}/Headers/Public/RNReanimated\"",
+					"\"${PODS_ROOT}/Headers/Public/RNScreens\"",
+					"\"${PODS_ROOT}/Headers/Public/RNVectorIcons\"",
+					"\"${PODS_ROOT}/Headers/Public/React-Core\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTBlob\"",
+					"\"${PODS_ROOT}/Headers/Public/React-RCTText\"",
+					"\"${PODS_ROOT}/Headers/Public/React-cxxreact\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsi\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsiexecutor\"",
+					"\"${PODS_ROOT}/Headers/Public/React-jsinspector\"",
+					"\"${PODS_ROOT}/Headers/Public/ReactCommon\"",
+					"\"${PODS_ROOT}/Headers/Public/Yoga\"",
+					"\"${PODS_ROOT}/Headers/Public/glog\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-image-picker\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-splash-screen\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-video\"",
+					"\"${PODS_ROOT}/Headers/Public/react-native-webview\"",
+					"\"$(PODS_ROOT)/Headers/Private/React-Core\"",
+					"$(SRCROOT)/../node_modules/react-native-open-share/src",
+				);
 				INFOPLIST_FILE = tiku_rn/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
