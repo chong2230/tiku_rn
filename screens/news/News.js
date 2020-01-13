@@ -58,7 +58,7 @@ export default class News extends Component<{}> {
         }
         Common.getNews(param, (result)=>{
             if (result.code == 0) {
-                let list = result.data || [];
+                let list = result.data.list || result.data || [];
                 hasMore = list.length == pageSize;
                 let data = this.state.listData;
                 if (isLoading) {
@@ -70,7 +70,7 @@ export default class News extends Component<{}> {
                     data = list;                    
                 }
                 this.setState({
-                    headerImg: data.headerImg,
+                    headerImg: result.data.headerImg,
                     listData: data
                 });
             }            
@@ -113,7 +113,7 @@ export default class News extends Component<{}> {
     _header = () => {
         let headerView;
         if (this.state.headerImg) {
-            headerView = <Image source={Common.baseUrl + this.state.headerImg} style={styles.headerImg} />;
+            headerView = <Image source={{uri: Common.baseUrl + this.state.headerImg}} style={styles.headerImg} />;
         } else {
             headerView = <Image source={require("../../images/news-header.jpg")} style={styles.headerImg} />;
         }

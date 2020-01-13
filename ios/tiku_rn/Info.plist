@@ -20,8 +20,78 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>RNShare</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wx1fe3c4b1d0608ef3</string>
+				<string>tencent101844964</string>
+				<string>tencent101844964.content</string>
+				<string>QQ061207E4</string>
+				<string>wb3808076800</string>
+				<string>renrenshare228525</string>
+				<string>fb776442542471056</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>wechat</string>
+		<string>weixin</string>
+		<string>sinaweibohd</string>
+		<string>sinaweibo</string>
+		<string>sinaweibosso</string>
+		<string>weibosdk</string>
+		<string>weibosdk2.5</string>
+		<string>mqqapi</string>
+		<string>mqq</string>
+		<string>mqqOpensdkSSoLogin</string>
+		<string>mqqconnect</string>
+		<string>mqqopensdkdataline</string>
+		<string>mqqopensdkgrouptribeshare</string>
+		<string>mqqopensdkfriend</string>
+		<string>mqqopensdkapi</string>
+		<string>mqqopensdkapiV2</string>
+		<string>mqqopensdkapiV3</string>
+		<string>mqqopensdkapiV4</string>
+		<string>mqzoneopensdk</string>
+		<string>wtloginmqq</string>
+		<string>wtloginmqq2</string>
+		<string>mqqwpa</string>
+		<string>mqzone</string>
+		<string>mqzonev2</string>
+		<string>mqzoneshare</string>
+		<string>wtloginqzone</string>
+		<string>mqzonewx</string>
+		<string>mqzoneopensdkapiV2</string>
+		<string>mqzoneopensdkapi19</string>
+		<string>mqzoneopensdkapi</string>
+		<string>mqqbrowser</string>
+		<string>mttbrowser</string>
+		<string>tim</string>
+		<string>timapi</string>
+		<string>timopensdkfriend</string>
+		<string>timwpa</string>
+		<string>timgamebindinggroup</string>
+		<string>timapiwallet</string>
+		<string>timOpensdkSSoLogin</string>
+		<string>wtlogintim</string>
+		<string>timopensdkgrouptribeshare</string>
+		<string>timopensdkapiV4</string>
+		<string>timgamebindinggroup</string>
+		<string>timopensdkdataline</string>
+		<string>wtlogintimV1</string>
+		<string>timapiV1</string>
+		<string>fbapi</string>
+		<string>fb-messenger-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -37,78 +107,6 @@
 			</dict>
 		</dict>
 	</dict>
-  <key>CFBundleURLTypes</key>
-  <array>
-    <dict>
-      <key>CFBundleURLName</key>
-      <string>RNShare</string>
-      <key>CFBundleURLSchemes</key>
-      <array>
-        <string>wx1fe3c4b1d0608ef3</string>
-        <string>tencent101844964</string>
-        <string>tencent101844964.content</string>
-        <string>QQ061207E4</string>
-        <string>wb3808076800</string>
-        <string>renrenshare228525</string>
-        <string>fb776442542471056</string>
-      </array>
-    </dict>
-  </array>
-  <key>LSApplicationQueriesSchemes</key>
-  <array>
-    <string>wechat</string>
-    <string>weixin</string>
-    <string>sinaweibohd</string>
-    <string>sinaweibo</string>
-    <string>sinaweibosso</string>
-    <string>weibosdk</string>
-    <string>weibosdk2.5</string>
-    <string>mqqapi</string>
-    <string>mqq</string>
-    <string>mqqOpensdkSSoLogin</string>
-    <string>mqqconnect</string>
-    <string>mqqopensdkdataline</string>
-    <string>mqqopensdkgrouptribeshare</string>
-    <string>mqqopensdkfriend</string>
-    <string>mqqopensdkapi</string>
-    <string>mqqopensdkapiV2</string>
-    <string>mqqopensdkapiV3</string>
-    <string>mqqopensdkapiV4</string>
-    <string>mqzoneopensdk</string>
-    <string>wtloginmqq</string>
-    <string>wtloginmqq2</string>
-    <string>mqqwpa</string>
-    <string>mqzone</string>
-    <string>mqzonev2</string>
-    <string>mqzoneshare</string>
-    <string>wtloginqzone</string>
-    <string>mqzonewx</string>
-    <string>mqzoneopensdkapiV2</string>
-    <string>mqzoneopensdkapi19</string>
-    <string>mqzoneopensdkapi</string>
-    <string>mqqbrowser</string>
-    <string>mttbrowser</string>
-    <string>tim</string>
-    <string>timapi</string>
-    <string>timopensdkfriend</string>
-    <string>timwpa</string>
-    <string>timgamebindinggroup</string>
-    <string>timapiwallet</string>
-    <string>timOpensdkSSoLogin</string>
-    <string>wtlogintim</string>
-    <string>timopensdkgrouptribeshare</string>
-    <string>timopensdkapiV4</string>
-    <string>timgamebindinggroup</string>
-    <string>timopensdkdataline</string>
-    <string>wtlogintimV1</string>
-    <string>timapiV1</string>
-    <string>fbapi</string>
-    <string>fb-messenger-api</string>
-    <string>fbauth2</string>
-    <string>fbshareextension</string>
-  </array>
-  <key>LSRequiresIPhoneOS</key>
-  <true/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME)需要访问您的相机，用于使用图片功能和视频功能</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

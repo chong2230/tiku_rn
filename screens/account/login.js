@@ -147,7 +147,7 @@ export default class Login extends Component {
                     <Button text="忘记密码" style={styles.forgetBtn} containerStyle={styles.forgetBtnContainer} onPress={this._forgetPwd} />
                 </View>
                 <View style={styles.separate}></View>
-                <ThirdPartyLogin loginCallback={this._loginCallback}></ThirdPartyLogin> 
+                {/*<ThirdPartyLogin loginCallback={this._loginCallback}></ThirdPartyLogin> */}
                 <Toast ref="toast" position="center" />
             </View>
         );

@@ -188,7 +188,17 @@ export default class Home extends Component {
                 {headerView}
             </View>
         );
-    }    
+    }
+
+    _renderSearch = () => {
+        return (
+            <TouchableWithoutFeedback onPress={()=>{this._goSearch()}}>
+                <View style={styles.searchArea}>
+                    <Text style={styles.searchInput}>请输入要搜索的试题</Text>
+                </View>
+            </TouchableWithoutFeedback>
+        );
+    }
 
     _renderHotContent = () => {
         let item = this.state.hotData;
@@ -344,6 +354,11 @@ export default class Home extends Component {
         });
     }
 
+    _goSearch = () => {
+        let { navigate } = this.props.navigation;
+        navigate('Search', { isVisible: false, title: '搜索', transition: 'forVertical' });
+    }
+
     render() {
         return (
             <View styles={styles.container}>
@@ -355,6 +370,7 @@ export default class Home extends Component {
                 </TouchableWithoutFeedback>
                 <ScrollView style={styles.scrollView}>
                     {this._renderHeader()}
+                    {this._renderSearch()}
                     {this._renderHotContent()}
                     <View style={styles.separator}></View>
                     {this._renderMine()}
@@ -418,6 +434,22 @@ const styles = StyleSheet.create({
         fontWeight:'400',
         alignSelf: 'center',
         textAlign: 'center'
+    },
+    searchArea: {
+        flexDirection: 'row',
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10
+    },
+    searchInput: {
+        width: deviceW - 20,
+        height: 35,
+        lineHeight: 35,
+        color: Colors.gray,
+        fontSize: 13,
+        paddingLeft: 10,
+        borderRadius: 10,
+        backgroundColor: '#f8f8f8'
     },
     scrollView: {
         backgroundColor:'white'

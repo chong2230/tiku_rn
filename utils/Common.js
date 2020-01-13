@@ -78,10 +78,12 @@ export default class Common {
         if (params.pageNumber) params.pageNum = params.pageNumber;
         // console.log(url, params);
         // 带签名的请求不加公共参数
+        let ver = DeviceInfo.getVersion();
         if (!params.sign) {
             params.plt = Platform.OS;
             params.dt = new Date().getTime();
-            params.ver = DeviceInfo.getVersion();
+            params.ver = ver;
+            params.innerVer = 100000 + parseInt(ver.replace(/\./g, ''));
             params.guid = DeviceInfo.getUniqueId();
         }
         let bodyParams = '';
@@ -281,6 +283,12 @@ export default class Common {
             // console.log(result);
             cb(result);
         })
+    }
+
+    static getSearchList(params, cb) {
+        Common.httpRequest('/search/list', params).then((result)=>{
+            cb(result);
+        })   
     }
 
     // 新闻

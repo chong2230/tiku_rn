@@ -49,7 +49,7 @@ export default class About extends Component {
                 </View>
                 <View style={styles.item}>
                     <Text style={styles.versionLabel}>版本信息</Text>
-                    <Text style={styles.versionValue}>1.0</Text>
+                    <Text style={styles.versionValue}>1.1</Text>
                 </View>
                 <SettingItem txt1 = '联系我们' onPress={this._contact}/>
                 <SettingItem txt1 = '服务条款' onPress={this._service}/>

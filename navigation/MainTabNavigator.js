@@ -14,6 +14,7 @@ import MyCollect from '../screens/home/MyCollect';
 import MyRecord from '../screens/home/MyRecord';
 import SingleTimu from '../screens/home/SingleTimu';
 import WrongTimu from '../screens/home/WrongTimu';
+import Search from '../screens/home/Search';
 import News from '../screens/news/News';
 import NewsDetail from '../screens/news/NewsDetail';
 import Column from '../screens/course/Column';
@@ -120,6 +121,10 @@ const HomeStack = createStackNavigator(
         },
         WrongTimu: {
             screen: WrongTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Search: {
+            screen: Search,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
         // Note: {

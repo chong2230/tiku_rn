@@ -3,6 +3,133 @@
 **/
 const MockData = {
 
+	'/search/list': {
+	  "code": 0,
+	  "data": [
+	    {
+	      "askList": [],
+	      "content": "14.甲企业为符合条件的小型微利企业。2018年甲企业的应纳税所得额为90万元。甲企业当年应缴纳的企业所得税税额为（   ）。万元",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 493,
+	      "paperName": "企业所得税、个人所得税法律制度模拟练习",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 18012,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "19.甲企业和乙企业签订一份买卖合同，丙企 业为鉴定人，丁企业为甲的担保人。该业务中，印花税的纳税义务人为（   ）。",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 494,
+	      "paperName": "其它税收法律制度模拟练习",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 18107,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "5.对国有企业职工，因企业依照《企业破产法》宣告破产，从破产企业取得的一次性安置费收入，免予征收个人所得税。（   ）",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 489,
+	      "paperName": "经济法基础模拟测试(六)",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 17746,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "266.根据企业所得税法律制度的规定，下列适用 25%企业所得税税率的企业有（   ）。",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 401,
+	      "paperName": "经济法基础高频考点练习3",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 15656,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "10.自2017年7月1日起，购买方为企业（包括公司、非公司制企业法人、企业分支机构、 个人独资企业、合伙企业和其他企业）的，索取增值税普通发票时，应向销售方提供纳税人识别号或统一社会信用代码。（\t）",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 489,
+	      "paperName": "经济法基础模拟测试(六)",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 17751,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "4.自2017年7月1日起，购买方为企业（包 括公司、非公司制企业法人、企业分支机 构、个人独资企业、合伙企业和其他企业） 的，索取増值税普通发票时，应向销售方 提供纳税人识别号或统一社会信用代码。（   ）",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 495,
+	      "paperName": "税收征收管理法律制度模拟练习",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 18236,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "445.非金融企业向金融企业借款的利息支出可以据实扣除，非金融企业向非金融企业借款的利息支出不允许在税前扣除。（   ）",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 403,
+	      "paperName": "经济法基础高频考点练习5",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 15835,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "46.非金融企业向金融企业借款的利息支出可以据实扣除，非金融企业向非金融企业借款的利息支出不允许在税前扣除。（   ）",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 503,
+	      "paperName": "经济法基础高频错题练习3",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 18722,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "13.根据企业所得税法律制度的规定，企业 从事下列项目的所得，减半征收企业所得税的有（   ）。",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 493,
+	      "paperName": "企业所得税、个人所得税法律制度模拟练习",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 18041,
+	      "questionName": ""
+	    },
+	    {
+	      "askList": [],
+	      "content": "65、根据企业所得税法律制度的规定，企业从事下列项目的所得，减半征收企业所得税的有（   ）。",
+	      "courseId": 3,
+	      "courseName": "",
+	      "paperId": 660,
+	      "paperName": "每日一练23",
+	      "professionId": 2,
+	      "professionName": "",
+	      "questionId": 19657,
+	      "questionName": ""
+	    }
+	  ],
+	  "msg": "SUCCESS"
+	},
+
 	'/question/list': {
         "code":0,
         "data":[
