@@ -15,6 +15,10 @@ import MyRecord from '../screens/home/MyRecord';
 import SingleTimu from '../screens/home/SingleTimu';
 import WrongTimu from '../screens/home/WrongTimu';
 import Search from '../screens/home/Search';
+import DoneTimu from '../screens/home/DoneTimu';
+import Recorrect from '../screens/home/Recorrect';
+import Statistics from '../screens/home/Statistics';
+import Goods from '../screens/home/Goods';
 import News from '../screens/news/News';
 import NewsDetail from '../screens/news/NewsDetail';
 import Column from '../screens/course/Column';
@@ -87,7 +91,8 @@ const StackOptions = ({navigation}) => {
             goBack();
         }}></ImageButton>
     );
-    return {headerStyle, headerTitle, headerTitleStyle, headerBackTitle, headerLeft, header}
+    const gesturesEnabled = false;
+    return {headerStyle, headerTitle, headerTitleStyle, headerBackTitle, headerLeft, header, gesturesEnabled}
 };
 
 const HomeStack = createStackNavigator(
@@ -125,6 +130,34 @@ const HomeStack = createStackNavigator(
         },
         Search: {
             screen: Search,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        DoneTimu: {
+            screen: DoneTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Recorrect: {
+            screen: Recorrect,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Statistics: {
+            screen: Statistics,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Goods: {
+            screen: Goods,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Balance: {
+            screen: Balance,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Recharge: {
+            screen: Recharge,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Ticket: {
+            screen: Ticket,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
         // Note: {

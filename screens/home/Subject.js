@@ -22,6 +22,7 @@ import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
+import Alert from '../../components/Alert';
 import Toast from '../../components/Toast';
 import {TabbarSafeBottomMargin} from "../../utils/Device";
 
@@ -46,6 +47,7 @@ export default class Subject extends PureComponent{
             indexText: '',
             hasLoad: false
         };
+        this.selectData = {};
     }
 
     // 改变value而不需要重新re-render的变量，声明在constructor外面
@@ -157,9 +159,12 @@ export default class Subject extends PureComponent{
 
     // userStatus: 1 未做过 2 已做过 3 已做完
     // 历年真题和模拟试卷不能重新开始，避免知道答案重新开始可以轻松获得100分的问题
+    // doModel: 1 练习模式 2 考试模式
     _renderItem = (item) =>{
         let { state } = this.props.navigation;
         let rowData = item.item;
+        // For Test
+        // rowData.needPay = true;
         let btnText = '开始做题';
         if (rowData.userStatus == 2) btnText = '继续做题';
         else if (rowData.userStatus == 3) btnText = '重新开始';
@@ -185,11 +190,28 @@ export default class Subject extends PureComponent{
                             : null
                     }
                     {
-                        rowData.userStatus == 3 &&
-                        (state.params.title == '历年真题' || state.params.title == '模拟试卷') ? null :
+                        // rowData.userStatus == 3 &&
+                        // (state.params.title == '历年真题' || state.params.title == '模拟试卷') ? null :
                             <Button text={btnText}
                                     style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
-                                    onPress={()=>{this._startPractise(rowData)}}></Button>
+                                    onPress={()=>{
+                                        // 付费试卷，未付费
+                                        if (rowData.needPay && !rowData.hasPayed) {
+                                            this._goGoods();
+                                            return;
+                                        }
+                                        this.selectData = rowData;
+                                        let doModels = rowData.doModels ? rowData.doModels.split(',') : 1;
+                                        // 开始做题/继续做题
+                                        if (rowData.userStatus == 1 || rowData.userStatus == 3) {
+                                            // 根据后台返回的做题模式来做题
+                                            if (doModels.length == 2) this._chooseMode(rowData);
+                                            else this._startPractise(rowData, false, parseInt(doModels[0]));
+                                        } else {
+                                            this.continueAlert.show();
+                                            // this._startPractise(rowData, false);
+                                        }
+                                    }}></Button>
                     }
 
                 </View>
@@ -197,15 +219,25 @@ export default class Subject extends PureComponent{
         );
     };
 
-    _startPractise = (data, isAnalyse) => {
-        console.log('start ', data);
+    _chooseMode = () => {
+        this.alert.show();
+    }
+
+    _startPractise = (data, isAnalyse, doModel=1, type) => {
+        // console.log('start ', data);
+        if (!type) type = isAnalyse ? 1 : (data.userStatus == 2 ? 3 : 2);   // type: 1 查看解析 2 开始做题 3 继续做题
         const { navigate, state } = this.props.navigation;
         if (global.token) {
             navigate("Timu", {id: data.id, name: data.name,
                 functionName: state.params.title, functionId: state.params.id,
-                type: isAnalyse ? 1 : 2,
-                isVisible: false, isAnalyse: isAnalyse, callback: ()=>{
+                type: type,
+                doModel: doModel,   // 做题模式
+                isVisible: false, isAnalyse: isAnalyse, callback: (status)=>{
                     this._reload();
+                    // data.userStatus = status;
+                    // this.setState({
+                    //     listData: this.state.listData
+                    // })
                 }
             });
         } else {
@@ -215,6 +247,32 @@ export default class Subject extends PureComponent{
                 }
             } });
         }        
+    }
+
+    _startExam = () => {
+
+    }
+
+    // 进入商品购买列表 TODO: refresh paper, not reload
+    _goGoods = () => {
+        const { navigate, state } = this.props.navigation;
+        if (global.token) {
+            navigate("Goods", {
+                isVisible: false, callback: (status)=>{
+                    this._reload();
+                    // data.userStatus = status;
+                    // this.setState({
+                    //     listData: this.state.listData
+                    // })
+                }
+            });
+        } else {
+            navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
+                    if (token != null) {
+                        this._reload();
+                    }
+                } });
+        }
     }
 
     _setFlatListHeight = (e) => {
@@ -259,6 +317,43 @@ export default class Subject extends PureComponent{
                     //getItemLayout={(data, index) => ( { length: 40, offset: (40 + 1) * index + 50, index } )}
                 />
                 <View style={styles.safeBottom}></View>
+                <Alert
+                    ref={(ref)=>this.alert = ref}
+                    modalWidth={270}
+                    modalHeight={124}
+                    titleText="请选择答题模式"
+                    titleFontSize={16}
+                    titleFontWeight={"bold"}
+                    okText={'练习模式'}
+                    cancelText={'考试模式'}
+                    confirm={()=>{
+                        this._startPractise(this.selectData, false, 1, 2);
+                    }}
+                    cancel={()=>{
+                        this._startPractise(this.selectData, false, 2, 2);
+                    }}
+                    okFontColor={'#4789F7'}
+                />
+                <Alert
+                    ref={(ref)=>this.continueAlert = ref}
+                    modalWidth={270}
+                    modalHeight={124}
+                    titleText="您有未完成的测试，是否继续"
+                    titleFontSize={16}
+                    titleFontWeight={"bold"}
+                    okText={'继续答题'}
+                    cancelText={'重新开始'}
+                    confirm={()=>{
+                        this._startPractise(this.selectData, false);
+                    }}
+                    cancel={()=>{
+                        let data = this.selectData;
+                        let doModels = data.doModels ? data.doModels.split(',') : 1;
+                        if (doModels.length == 2) this._chooseMode();
+                        else this._startPractise(data, false, parseInt(doModels[0]), 2);
+                    }}
+                    okFontColor={'#4789F7'}
+                />
                 <Toast
                     ref="toast"
                     style={{backgroundColor:'black'}}

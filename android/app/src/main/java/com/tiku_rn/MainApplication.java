@@ -9,6 +9,9 @@ import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+//import com.umeng.commonsdk.UMConfigure;
+//import com.umeng.soexample.invokenative.RNUMConfigure;
+//import com.umeng.socialize.PlatformConfig;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -44,8 +47,17 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+      //初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
+    //建议在宿主App的Application.onCreate函数中调用基础组件库初始化函数。
+//      RNUMConfigure.init(this, "5e4282db65b5ec273b5ae8e0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
   }
+
+//    {
+//        PlatformConfig.setWeixin("wxdc1e388c3822c80b", "3baf1193c85774b3fd9d18447d76cab0");
+//        PlatformConfig.setQQZone("101844964", "Key：ccd8370e6af58b1503be27649b71d46a");
+//        PlatformConfig.setSinaWeibo("3293143520", "95db68fe9147e135097db6a70a86a8c6", "http://www.jianshu.com/u/023338566ca5");
+//    }
 
   /**
    * Loads Flipper in React Native templates.

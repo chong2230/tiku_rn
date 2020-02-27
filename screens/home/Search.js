@@ -203,7 +203,7 @@ export default class Search extends PureComponent{
             <TouchableOpacity onPress={()=>{this._goTimu(rowData)}}>
                 <View style={styles.item}>
                     <Text style={styles.paperName}>试卷名称：{rowData.paperName}</Text>
-                    <Text numberOfLines={2}>{content}</Text>
+                    <Text style={styles.content} numberOfLines={2}>{content}</Text>
                     {/*<HTMLView value={content}*/}
                               {/*renderNode={this.renderNode.bind(this)}*/}
                               {/*style={styles.htmlStyle}*/}
@@ -293,7 +293,8 @@ const styles = StyleSheet.create({
     },
     searchArea: {
         flexDirection: 'row',
-        margin: 10
+        margin: 10,
+        // borderRadius: 10
     },
     searchInput: {
         width: screenWidth - 80,
@@ -301,7 +302,8 @@ const styles = StyleSheet.create({
         fontSize: 13,
         paddingLeft: 10,
         borderRadius: 10,
-        backgroundColor: '#E9EAEC'
+        // color: Colors.gray,
+        backgroundColor: '#f8f8f8'
     },
     searchBtn: {
         width: 60,
@@ -319,8 +321,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
         height: 21,
         lineHeight: 21,
-        fontWeight: 'bold',
-        textAlign: 'left'
+        // fontWeight: 'bold',
+        textAlign: 'left',
+        color: Colors.title
+    },
+    content: {
+        color: Colors.text
     },
     htmlStyle: {
         width: screenWidth - 30,

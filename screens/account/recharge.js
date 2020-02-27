@@ -209,11 +209,12 @@ export default class Recharge extends Component {
         })
     }
 
+    // 未登录也可以充值
     pay() {
-        if (!global.token) {
-            this.toast.show('需要登录才能支付哦~');
-            return;
-        }
+        // if (!global.token) {
+        //     this.toast.show('需要登录才能支付哦~');
+        //     return;
+        // }
         let payIndex = 0;
         let self = this;
         if (Platform.os == 'android') {
@@ -248,7 +249,7 @@ export default class Recharge extends Component {
         }  
         let intro = '';
         if (Platform.OS == 'ios') {
-            intro = "1. 充值金额仅限iOS版使用；<br>2. 充值成功后，暂不支持账户余额退款、提现或转赠他人；<br>3. 使用苹果系统充值可以参考App Store充值引导；<br> 4. 如在充值过程中遇到任何问题，请关注公众号，我们将为您提供解决方案，帮助您快速完成充值。";
+            intro = "1. 充值金额仅限iOS版使用；\n\n2. 充值成功后，暂不支持账户余额退款、提现或转赠他人；\n\n3. 使用苹果系统充值可以参考App Store充值引导；\n\n 4. 如在充值过程中遇到任何问题，请关注公众号，我们将为您提供解决方案，帮助您快速完成充值。";
         } else {
             intro = "1. 充值成功后，暂不支持账户余额退款、提现或转赠他人；<br>2. 如在充值过程中遇到任何问题，请关注公众号，我们将为您提供解决方案，帮助您快速完成充值。";
         }
@@ -264,8 +265,8 @@ export default class Recharge extends Component {
                     }}
                         bottomLineColor={'rgba(0, 0, 0)'} />
                 <View style={styles.top}>
+                    <Text style={styles.title}>余额</Text>
                     <Text style={styles.money}> {this.state.money || 0.00} 学币</Text>
-                    <Text style={styles.title}>账户余额</Text>
                 </View>
                 <View style={styles.center}>
                     <Text style={styles.rechargeLabel}>充值</Text>
@@ -280,7 +281,8 @@ export default class Recharge extends Component {
                 <View>
                     <Text style={styles.introLabel}>充值说明</Text>
                     <View style={styles.line}></View>
-                    <HTMLView value={intro} style={styles.htmlStyle} />
+                    {/*<HTMLView value={intro} style={styles.htmlStyle} />*/}
+                    <Text style={styles.intro}>{intro}</Text>
                 </View>
                 <View style={styles.safeBottom}></View>
                 <Toast ref={(ref)=>{this.toast = ref}} position="center" />
@@ -308,7 +310,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#828282',
         textAlign: 'center',
-        marginTop: 5
+        marginBottom: 5
     },
     center: {
         flexDirection: 'row',
@@ -354,8 +356,12 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '500'
     },
-    htmlStyle: {
+    // htmlStyle: {
+    //     padding: 10,
+    // },
+    intro: {
         padding: 10,
+        lineHeight: 20
     },
     separator: {
         backgroundColor: '#ECEFF2',

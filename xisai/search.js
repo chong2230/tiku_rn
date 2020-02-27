@@ -13,6 +13,9 @@ var lwcurid = "";
 var subjectCode = Kino.getUrlParam('subjectCode'); //subjectCode
 var sjId = Kino.getUrlParam('sjId'); //sjId试卷id
 
+var jsonData = [];  // 导出数据
+var delay = 3000;  // 延迟3秒
+
 //查找制定元素在数组中的索引值
 Array.prototype.indexVf = function(arr) {
   for (var i = 0; i < this.length; i++) {
@@ -107,6 +110,7 @@ Kino.ajax('/api/course/paper/loadInfoByPK.do', function(mydata) {
             shitidata['det'] = resp.model;
             shitidata['index'] = stIdIndex;
             console.log('试题详细信息', shitidata);
+            convertData(shitidata.shiti);
             if(shitidata['det']['subjectiveAnswerImg']){
               shitidata['det']['subjectiveAnswerImg'] = resp.model.subjectiveAnswerImg.split(",");
             }else{
@@ -122,9 +126,10 @@ Kino.ajax('/api/course/paper/loadInfoByPK.do', function(mydata) {
           }
         });
         if (stIdIndex == stIdArr.length - 1) {
-          
+          addExportBtn();
         } else {
-          // next();
+          // 延迟10秒请求下一题，避免请求太频繁
+          setTimeout(function(){next();}, delay);
         }
       }
     }, {
@@ -140,4 +145,80 @@ function next() {
   tIndex++;
   console.log('下一题', tIndex);
   loadShitiInfo(tIndex);
-};
+}
+
+function convertData(data) {
+  let question = data.questionMap[0]; // TODO：多个问题需要处理
+  let obj = {
+    'ask': data.tigan,
+    "askImg": "",
+    "score": 10.00,
+    'choiceA': question['A'],
+    'choiceB': question['B'],
+    'choiceC': question['C'] ? question['C'] : '', 
+    'choiceD': question['D'] ? question['D'] : '',
+    'choiceE': question['E'] ? question['E'] : '',
+    'choiceF': question['F'] ? question['F'] : '',
+    "answer": data.answerStr,
+    "answerImg": "",
+    "analysis": data.analysis,
+    "analysisImg": "",
+  }
+  console.log(obj);
+  jsonData.push(obj);
+}
+
+function tableToExcel() {
+  //要导出的json数据
+  // 列标题：问题序号 问题内容  问题图片  问题分值  问题选项A 问题选项B 
+  //问题选项C 问题选项D 问题选项E 问题选项F 问题答案  问题答案图片  问题解析  问题解析图片
+  let str = '<tr><td>问题序号</td><td>问题内容</td><td>问题图片</td><td>问题分值</td>'
+    +'<td>问题选项A</td><td>问题选项B</td><td>问题选项C</td><td>问题选项D</td>'
+    +'<td>问题选项E</td><td>问题选项F</td><td>问题答案</td><td>问题答案图片</td>'
+    +'<td>问题解析</td><td>问题解析图片</td></tr>';
+  //循环遍历，每行加入tr标签，每个单元格加td标签
+  for (let i = 0; i < jsonData.length; i++) {
+      str += `<tr><td>${i+1}</td>`;
+      for (let item in jsonData[i]) {
+          //增加\t为了不让表格显示科学计数法或者其他格式
+          str += `<td>${jsonData[i][item]}</td>`;
+      }
+      str += '</tr>';
+  }
+  let excelHtml = `
+  <html>
+      <head>
+       <meta charset='utf-8' />
+      </head>
+       <body>
+          <table>
+            ${str}
+          </table>
+       </body>
+  </html>
+`
+  let excelBlob = new Blob([excelHtml], {type: 'application/vnd.ms-excel'})
+
+  // 创建一个a标签
+  let oA = document.createElement('a');
+  // 利用URL.createObjectURL()方法为a元素生成blob URL
+  oA.href = URL.createObjectURL(excelBlob);
+  let title = '试卷';
+  let modelTitle = document.querySelector('.modeTitle h4');
+  if (modelTitle) title = modelTitle.innerText;
+  // 给文件命名
+  oA.download = title + '.xls';
+  // 模拟点击
+  oA.click()
+}
+
+function addExportBtn() {
+  let btn = document.createElement('button');
+  btn.setAttribute('id', 'exportBtn');
+  btn.setAttribute('style', 'color: red;position: absolute;top: 50%;left: 50%;width: 150px;font-size: 30px;');
+  btn.innerHTML = "导出";
+  document.body.appendChild(btn);
+  btn.addEventListener('click', function() {
+    tableToExcel();
+  });
+}

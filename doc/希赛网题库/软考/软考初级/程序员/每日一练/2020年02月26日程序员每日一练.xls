@@ -1,0 +1,41 @@
+
+  <html>
+      <head>
+       <meta charset='utf-8' />
+      </head>
+       <body>
+          <table>
+            <tr><td>问题序号</td><td>问题内容</td><td>问题图片</td><td>问题分值</td><td>问题选项A</td><td>问题选项B</td><td>问题选项C</td><td>问题选项D</td><td>问题选项E</td><td>问题选项F</td><td>问题答案</td><td>问题答案图片</td><td>问题解析</td><td>问题解析图片</td></tr><tr><td>1</td><td>敏捷开发的原则不包括（&nbsp; ）。<p><br></p></td><td></td><td>10</td><td>使用分阶段的计划来管理流程，并详细地编写开发文档</td><td>欢迎需求变化，并利用这种变化来提高用户的竞争优势</td><td>尽早并持续地发布并交付有价值的软件以满足用户需求</td><td>无论团队内外，面对面的交流始终是最有效的沟通方式</td><td></td><td></td><td>A</td><td></td><td>本题考查敏捷开发方法。<br>
+
+敏捷软件开发<span>（英语：Agile software development），又称</span>敏捷开发<span>，是一种从1990年代开始逐渐引起广泛关注的新型</span><span>软件开发</span><span>方法，是一种能应对快速变化需求的软件开发能力。它们的具体名称、理念、过程、术语都不尽相同，相对于“非敏捷”，更强调程序员团队与业务专家之间的紧密协作、面对面的沟通（认为比书面的文档更有效）、频繁交付新的软件版本、紧凑而自我组织型的团队、能够很好地适应需求变化的代码编写和团队组织方法，也更注重软件开发过程中人的作用。
+
+<span>敏捷开发需要避免不必要的开销：如果实践仍然是真正的敏捷精神，那么团队就致力于尽可能多地减少项目计划和文档。</span>
+
+</span></td><td></td></tr><tr><td>2</td><td><p>
+	（ &nbsp;）属于标记语言。</p></td><td></td><td>10</td><td>PHP <BR /></td><td>Lisp <BR /></td><td>XML <BR /></td><td>SQL<BR /><BR /></td><td></td><td></td><td>C</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 本题考查程序语言基础知识。<br />
+	&nbsp;&nbsp;&nbsp; PHP是一种服务器端的、嵌入HTML的脚本语言。PHP区别其他像客户端JavaScript的地方是其代码在服务器端执行，PHP可以做任何其他CGI程序所能做的事，例如收集表格数据，生成动态页面内容，或者收发cookies等，PHP支持大范围的数据库。<br />
+	&nbsp;&nbsp;&nbsp; Lisp是一种函数式程序设计语言，属于动态程序语言。<br />
+	&nbsp;&nbsp;&nbsp; SQL（Structured Query Language，结构化查询语言）最早是IBM的圣约瑟研究实验室为其关系数据库管理系统SYSTEM R开发的一种查询语言。SQL是高级的非过程化编程语言，允许用户在高层数据结构上工作。该语言不要求用户指定对数据的存放方法，也不需要用户了解具体的数据存放方式，所以具有完全不同底层结构的不同数据库系统可以使用相同的SQL语言作为数据输入与管理的接口。它以记录集合作为操纵对象，所有SQL语句接受集合作为输入，返回集合作为输出。SQL语言包含4个部分：数据查询语言（SELECT语句）、数据操纵语言（INSERT、UPDATE、DELETE语句）、数据定义语言（如CREATE、DROP等语句）和数据控制语言（如COMMIT、ROLLBACK等语句）。<br />
+	&nbsp;&nbsp;&nbsp; XML（EXtensible Markup Language）是一种类似于HTML的标记语言，用来描述数据。</p></td><td></td></tr><tr><td>3</td><td>GIF文件类型支持（&nbsp; ）图像存储格式。<br />
+<br /></td><td></td><td>10</td><td>真彩色 <BR /></td><td>伪彩色<BR /></td><td>直接色<BR /></td><td>矢量<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td>本题考察图像的基础知识。<br />
+GIF分为静态GIF和动画GIF两种，扩展名为.gif，是一种压缩位图格式，支持透明背景图像，适用于多种操作系统，&ldquo;体型&rdquo;很小，网上很多小动画都是GIF格式。其实GIF是将多幅图像保存为一个图像文件，从而形成动画，最常见的就是通过一帧帧的动画串联起来的搞笑gif图，所以归根到底GIF仍然是图片文件格式。但GIF只能显示256色。和jpg格式一样，这是一种在网络上非常流行的图形文件格式。</td><td></td></tr><tr><td>4</td><td><p>
+	为防止攻击者通过 Windows XP 系统中正在运行的Telnet服务登录到用户的计算机，可以对Windows XP中Telnet服务进行如下设置： （） 。</p></td><td></td><td>10</td><td>设置启动类型为自动 <BR /></td><td>设置启动类型为自动，之后重启计算机 <BR /></td><td>设置启动类型为手动 <BR /></td><td>设置启动类型为手动，之后重启计算机<BR /><BR /></td><td></td><td></td><td>D</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 本题考查计算机安全方面的基础知识。Windows KP系统服务中Telnet服务如果配置为&ldquo;自动&rdquo;，则每当Windows XP启动时，系统会自动启动Telnet服务；把Tenet服务配置为&ldquo;手动&rdquo;，则每当Windows XP启动时，系统不会自动启动Telnet服务，但是如果系统当前已经运行了Telnet服务，系统也不会自动关闭Telnet服务。因此答案为D。</p></td><td></td></tr><tr><td>5</td><td>White box testing is the responsibility of the（&nbsp; ）.</td><td></td><td>10</td><td>user</td><td>project manager</td><td>programmer</td><td>system test engineer</td><td></td><td></td><td>C</td><td></td><td>白盒测试是程序员的任务。</td><td></td></tr><tr><td>6</td><td><p>
+	&nbsp; 在统一建模语言（Unified Modeling Language，UML）中，描述本系统与外部系统及用户之间交互的图是（）；按时间顺序描述对象间交互的图是&nbsp;（）&nbsp;。</p></td><td></td><td>10</td><td>用例图 <BR /></td><td>类图 <BR /></td><td>对象图 <BR /></td><td>状态图 <BR /><BR /></td><td></td><td></td><td>A|B</td><td></td><td><p>
+	本题考查统一建模语言的基础知识。<br />
+	　　在UML中，描述本系统与外部系统及用户之间交互的图是用例图；按时问顺序描述对象间交互的图是序列图。</p></td><td></td></tr><tr><td>7</td><td><p>
+	在微型计算机中，通常用主频来描述CPU的（ &nbsp;）；对计算机磁盘工作影响最小的因素是（ &nbsp;）。</p></td><td></td><td>10</td><td>运算速度</td><td>可靠性</td><td>可维护性</td><td>可扩充性</td><td></td><td></td><td>A|C</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 主频是CPU的时钟频率，简单地说也就是CPU的工作频率。一般来说，一个时钟周期完成的指令数是固定的，所以主频越高，CPU的速度也就越快，故常用主频来描述CPU的运算速度。外频是系统总线的工作频率。倍频是指CPU外频与主频相差的倍数。主频＝外频&times;倍频。<br />
+	&nbsp;&nbsp;&nbsp; 使用硬盘时应注意防高温、防潮和防电磁干扰。硬盘工作时会产生一定热量，使用中存在散热问题。温度以20-25<sub>&shy;</sub>&deg;C为宜，温度过高或过低都会使晶体振荡器的时钟主频发生改变。温度还会造成硬盘电路元件失灵，磁介质也会因热胀效应而造成记录错误。温度过低，空气中的水分会凝结在集成电路元件上，造成短路，湿度过高，电子元件表面可能会吸附一层水膜，氧化、腐蚀电子线路，以致接触不良，甚至短路，还会使磁介质的磁力发生变化，造成数据的读写错误。湿度过低，容易积累大量因机器转动而产生的静电荷，这些静电会烧坏CMOS电路，吸附灰尘而损坏磁头、划伤磁盘片。机房内的湿度以45%～65％为宜。注意使空气保持干燥或经常给系统加电，靠自身发热将机内水汽蒸发掉。另外，尽量不要使硬盘靠近强磁场，如音箱、喇叭、电机、电台和手机等，以免硬盘所记录的数据因磁化而损坏。</p></td><td></td></tr><tr><td>8</td><td>某C语言程序中有表达式x%m（即x被m除取余数），其中，x为浮点型变量，m为整型非0常量，则该程序在（&nbsp; ）时会报错，该错误属于（&nbsp; ）错误。<br /></td><td></td><td>10</td><td>编译</td><td>预处理</td><td>编辑</td><td>运行</td><td></td><td></td><td>A|C</td><td></td><td>此题考查程序设计基础，出自《程序员教程（第四版）》，全书第223页。也就是C语言基础，取余运算%只能是整形数据参与，如果是其他类型则会在编译时会出错。<br />
+这种错误属于静态语义错误。<br />
+动态错误：发生程序运行时，也叫动态语义错误包括变量取零时做除数、引用数组元素下标越界等错误；<br />
+静态错误：编译时所发现的程序错误；分为语法错误和静态语义错误；<br />
+语法错误包含：单词拼写错误、标点符号错误、表达式中缺少操作数、括号不匹配等有关语言结构上的错误<br />
+静态语义分析：运算符与运算对象类型不合法等错误</td><td></td></tr><tr><td>9</td><td>以下文件格式中，（&nbsp; ）属于声音文件格式。</td><td></td><td>10</td><td>XLS</td><td>AVI</td><td>WAV</td><td>GIF</td><td></td><td></td><td>C</td><td></td><td>常见音频格式：<br />
+WAVE、SOUND、VOICE、MOD、MP3、RealAudio、CDAudio、MIDI等。</td><td></td></tr><tr><td>10</td><td><p>
+	在软件开发中使用函数库可 （） 。</p></td><td></td><td>10</td><td>提高软件的执行速度 <BR /></td><td>降低系统负载 <BR /></td><td>提高软件各部分之间的耦合度 <BR /></td><td>提高软件的可重用性<BR /><BR /></td><td></td><td></td><td>D</td><td></td><td><p>
+	本题考查软件开发基础知识。目前绝大多数程序设计语言都支持函数机制，例如C语言提供了基本的I/O操作、数学运算等函数，并将这些常用函数以函数库形式提供给软件开发者。在应用软件开发中也可以将系统常用操作定义为函数，并打包成函数库，这样做的目的主要是为提高软件的可重用性，并降低程序各部分之间的耦合度，从而使得这些函数库可在多个软件中重复使用。</p></td><td></td></tr>
+          </table>
+       </body>
+  </html>

@@ -1,3 +1,4 @@
 <resources>
+    <string moduleConfig="true" name="CodePushDeploymentKey">86WhYlH2Wl6OOIr24CQ1pJ1jxdq44ksvOXqog</string>
     <string name="app_name">有知学堂</string>
 </resources>

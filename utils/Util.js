@@ -139,3 +139,37 @@ export function getLength(str) {
     return Math.ceil(count);
 }
 
+// 获取运行环境
+export function getEnvironment(host) {
+    let env = 'prod';
+    if (host.indexOf('test') != -1) env = 'test';
+    else if (host.indexOf('dev') != -1) env = 'dev';
+    return env;
+}
+
+/**
+ * 判断版本号大小
+ * @param v1 (1.9)
+ * @param v2 (1.9.1)
+ * @returns -1 0 1
+ *  -1 v1 < v2;
+ *  0 v1 == v2;
+ *  1 v1 > v2
+ */
+export function compareVer(v1, v2){
+    v1 = ""+v1;
+    v2 = ""+v2;
+    var ver1 = v1.split('.');
+    var ver2 = v2.split('.');
+    var l = ver1.length > ver2.length ? ver1.length : ver2.length;
+    for(var i = 0; i < l; i++){
+        var num1 = ver1[i] || 0;
+        var num2 = ver2[i] || 0;
+        if(parseFloat(num1) > parseFloat(num2)){
+            return 1;
+        }else if(parseFloat(num1) < parseFloat(num2)){
+            return -1;
+        }
+    }
+    return 0;
+};

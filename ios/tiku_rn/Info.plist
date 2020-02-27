@@ -31,7 +31,7 @@
 				<string>tencent101844964</string>
 				<string>tencent101844964.content</string>
 				<string>QQ061207E4</string>
-				<string>wb3808076800</string>
+				<string>wb3293143520</string>
 				<string>renrenshare228525</string>
 				<string>fb776442542471056</string>
 			</array>
@@ -39,6 +39,10 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+  <key>CodePushDeploymentKey</key>
+  <string>86WhYlH2Wl6OOIr24CQ1pJ1jxdq44ksvOXqog</string>
+  <key>CodePushServerURL</key>
+  <string>http://127.0.0.1:3000</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wechat</string>

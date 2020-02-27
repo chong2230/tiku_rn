@@ -11,7 +11,8 @@ import {
     Linking,
     Platform,
     NativeModules,
-    AsyncStorage
+    AsyncStorage,
+    DeviceEventEmitter
 } from 'react-native';
 
 // import * as CacheManager from 'react-native-http-cache';
@@ -19,10 +20,12 @@ import {
 import Bar from '../../components/Bar';
 import Header from '../../components/Header';
 import Colors from '../../constants/Colors';
+import Common from '../../utils/Common';
 import Storage from '../../utils/Storage';
 import Toast from '../../components/Toast';
 import Alert from '../../components/Alert';
 import SettingItem from './settingItem';
+import { getEnvironment } from '../../utils/Util';
 
 export default class Setting extends Component {
     constructor(props) {
@@ -30,6 +33,7 @@ export default class Setting extends Component {
 
         this.state = ({
             cacheSize: 0,   //缓存大小
+            versionTip: '公网测试环境',
             token: null,
             showPull: false,        // 显示推送
             showPlay: false,        // 显示播放和下载
@@ -44,6 +48,18 @@ export default class Setting extends Component {
                 });
             }
         });
+        if (Common.env == 'test') {
+            Storage.get('host').then((val)=>{
+                if (val) {
+                    Common.httpServer = val;
+                    global.host = host;
+                    let env = getEnvironment(Common.httpServer);
+                    this.setState({
+                        versionTip: env == 'test' ? '公网测试环境' : ''
+                    });
+                }
+            });
+        }
         this.getCacheSize();        
     }
 
@@ -110,30 +126,55 @@ export default class Setting extends Component {
         navigate('About', {isVisible: true, title: '关于我们'});
     }
 
+    // 打生产包时要去掉
+    _switch = () => {
+        let env = getEnvironment(Common.httpServer);
+        let host = '';
+        let versionTip = '';
+        if (env == 'test') {
+            host = 'https://practice.youzhi.tech';            
+        } else if (global.host) {
+            host = 'https://test-practice.youzhi.tech';
+            versionTip = '公网测试环境';
+        }    
+        if (this.state.token) {
+            this._logout();
+        }  
+        Common.httpServer = host;
+        Storage.save('host', host)
+        this.setState({
+            versionTip: versionTip
+        });   
+        Storage.delete('course').then(()=>{
+            global.course = null;
+            DeviceEventEmitter.emit('refreshHome', {});
+        });           
+    }
+
     _share = () => {
         
     }
 
-    _logout = () => {
+    _logout = (callback) => {
         Storage.delete('token').then(()=>{
             global.token = null;
             const { navigate, state } = this.props.navigation;
             setTimeout(function() {
                 if (state.params.refresh) state.params.refresh(null);
-                navigate('Login', { isVisible: false, title: '密码登录',
-                    from: 'setting', returnKey: state.key, transition: 'forVertical',
+                navigate('Account', { isVisible: false, transition: 'forVertical',
                     refresh: (token)=>{
                         if (token != null) {
                             state.params.refresh(token);
                         }
                     }
                 });
+                if (callback instanceof Function) callback();
             }, 400);
         });   
     }
 
     render() {
-        let pullView, playView, shareView, logoutView;
+        let pullView, playView, shareView, logoutView, switchView;
         if (this.state.showPull) pullView = <SettingItem txt1 = '推送设置' onPress={this._setPull}/>;
         if (this.state.showPlay) playView = <SettingItem txt1 = '播放和下载' onPress={this._setPlay}/>;
         if (this.state.showShare) shareView = <SettingItem txt1 = '推荐给好友' onPress={this._share}/>;
@@ -145,6 +186,9 @@ export default class Setting extends Component {
                         </View>
                     </TouchableOpacity>
             );
+        }
+        if (Common.env == 'test') {
+            switchView = <SettingItem txt1 = '切换版本' count={this.state.versionTip} onPress={this._switch}/>;
         }
         return (
             <View style={styles.container}>
@@ -169,6 +213,7 @@ export default class Setting extends Component {
                     <SettingItem txt1 = '意见与建议' showBorder = {false} onPress={this._suggest}/>
                     <View style={styles.separator}></View>
                     <SettingItem txt1 = '关于我们' onPress={this._about}/>
+                    {switchView}
                     {shareView}
                     <View style={{backgroundColor:'white',height:20}}></View>
                     

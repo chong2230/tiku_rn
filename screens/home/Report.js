@@ -101,13 +101,48 @@ export default class Report extends Component {
 
     _renderInfoItem = (name, count, index) => {
         if (!count) count = 0;
-        let specialStyle = index == 0 ? { color: Colors.special, fontWeight: 'bold', fontSize: 20} : null;
+        let specialStyle = null;
+        switch (index) {
+            case 0:
+                specialStyle = { color: Colors.special, fontWeight: 'bold', fontSize: 20 };
+                break;
+            case 1:
+                specialStyle = { color: Colors.highlight };
+                break;
+            case 3:
+                specialStyle = { color: Colors.special };
+                break;
+            case 5:            
+                specialStyle = { color: '#666678' };
+                break;
+            case 7:
+                specialStyle = { color: Colors.gray };
+                break;
+        }
         return (
-            <View style={styles.infoItem} key={'info_' + index}>
-                <Text style={[styles.infoText, specialStyle]}>{name}</Text>
-                <Text style={[styles.infoCount, specialStyle]}>{count}</Text>
-            </View>
+            <TouchableWithoutFeedback  key={'info_touch_' + index} onPress={()=>{this._onItemClick(index, count)}}>
+                <View style={styles.infoItem} key={'info_' + index}>
+                    <Text style={[styles.infoText, specialStyle]}>{name}</Text>
+                    <Text style={[styles.infoCount, specialStyle]}>{count}</Text>
+                </View>
+            </TouchableWithoutFeedback>
         );
+    }
+
+    _onItemClick = (index, count) => {
+        if (count == 0) return;
+        console.log(index);
+        let rIndex = (index + 1) / 2;
+        if (rIndex > 3) return;
+        let { state, navigate } = this.props.navigation;
+        let data = JSON.parse(state.params.info);
+        console.log('_onItemClick ', data);
+        navigate("DoneTimu", {id: data.id, paperId: state.params.paperId, name: data.name,
+            functionName: '', functionId: data.functionId,
+            type: rIndex,    // 区分正确、错误、未做题目
+            isVisible: false, 
+            isAnalyse: true
+        });
     }
 
     render() {

@@ -112,10 +112,13 @@ export default class Login extends Component {
                 this.refs.toast.show('登录成功');
                 global.token = data.token;
                 Storage.save('token', data.token).then(()=>{
-                    const { navigate, state } = this.props.navigation;
+                    const { navigate, state, goBack } = this.props.navigation;
                     if (state.params.refresh) state.params.refresh(data.token);
+                    if (state.params.callback instanceof Function) {    // 同login
+                        state.params.callback();
+                    }
                     setTimeout(function() {
-                        navigate('Main');
+                        goBack();
                     }, 400);
                 });       
             } else {
@@ -147,7 +150,7 @@ export default class Login extends Component {
                     <Button text="忘记密码" style={styles.forgetBtn} containerStyle={styles.forgetBtnContainer} onPress={this._forgetPwd} />
                 </View>
                 <View style={styles.separate}></View>
-                {/*<ThirdPartyLogin loginCallback={this._loginCallback}></ThirdPartyLogin> */}
+                <ThirdPartyLogin loginCallback={this._loginCallback}></ThirdPartyLogin>
                 <Toast ref="toast" position="center" />
             </View>
         );

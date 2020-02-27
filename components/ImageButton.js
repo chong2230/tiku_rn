@@ -30,17 +30,22 @@ const propTypes = {
 let inClick = false;
 
 const ImageButton = ({
-  onPress, disabled, source, style, containerStyle
+  onPress, disabled, source, style, containerStyle, delay,
 }) => (
   <TouchableOpacity
     style={containerStyle}
     onPress={()=>{
       if (!disabled && !inClick) {
-        inClick = true;
-        onPress();
-        setTimeout(()=>{
-          inClick = false;
-        }, 1000);
+        if (delay) {
+            inClick = true;
+            onPress();
+            setTimeout(()=>{
+                inClick = false;
+            }, 1000);
+        } else {
+            onPress();
+        }
+
       }
     }}
     disabled={disabled}
@@ -53,7 +58,8 @@ ImageButton.propTypes = propTypes;
 
 ImageButton.defaultProps = {
   onPress() {},
-  disabled: false
+  disabled: false,
+  delay: true
 };
 
 export default ImageButton;

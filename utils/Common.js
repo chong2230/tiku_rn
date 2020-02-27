@@ -12,13 +12,14 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    static httpServer = 'https://practice.youzhi.tech';
+    // static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    // static httpServer = 'https://test-practice.youzhi.tech';
+    static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
+    static env = 'test';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
 
-    static isPreAlpha = false;   // 预览版
+    static isPreAlpha = false;   // 预览版，为true时，底部导航条带课程
     static isHack = false;   // 默认为false，不使用mock数据
     static netStatus = 'unknown';
     static _netObserver = [];
@@ -73,6 +74,7 @@ export default class Common {
             'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
             'Authorization': 'Bearer ' + global.token,
         };
+        console.log('token=', global.token);
         if (!method) method = params ? 'POST' : 'GET';
         params = params || {};
         if (params.pageNumber) params.pageNum = params.pageNumber;
@@ -95,6 +97,7 @@ export default class Common {
         } else {
             bodyParams = str;
         }
+        // console.log(Common.httpServer);
         return fetch((Common.isHack ? Common.hackServer : Common.httpServer) + url, {
             method: method,
             mode: 'cors',
@@ -110,7 +113,7 @@ export default class Common {
                     global.token = null;
                     Storage.delete('token');
                 }
-                // console.log(json); // TODO: need to delete
+                console.log(url, params, json); // TODO: need to delete
                 return Common.isHack ? MockData[url] : json;
             })
             .catch((error) => {
@@ -276,6 +279,30 @@ export default class Common {
         })
     }
 
+    // 获取正确题目列表
+    static getCorrectTimuList(params, cb) {
+        Common.httpRequest('/exam/detail/rightQuestions', params).then((result)=>{
+            // console.log(result);
+            cb(result);
+        })
+    }
+
+    // 获取错误题目列表
+    static getIncorrectTimuList(params, cb) {
+        Common.httpRequest('/exam/detail/wrongQuestions', params).then((result)=>{
+            // console.log(result);
+            cb(result);
+        })
+    }
+
+    // 获取未做列表
+    static getUndoTimuList(params, cb) {
+        Common.httpRequest('/exam/detail/undoQuestions', params).then((result)=>{
+            // console.log(result);
+            cb(result);
+        })
+    }
+
     static getHomeList(cb) {
         Common.httpRequest('/home/list', {
             pageSize: 4
@@ -289,6 +316,27 @@ export default class Common {
         Common.httpRequest('/search/list', params).then((result)=>{
             cb(result);
         })   
+    }
+
+    // 获取评估报告
+    static getStatistics(params, cb) {
+        Common.httpRequest('/exam/report', params).then((result)=>{
+            cb(result);
+        })
+    }
+
+    // 获取商品列表
+    static getGoodsList(params, cb) {
+        Common.httpRequest('/pay/products', params).then((result)=>{
+            cb(result);
+        })
+    }
+
+    // 纠错
+    static recorrect(params, cb) {
+        Common.httpRequest('/correct/add', params).then((result)=>{
+            cb(result);
+        })
     }
 
     // 新闻
@@ -566,6 +614,13 @@ export default class Common {
             openid: openid,
             accessToken: accessToken
         }).then((result)=>{
+            cb(result);
+        })
+    }
+
+    // 检查版本更新
+    static checkVersionUpdate(params, cb) {
+        Common.get('/system/checkVersionUpdate', params).then((result)=>{
             cb(result);
         })
     }

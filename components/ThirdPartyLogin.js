@@ -7,13 +7,26 @@ import {
     Alert,
     Dimensions,
     DeviceEventEmitter,
-    Linking
+    Linking,
+    Platform,
+    NativeModules
 } from 'react-native';
 
 import openShare from 'react-native-open-share';
 import ImageButton from './ImageButton';
 
+const LoginModule = NativeModules.loginModule;
+
 var deviceW = Dimensions.get('window').width;
+
+const SharePlatform = {
+    QQ: 0,
+    SINA: 1,
+    WECHAT: 2,
+    WECHATMOMENT: 3,
+    QQZONE: 4,
+    FACEBOOK: 5
+};
 
 export default  class ThirdPartyLogin extends Component {
 
@@ -21,6 +34,7 @@ export default  class ThirdPartyLogin extends Component {
         super(props);  
         this.state = {
             showWxBtn: false,
+            showWbBtn: false,
             isWechatInstalled: false,
             isQQInstalled: false,
             isWeiboInstalled: false
@@ -65,6 +79,10 @@ export default  class ThirdPartyLogin extends Component {
     }
 
     _wechatLogin = () => {
+        if (Platform.OS == 'android') {
+            this.login('WECHAT');
+            return;
+        }
         var _this = this;
         if (this.state.isWechatInstalled) {
             // console.log('Wechat Installed');
@@ -94,6 +112,10 @@ export default  class ThirdPartyLogin extends Component {
     }
 
     _qqLogin = () => {
+        if (Platform.OS == 'android') {
+            this.login('QQ');
+            return;
+        }
         var _this = this;
         if (this.state.isQQInstalled) {
             // console.log('QQ Installed');
@@ -119,6 +141,10 @@ export default  class ThirdPartyLogin extends Component {
     }
 
     _weiboLogin = () => {
+        if (Platform.OS == 'android') {
+            this.login('SINA');
+            return;
+        }
         var _this = this;
         if (this.state.isWeiboInstalled) {
             // console.log('Weibo Installed');
@@ -142,7 +168,33 @@ export default  class ThirdPartyLogin extends Component {
         }
     }
 
+    login(platform) {
+        if (!LoginModule) return;
+        LoginModule.login(SharePlatform[platform], (response) => {
+            /**
+             * response
+             * 授权数据
+             * uid
+             * openid
+             * accessToken
+             * expiration
+             * 用户数据
+             * name
+             * iconurl
+             * unionGender
+             */
+            console.log('login response', response);
+            if (platform == 'QQ') {
+                let data = response;
+                _this.props.loginCallback('qq', data.openid, data.accessToken);
+            } else if (platform == 'SINA') {
+                _this.props.loginCallback('wb', data.uid, data.accessToken);
+            }
+        })
+    }
+
     render() {
+        if (Platform.OS == 'android') return null;
         let wxBtn, qqBtn, wbBtn;
         let otherLogin = '';
         if (this.state.showWxBtn && this.state.isWechatInstalled) {
@@ -153,9 +205,7 @@ export default  class ThirdPartyLogin extends Component {
             qqBtn = <ImageButton source={require('../images/icon-qq.jpg')} style={styles.imageButton} onPress={this._qqLogin} />;
             otherLogin = '其他方式登录';
         }
-        // console.log('isWeiboInstalled ', openShare.isWeiboInstalled);
-        console.log('isWeiboInstalled ', this.state.isWeiboInstalled);
-        if (this.state.isWeiboInstalled) {
+        if (this.state.showWbBtn && this.state.isWeiboInstalled) {
             wbBtn = <ImageButton source={require('../images/icon-wb.jpg')} style={styles.imageButton} onPress={this._weiboLogin} />;
             otherLogin = '其他方式登录';
         }

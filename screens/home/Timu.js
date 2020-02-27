@@ -20,6 +20,7 @@ import Header from '../../components/Header';
 import TimuCardModal from './TimuCardModal';
 import Button from '../../components/Button';
 import Toast from '../../components/Toast';
+import Alert from '../../components/Alert';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
@@ -48,6 +49,7 @@ export default class Timu extends Component {
 	  	this.showMultiChoiceTip = false;		// 多选题提示
 	  	this.showUncertainChoiceTip = false;	// 不定项选择题提示
 	  	this.isFetchScantron = false;			// 是否已经获取了答题卡接口，新版接口出来后修改为false
+	  	this.hasChoosed = true;//false;
 	}
 
 	componentDidMount() {
@@ -61,11 +63,14 @@ export default class Timu extends Component {
 	_getTimuList = () => {
 		let { state } = this.props.navigation;
 		let params = {
+			professionId: global.course.professionId,
+            courseId: global.course.courseId || global.course.id,
 			paperId: state.params.id,
-			type: state.params.type
+			type: state.params.type,    // 区分查看解析和重新做题
+			doModel: state.params.doModel || 1
 		};
 		Common.getTimuList(params, (result)=>{
-			console.log('getTimuList ', result);
+			// console.log('getTimuList ', result);
 			if (result.code == 0) {
 				let list = [];
 				// 和答题卡接口数据统一
@@ -112,7 +117,9 @@ export default class Timu extends Component {
                 // console.log('sign ', params);
                 // 防止试卷无题目时报错
 				if (id) {
+					this._showLoading(true);
 					Common.getTimu(params, (result)=>{
+						this._showLoading(false);
 						if (result.code == 0) {
 							let info = {
 								question: "",
@@ -139,7 +146,7 @@ export default class Timu extends Component {
 		                        // if (result.data.askList.length == 1) info.question = ask.question || '';
 							}
 							info = Object.assign({}, result.data, info);
-							console.log('info ', info);
+							// console.log('info ', info);
 							this.setState({
 								index: index || 1,	// 不传则默认为1
 								info: info,
@@ -158,6 +165,10 @@ export default class Timu extends Component {
 
 	}
 
+	_showLoading = (bool=true)=>{
+		global.mLoadingComponentRef && global.mLoadingComponentRef.setState({ showLoading: bool });
+	}
+
 	_convertAnswers = (list) => {
 		let currentAnswers = [];
 		for (let i in list) {
@@ -170,11 +181,13 @@ export default class Timu extends Component {
 		});
 	}
 
+	// doModel: 1 练习模式 2 考试模式
+	// 考试模式时历年真题、模拟试卷不能查看解析
 	_getAnalyse = () => {
 		let { state } = this.props.navigation;
-		if (!state.params.isAnalyse &&
-			(state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')) {
-            this.toast.show('答题时不能查看解析哦~');
+		if (!state.params.isAnalyse && state.params.doModel == 2 /*&&
+			(state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')*/) {
+            this.toast.show('考试模式时不能查看解析哦~');
 			return;
 		}
 		let showAnalyse = this.state.showAnalyse;
@@ -186,11 +199,11 @@ export default class Timu extends Component {
 
 	_collect = () => {
         let { state } = this.props.navigation;
-        if (!state.params.isAnalyse &&
-            (state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')) {
-            this.toast.show('答题时不能收藏哦~');
-            return;
-        }
+        // if (!state.params.isAnalyse && state.params.doModel == 2 &&
+        //     (state.params.functionName == '历年真题' || state.params.functionName == '模拟试卷')) {
+        //     this.toast.show('答题时不能收藏哦~');
+        //     return;
+        // }
 		let self = this;
 		let info = this.state.info;
 		let params = {
@@ -198,11 +211,11 @@ export default class Timu extends Component {
 			courseId: info.courseId,
 			paperId: info.paperId,
 			questionId: info.id,
-			type: info.hasCollect ? 0 : 1
+			type: info.collected ? 0 : 1
 		};
 		Common.collectTimu(params, (result)=>{
 			if (result.code == 0) {
-				info.hasCollect = !info.hasCollect;
+				info.collected = !info.collected;
 				self.setState({
 					info: info
 				})
@@ -251,25 +264,49 @@ export default class Timu extends Component {
             }
             currentAnswers[index] = answers.join('');
 		}
-		console.log(currentAnswers);
+		// console.log(currentAnswers);
         this.setState({
             currentAnswers: currentAnswers,
         });
 		this._saveTimu();
 	}
 
-	_getPrev = () => {
-		if (this.state.index == 1) return;
+	_getPrev = (isSlip) => {
+		if (this.state.index == 1) {
+			if (isSlip) this.toast.show('已是第一题哦~');
+			return;
+		}
         clearTimeout(this.nextTimeout);
 		let id = this.state.list[this.state.index-2].id;
 		this._getTimu(id, this.state.index - 1);
 	}
 
-	_getNext = () => {
-		if (this.state.index == this.state.total) return;
+	_getNext = (isSlip) => {
+		if (this.state.index == this.state.total) {
+			if (isSlip) this.toast.show('已是最后一题哦~');
+			return;
+		}
         clearTimeout(this.nextTimeout);
 		let id = this.state.list[this.state.index].id;
 		this._getTimu(id, this.state.index + 1);
+	}
+
+    _goRecorrect = () => {
+        let { navigate, state } = this.props.navigation;
+        let info = this.state.info;
+        let question;
+        if (this.state.askList.length > 1) {
+            let name = info.name ? info.name.replace(/^\d*\./, '')
+                .replace(/^\d*、/, '').replace(/^\d*．/, '').replace(/^\d*\s/, '') : '';
+            question = info.name ? this.state.index+ '. ' + name : '';
+		} else {
+            let ask = this.state.askList[0].ask.replace(/^\d*\./, '')
+                .replace(/^\d*、/, '').replace(/^\d*．/, '');
+            question = this.state.index + '. ' + ask;
+		}
+        navigate('Recorrect', {paperName: state.params.name || '', question: question,
+            questionId: info.id,
+			paperId: state.params.from == 'WrongTimu' ? '' : state.params.id, isVisible: false});
 	}
 
 	// 保存答题记录
@@ -284,7 +321,7 @@ export default class Timu extends Component {
 			courseId: info.courseId,
 			paperId: info.paperId,
 			questionId: info.id,
-            "doMode": state.params.doMode || "练习模式"
+            // doMode: state.params.doMode || 1
 			// answer: this._getAnswer()
 		};
 		let qaas = [
@@ -317,6 +354,7 @@ export default class Timu extends Component {
         params.qaas = qaas;
 		Common.saveTimu(params, (result)=>{
 			if (result.code == 0) {
+				this.hasChoosed = true;
 				let list = Object.assign({}, this.state.list);
 				// list[this.state.index - 1].myAnswers = currentAnswers;
 				// 如果有多个问题，都做了才算做完
@@ -363,7 +401,7 @@ export default class Timu extends Component {
 				paperId: state.params.id,
 			};
 			Common.getScantron(params, (result)=>{
-				console.log('getTimuList ', result);
+				// console.log('getTimuList ', result);
 				if (result.code == 0) {
 					this.isFetchScantron = true;
 					this.setState({
@@ -403,9 +441,10 @@ export default class Timu extends Component {
 			if (result.code == 0) {
 				let { state, navigate } = this.props.navigation;
 	            if (state.params.callback instanceof Function) {
-                    state.params.callback();
+                    state.params.callback(3);
                 }
-	            navigate('Report', {info: JSON.stringify(result.data), returnKey: state.key, isVisible: false});
+	            navigate('Report', {info: JSON.stringify(result.data), 
+	            	paperId: info.paperId, returnKey: state.key, isVisible: false});
 			}
 		})
 
@@ -602,7 +641,7 @@ export default class Timu extends Component {
 	_renderBottom = () => {
 		let collectText = '收藏';
 		let collectBtnStyle = { color: Colors.gray };
-		if (this.state.info.hasCollect) {
+		if (this.state.info.collected) {
 			collectText = '已收藏';
 			collectBtnStyle = {
 				color: Colors.highlight
@@ -622,15 +661,23 @@ export default class Timu extends Component {
 					onPress={()=>{this._getAnalyse()}}></Button>
 				<Button text={collectText} style={[styles.button, collectBtnStyle]} 
 					onPress={()=>{this._collect()}}></Button>
+                {/*<Button text="纠错"*/}
+                        {/*containerStyle={styles.buttonContainer}*/}
+                        {/*style={styles.recorrectButton}*/}
+                        {/*onPress={()=>{this._goRecorrect()}}></Button>*/}
 				<Button text="上一题" style={[styles.button, prevBtnStyle]} 
 					onPress={()=>{this._getPrev()}}></Button>
 				<Button text="下一题" style={[styles.button, nextBtnStyle]} 
 					onPress={()=>{this._getNext()}}></Button>
-				<Button text={this.state.index + '/' + this.state.total} 
+				<Button text={this.getCurrentTotalLabel()}
 					style={styles.button}
 				  	onPress={()=>{this._getScantron()}}></Button>
 			</View>
 		);
+	}
+
+	getCurrentTotalLabel = () => {
+		return '交卷 ' + this.state.index + '/' + this.state.total;
 	}
 
 	render() {
@@ -651,18 +698,44 @@ export default class Timu extends Component {
         }
         let name = info.name ? info.name.replace(/^\d*\./, '')
 			.replace(/^\d*、/, '').replace(/^\d*．/, '').replace(/^\d*\s/, '') : '';
-
+		let position = {
+            startX: 0,
+            startY: 0,            
+            endX: 0,
+            endY: 0
+        };
 		return (
 			<View style={styles.container}>
 				<Bar></Bar> 
-                <Header title={state.params.name || ''} goBack={()=>{
-                	let { state, goBack } = this.props.navigation;
-                    if (state.params.callback instanceof Function) {
-                        state.params.callback();
-                    }
-                    goBack();
-                }}></Header>
-				<ScrollView ref={(ref)=>{this.scrollView = ref;}} style={styles.content}>
+                <Header title={state.params.name || ''}
+						rightText={'纠错'}
+                        onRight={this._goRecorrect}
+						goBack={()=>{
+							let { state, goBack } = this.props.navigation;
+							if (this.hasChoosed && state.params.callback instanceof Function) {
+								state.params.callback(2);
+							}
+							goBack();
+                		}}
+						></Header>
+				<ScrollView ref={(ref)=>{this.scrollView = ref;}} 
+						style={styles.content}
+						onTouchStart={(e)=>{
+							position.startX = e.nativeEvent.pageX;
+							position.startY = e.nativeEvent.pageY;
+						}}
+						onTouchEnd={(e)=>{
+							position.endX = e.nativeEvent.pageX;
+							position.endY = e.nativeEvent.pageY;
+							// 竖直方向滑动超过100时，不做左右切换
+							if (parseInt(position.endY - position.startY) > 100) return;
+							if (position.endX - position.startX > 50) {
+								this._getPrev(true);
+							} else if (position.endX - position.startX < -50) {
+								this._getNext(true);
+							}
+						}}
+						>
 					<Text style={styles.type}>
 						{info.type}
 						{tip == '' ? null : <Text style={{color: Colors.special}}>{' ' + tip}</Text>}
@@ -698,6 +771,20 @@ export default class Timu extends Component {
                         </Modal> 
                     </View>: null
                 }
+                {/*<Alert*/}
+                    {/*ref={(ref)=>this.alert = ref}*/}
+                    {/*modalWidth={270}*/}
+                    {/*modalHeight={124}*/}
+                    {/*titleText="您确定退出练习吗"*/}
+                    {/*titleFontSize={16}*/}
+                    {/*titleFontWeight={"bold"}*/}
+                    {/*okText={'确定'}*/}
+                    {/*cancelText={'取消'}*/}
+                    {/*confirm={()=>{*/}
+                        {/**/}
+                    {/*}}*/}
+                    {/*okFontColor={'#4789F7'}*/}
+                {/*/>*/}
                 <Toast ref={(ref)=>this.toast = ref} position="center" />
 			</View>
 		);
@@ -796,6 +883,10 @@ const styles = StyleSheet.create({
 	button: {
 		margin: 20,
 		color: Colors.highlight
+	},
+    recorrectButton: {
+        margin: 20,
+        color: Colors.gray
 	},
 	safeBottom: {
         backgroundColor: 'white',

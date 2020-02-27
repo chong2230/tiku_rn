@@ -10,6 +10,7 @@ import {
     Platform,
     Keyboard,
     TouchableOpacity, 
+    TouchableWithoutFeedback,
     TextInput, 
     StyleSheet,
     KeyboardAvoidingView,
@@ -60,20 +61,22 @@ export default class Alert extends React.Component {
         bottomFontSize: PropTypes.number,//下面取消确定的文字大小
         okFontColor: PropTypes.any,
         cancelFontColor: PropTypes.any,
+        onPress: PropTypes.func
     }
 
     static defaultProps = {
         modalWidth: 303,
         modalHeight: 150,
+        titleText: '',
         titleFontSize: 18,
         titleFontWeight: 'normal',
         titleFontColor: '#243047',
-        descFontSize: 18,
+        descFontSize: 15,
         descFontWeight: 'normal',
         descFontColor: '#243047',
         titleMarginBottom: 10,
         bottomHeight: 50,
-        bottomFontSize: 18,
+        bottomFontSize: 15,
         okFontColor: 'red',
         cancelFontColor: '#4789F7',
         cancelText: '取消',
@@ -102,6 +105,10 @@ export default class Alert extends React.Component {
         this.setState({modalVisible:false})
     }
 
+    _onPress = () => {
+        this.props.onPress ? this.props.onPress() : this.close();
+    }
+
     render(){
         return(
             <View>
@@ -119,6 +126,7 @@ export default class Alert extends React.Component {
 
     renderContent(){
         return(
+            <TouchableWithoutFeedback onPress={this._onPress}>
             <View style={styles.ViewPage}>
                 <View style={{
                     // height: this.props.modalHeight ? this.props.modalHeight : (this.props.TextInputVisible?300:150),
@@ -148,7 +156,7 @@ export default class Alert extends React.Component {
                                     marginRight:15,
                                 }}>{this.props.titleText}</Text>
                                 {
-                                    this.props.desText &&
+                                    this.props.desText ?
                                     <Text style={{
                                         fontSize: this.props.descFontSize,
                                         fontWeight: this.props.descFontWeight,
@@ -158,6 +166,7 @@ export default class Alert extends React.Component {
                                         marginLeft: 15,
                                         marginRight: 15,
                                     }}>{this.props.desText}</Text>
+                                        : null
                                 }
                             </View>
                         }
@@ -206,6 +215,7 @@ export default class Alert extends React.Component {
                     </View>
                 </View>
             </View>
+            </TouchableWithoutFeedback>
         )
     }
 }
@@ -216,7 +226,7 @@ const styles = StyleSheet.create({
         height:deviceHeight,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'rgba(0,0,0,0.2)'
+        backgroundColor: 'rgba(0,0,0,0.5)'
     },
     container: {
         flex: 1,

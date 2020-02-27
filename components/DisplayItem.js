@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
         right: 20
     },
     txt1: {
-        width: 80,
+        width: 100,
         textAlign: 'center',
         fontSize: 15
     },

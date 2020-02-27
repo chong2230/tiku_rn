@@ -9,10 +9,12 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
   Modal,
+  DeviceEventEmitter,
   Dimensions
 } from 'react-native';
 
 import SplashScreen from 'react-native-splash-screen';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Bar from '../../components/Bar';
 import ViewPager from '../../components/ViewPager';
@@ -55,6 +57,9 @@ export default class Home extends Component {
     componentDidMount() {
         SplashScreen.hide();
         this._initData();
+        this.emitter = DeviceEventEmitter.addListener('refreshHome', (data) => {
+            this._initData();
+        });
     }
 
     _initData = () => {
@@ -70,7 +75,7 @@ export default class Home extends Component {
                 this.setState({
                     curCourse: data
                 });
-                this._load();
+                this._preload();
             } else {
                 this.props.navigation.push('Category', { isVisible: false, leftBtnIsHidden: true,
                     chooseCallback:(data)=>{
@@ -79,11 +84,27 @@ export default class Home extends Component {
                         this.setState({
                             curCourse: data
                         });
-                        this._load();
+                        this._preload();
                     }
                 })
             }
-        })
+        });
+
+    }
+
+    _preload = () => {
+        if (Common.env == 'test') {
+            // 获取host，用于切换环境
+            Storage.get('host').then((val)=>{
+                if (val) {
+                    Common.httpServer = val;
+                    global.host = val;                        
+                }
+                this._load();
+            });    
+        } else {
+            this._load();
+        }
     }
 
     _load = () => {
@@ -191,9 +212,18 @@ export default class Home extends Component {
     }
 
     _renderSearch = () => {
+        let name = Platform.OS == 'ios' ? 'ios-search' : 'md-search';
         return (
             <TouchableWithoutFeedback onPress={()=>{this._goSearch()}}>
-                <View style={styles.searchArea}>
+                <View style={styles.searchArea}>                    
+                    <Text style={styles.searchIcon}>
+                        <Icon
+                            name={name}
+                            size={18}
+                            style={{marginBottom: -3, marginRight: 10, top: 5}}
+                            color={Colors.gray}
+                        />
+                    </Text>                  
                     <Text style={styles.searchInput}>请输入要搜索的试题</Text>
                 </View>
             </TouchableWithoutFeedback>
@@ -234,13 +264,14 @@ export default class Home extends Component {
         navigate("Subject", {id: data.id, title: data.name, isVisible: false}); 
     }
 
+    // 新增学习评估
     _renderMine = () => {
         let myData = this.state.myData;
         let item = myData.contents || [];
         let iconsView = [];
         let names = Platform.OS == 'ios'
-            ? ['ios-heart', 'ios-list-box', 'ios-bug', 'ios-book']
-            : ['md-heart', 'md-list-box', 'md-bug', 'md-book'];
+            ? ['ios-heart', 'ios-list-box', 'ios-bug', 'ios-book', 'ios-eye']
+            : ['md-heart', 'md-list-box', 'md-bug', 'md-book', 'md-eye'];
         for (let i in item) {
             let data = item[i];
             if (data.name == '题库笔记') continue;  // 暂不支持该功能
@@ -286,6 +317,9 @@ export default class Home extends Component {
                 this._getWrongTimuList(data);
                 break;
             case '题库笔记':
+                // break;
+            case '评估报告':
+                navigate("Statistics", {id: data.id, isVisible: false});
                 break;
             default:
                 break;
@@ -316,7 +350,7 @@ export default class Home extends Component {
                     this.toast.show('还没有错题哦~');
                 } else {
                     navigate("WrongTimu", {id: data.id, course: this.state.curCourse,
-                        isAnalyse: true,
+                        isAnalyse: true, from: 'WrongTimu',
                         list: result.data, isVisible: false});
                 }
             } else if (result.code == 2) {
@@ -439,7 +473,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        borderRadius: 10,
+        backgroundColor: '#f8f8f8'
+    },
+    searchIcon: {
+        marginTop: 8,
+        marginLeft: 10
     },
     searchInput: {
         width: deviceW - 20,
@@ -447,9 +487,9 @@ const styles = StyleSheet.create({
         lineHeight: 35,
         color: Colors.gray,
         fontSize: 13,
-        paddingLeft: 10,
+        paddingLeft: 6,
         borderRadius: 10,
-        backgroundColor: '#f8f8f8'
+        // backgroundColor: '#f8f8f8'
     },
     scrollView: {
         backgroundColor:'white'
@@ -488,7 +528,8 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 8,
         marginLeft: 8,
-        height: 30,
+        marginBottom: 10,
+        height: 20,
     },
     hotView: {
         flexDirection: 'column',
@@ -496,7 +537,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: itemWidth,
         height: 80,
-        marginBottom: 15
+        marginBottom: 10
     },
     name: {
         marginTop: 10,
@@ -514,8 +555,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: itemWidth,
         height: 80,
-        marginTop: 10,
-        marginBottom: 15
+        // marginTop: 10,
+        marginBottom: 10
     },
     separator: {
         backgroundColor: '#f2f2f2',

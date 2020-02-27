@@ -18,7 +18,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [OpenShare connectQQWithAppId:@"101844964"];
-  [OpenShare connectWeiboWithAppKey:@"3808076800"];
+  [OpenShare connectWeiboWithAppKey:@"3293143520"];
   [OpenShare connectWeixinWithAppId:@"wx1fe3c4b1d0608ef3"];
   [OpenShare connectRenrenWithAppId:@"228525" AndAppKey:@"1dd8cba4215d4d4ab96a49d3058c1d7f"];
   

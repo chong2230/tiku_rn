@@ -18,7 +18,7 @@ function getDevice(w, h) {
 }
 const isIphoneX_XS = getDevice(X_XS_width, X_XS_height);
 
-const isIphoneXR_XSMax = getDevice(XR_XS_width, XR_XS_height);;
+const isIphoneXR_XSMax = getDevice(XR_XS_width, XR_XS_height);
 //异性全面屏
 const isFullScreen = (isIphoneX_XS || isIphoneXR_XSMax);
 

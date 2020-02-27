@@ -1,0 +1,44 @@
+
+  <html>
+      <head>
+       <meta charset='utf-8' />
+      </head>
+       <body>
+          <table>
+            <tr><td>问题序号</td><td>问题内容</td><td>问题图片</td><td>问题分值</td><td>问题选项A</td><td>问题选项B</td><td>问题选项C</td><td>问题选项D</td><td>问题选项E</td><td>问题选项F</td><td>问题答案</td><td>问题答案图片</td><td>问题解析</td><td>问题解析图片</td></tr><tr><td>1</td><td><p>
+	若n表示问题的规模、O（f（n））表示算法的时间复杂度随n变化的增长趋势，则算法时间复杂度最小的是（）。</p></td><td></td><td>10</td><td>O(n<sup>2</sup>） <BR /></td><td>O（n） <BR /></td><td>O（log n） <BR /></td><td>O（n log n）<BR /><BR /></td><td></td><td></td><td>C</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 本题考查的是算法消耗的时间度量。<br />
+	&nbsp;&nbsp;&nbsp; 一般情况下，一个算法中基本操作重复执行的次数是问题规模n的某个函数f（n）算法的时间量度记作T（n）=O（f（n）），它表示随问题n的增大，算法执行时间的增长率和f（n）的增长率相同，称做算法的渐进时间复杂度，简称时间复杂度。显然，在O（n<sup>2</sup>）、 O（n）、O（log n）和O（n log n）中，复杂度最小的是O（log n）。</p></td><td></td></tr><tr><td>2</td><td><p>
+	设递增序列A为a1，a2，&hellip;，an，递增序列B为b1，b2，&hellip;，bm，且m&gt;n，则将这两个序列合并为一个长度为m+n的递增序列时，当（ &nbsp;）时，归并过程中元素的比较次数最少。</p></td><td></td><td>10</td><td>a<sub>n</sub> &gt;b<sub>m</sub></td><td>a<sub>n </sub>&lt;b<sub>1 </sub></td><td>a<sub>1</sub>&gt;b<sub>1 </sub></td><td>a<sub>1</sub>&lt;b<sub>m</sub></td><td></td><td></td><td>B</td><td></td><td><p>
+	当a<sub>n</sub>&lt;b<sub>1</sub>时，合并过程中，由于序列A，B都是递增序列，所以其比较次数是最少的。</p></td><td></td></tr><tr><td>3</td><td><p>
+	编译型程序设计语言若规定程序中的变量必须先定义（或声明）再引用，那么违反此规定的程序在（）时报错。</p></td><td></td><td>10</td><td>编辑 <BR /></td><td>编译 <BR /></td><td>链接 <BR /></td><td>运行<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 本题考查程序语言基础知识。<br />
+	&nbsp;&nbsp;&nbsp; 程序错误一般分为语法错、语义错及运行错。语法错误是指语言结构上的错误，编译程序在进行语法分析遇到错误时，不会就此停止工作，而是希望能准确地指出出错位置和错误性质并尽可能进行校正，以便使编译程序能继续工作。源程序中有些结构，按照语法规则去判断，它是正确的，但它不符合语义规则。对未声明的变量进行引用，编译时会报告错误。</p></td><td></td></tr><tr><td>4</td><td><p>
+	当二叉树的结构形如一（ &nbsp;）时，其后序遍历序列和中序遍历序列相同。</p></td><td></td><td>10</td><td><img alt="" src="http://www.educity.cn/tiku/uploadfiles/2017-09/0439a21034954ec8a5313cafdd0ff6db_.png" style="width: 110px; height: 138px;" /> <BR /></td><td><img alt="" src="http://www.educity.cn/tiku/uploadfiles/2017-09/dd88552481c246b78c1a08da3ac5c670_.png" style="width: 100px; height: 144px;" /> <BR /></td><td><img alt="" src="http://www.educity.cn/tiku/uploadfiles/2017-09/2798bd62853f490c91c0396af089226b_.png" style="width: 66px; height: 152px;" /> <BR /></td><td><img alt="" src="http://www.educity.cn/tiku/uploadfiles/2017-09/1c0c503c2bb44328bd867325850be883_.png" style="width: 125px; height: 134px;" /><BR /><BR /></td><td></td><td></td><td>A</td><td></td><td><p>
+	后序遍历：先遍历左结点，然后是右结点，最后是根结点。如此递归。<br />
+	中序遍历：先遍历左结点，然后是根结点，最后是右结点。<br />
+	由于A选项没有右结点，所以其后序遍历和中序遍历相同。</p></td><td></td></tr><tr><td>5</td><td>屏幕设计的原则不包括（ &nbsp;）。</td><td></td><td>10</td><td>平衡原则，即屏幕上下左右应比较平衡 <BR /></td><td>效率原则，即占用存储少，运行速度快 <BR /></td><td>规范原则，即屏幕对象及其处理要规范化 <BR /></td><td>经济原则，即使用简明清晰的形式表达更多的信息<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td><div>
+	&nbsp; &nbsp; 本题考查软件工程基础知识。</div>
+<div>
+	&nbsp; &nbsp; 屏幕是用户界面的基本单元，屏幕设计是程序员编程的重要部分，是程序与用户交互的关键。屏幕设计的原则包括：平衡原则，即屏幕上下左右应比较平衡，不要一头拥挤一头空旷，让人看了不舒服：规范原则，即屏幕对象及其处理要规范化，例如保存文件的图标统一采用软盘形状，让大家一看就明白；经济原则，即使用简明清晰的形式表达更多的信息，文字不要啰嗦。效率问题是程序内部算法实现的问题，不属于屏幕设计的原则。对于执行时间较长的命令，在屏幕上应显示进度状况。</div></td><td></td></tr><tr><td>6</td><td><p>
+	要表示256级灰度图像，表示每个像素点的数据最少需要（ &nbsp;）个二进制位。</p></td><td></td><td>10</td><td>4 <BR /></td><td>8 <BR /></td><td>16 <BR /></td><td>256<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td><p>
+	2的8次方为256.</p></td><td></td></tr><tr><td>7</td><td>SMTP使用的传输协议是（&nbsp; ）。</td><td></td><td>10</td><td>TCP<BR /></td><td>IP<BR /></td><td>UDP<BR /></td><td>ARP<BR /><BR /></td><td></td><td></td><td>A</td><td></td><td>SMTP 是一种TCP协议支持的提供可靠且有效电子邮件传输的应用层协议。</td><td></td></tr><tr><td>8</td><td><p>
+	某通信公司公布了速率为512K的两种ADSL使用类型的资费标准如下：</p>
+<p align="center">
+	<img src="http://www.educity.cn/tiku/UploadFiles/2011-1/113_735130.jpg" /></p>
+<p>
+	根据该资费标准可以算出，月上网时间在T以下者，选择类型A 比较合适；月上网时间在T 以上者，应选择类型B。T 的值应是（） 。</p></td><td></td><td>10</td><td>15小时30分<BR /></td><td>28小时20分<BR /></td><td>30小时<BR /></td><td>40小时<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td><p>
+	&nbsp;&nbsp;&nbsp; 最清晰、直观的方法是图示方法。先建立坐标系统，以月上网时间（分钟）为X轴，应付上网费（元）为Y轴，再将两种类型的资费标准绘制成函数曲线〔如下图所示）。</p>
+<p align="center">
+	<img src="http://www.educity.cn/tiku/UploadFiles/2011-1/113_397739.jpg" /></p>
+<p>
+	&nbsp;&nbsp;&nbsp; 类型A的资费标准可表示成水平线段：y=24.5(0&le;x&le;1200)和斜线：y=24.5+0.05(x-1200)(x&ge;1200)。<br />
+	&nbsp;&nbsp;&nbsp; 类型B的资费标准可表示成水平线段：y=49.5(O&le;x&le;2400)和斜线：y=49.5+0.05（x-2400）（x&ge;2400）。<br />
+	&nbsp;&nbsp;&nbsp; 从图上可以看出，类型A曲线与类型B曲线的交点是（T，49.5）；<br />
+	&nbsp;&nbsp;&nbsp; （49.5-24.5）/（T-1200）=0.05 ，T=1700分钟=28小时20分。<br />
+	&nbsp;&nbsp;&nbsp; 月上网时间在T以下者，应选择类型A；月上网时间在T以上者，应选择类型B。</p></td><td></td></tr><tr><td>9</td><td>电子邮件地址&ldquo;linxin@mail.Ceiaec.org&rdquo;中的linxin、@和mail.ceiaec.org分别表示用户信箱的（&nbsp; ）<br /></td><td></td><td>10</td><td>帐号、邮件接收服务器域名和分隔符</td><td>帐号、分隔符和邮件接收服务器域名</td><td>部件接收服务器域名、分隔符和帐号</td><td>邮件接收服务器域名、帐号和分隔符</td><td></td><td></td><td>B</td><td></td><td>本题考察电子邮件基础知识。linxin是账号，@是分隔符，org是服务器域名后缀</td><td></td></tr><tr><td>10</td><td>将一个可执行程序从其汇编语言形式翻译成某种高级程序设计语言形式的过程称为（&nbsp;&nbsp; ）。<br />
+<br /></td><td></td><td>10</td><td>编译<BR /></td><td> 反编译<BR /></td><td> 汇编<BR /></td><td> 解释<BR /><BR /></td><td></td><td></td><td>B</td><td></td><td>&nbsp;本题考查考生的程序语言基础知识。<br />
+通常采用高级程序语言进行程序开发，由于计算机不能直接识别高级语言，因此需 将高级语言源程序经过编译及链接转换为可执行程序再运行，反编译就是对程序语言进 行翻译处理的逆过程。<br /></td><td></td></tr>
+          </table>
+       </body>
+  </html>

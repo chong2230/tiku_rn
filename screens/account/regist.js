@@ -103,7 +103,7 @@ export default class Regist extends Component {
 
     _getService = () => {
         const { navigate } = this.props.navigation;
-        navigate('Service', {isVisible: true, title: ''});
+        navigate('Service', {isVisible: false, title: ''});
     }
 
     _loginCallback = (type, openid, accessToken) => {

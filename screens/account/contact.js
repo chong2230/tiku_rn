@@ -22,7 +22,8 @@ export default class Contact extends Component {
         this.state = {
         	tel: '',
         	email: 'service@youzhi.tech',
-        	account: '有知学堂'//I18n.t('common.name')
+        	account: '有知学堂',//I18n.t('common.name')
+          qq: '878332066'
         };
     }
 
@@ -50,7 +51,8 @@ export default class Contact extends Component {
                 <Bar />
                 {telItem}
                 <DisplayItem txt1='联系邮箱' txt2={this.state.email} />
-                <DisplayItem txt1='公众号' txt2={this.state.account} />                
+                <DisplayItem txt1='公众号' txt2={this.state.account} />  
+                <DisplayItem txt1='官方QQ客服群' txt2={this.state.qq} />                
             </View>
         );
     }    

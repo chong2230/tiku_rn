@@ -86,6 +86,10 @@ export default class WrongTimu extends Timu {
         this._showCard();
     }
 
+    getCurrentTotalLabel = () => {
+        return this.state.index + '/' + this.state.total;
+    }
+
 }
 
 const styles = StyleSheet.create({
