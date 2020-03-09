@@ -163,8 +163,8 @@ export default class Alert extends React.Component {
                                         color: this.props.descFontColor,
                                         // marginTop: this.props.titleMarginTop ? this.props.titleMarginTop : 18,
                                         marginBottom: this.props.titleMarginBottom ? this.props.titleMarginBottom : 10,
-                                        marginLeft: 15,
-                                        marginRight: 15,
+                                        marginLeft: 10,
+                                        marginRight: 10,
                                     }}>{this.props.desText}</Text>
                                         : null
                                 }

@@ -14,7 +14,8 @@ var subjectCode = Kino.getUrlParam('subjectCode'); //subjectCode
 var sjId = Kino.getUrlParam('sjId'); //sjId试卷id
 
 var jsonData = [];  // 导出数据
-var delay = 3000;  // 延迟3秒
+var delay = 2000;  // 延迟n秒
+var isExportExcel = true;
 
 //查找制定元素在数组中的索引值
 Array.prototype.indexVf = function(arr) {
@@ -126,7 +127,9 @@ Kino.ajax('/api/course/paper/loadInfoByPK.do', function(mydata) {
           }
         });
         if (stIdIndex == stIdArr.length - 1) {
-          addExportBtn();
+          // addExportBtn();
+            if (isExportExcel) tableToExcel();
+            else saveJSON();
         } else {
           // 延迟10秒请求下一题，避免请求太频繁
           setTimeout(function(){next();}, delay);
@@ -148,24 +151,71 @@ function next() {
 }
 
 function convertData(data) {
-  let question = data.questionMap[0]; // TODO：多个问题需要处理
+    var imgReg = /<img.*?(?:>|\/>)/gi;
+    var pReg = /<\/?p.*?(?:>|\/>)/gi;
+    var brReg = /<br\s*\/?>/gi;
+    var divReg = /<div\s*\/?>/gi;
+  let question = data.questionMap.length > 0 ? data.questionMap[0] : {};
+  if (data.questionMap.length > 1) {  // 多个问题处理
+     question = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':''};
+    for (let i=0; i<data.questionMap.length; i++) {
+      let q = data.questionMap[i];
+      question['A'] += (i==0 ? q['A'] : '####' + q['A']);
+        question['B'] += (i==0 ? q['B'] : '####' + q['B']);
+        if (q['C']) question['C'] += (i==0 ? q['C'] : '####' + q['C']);
+        if (q['D'])question['D'] += (i==0 ? q['D'] : '####' + q['D']);
+        if (q['E'])question['E'] += (i==0 ? q['E'] : '####' + q['E']);
+        if (q['F'])question['F'] += (i==0 ? q['F'] : '####' + q['F']);
+    }
+      console.log('question[\'A\'] ', question['A']);
+  }
   let obj = {
-    'ask': data.tigan,
+    'ask': data.tiganDelHTMLTag,//data.tigan.replace(/<br\s*\/?>/gi, '\n'),
     "askImg": "",
-    "score": 10.00,
-    'choiceA': question['A'],
-    'choiceB': question['B'],
-    'choiceC': question['C'] ? question['C'] : '', 
+    "score": data.score || 10.00,
+    'choiceA': question['A'] ? question['A'] : '',  // 案例题无选项
+    'choiceB': question['B'] ? question['B'] : '',
+    'choiceC': question['C'] ? question['C'] : '',
     'choiceD': question['D'] ? question['D'] : '',
     'choiceE': question['E'] ? question['E'] : '',
     'choiceF': question['F'] ? question['F'] : '',
     "answer": data.answerStr,
     "answerImg": "",
-    "analysis": data.analysis,
-    "analysisImg": "",
+    "analysis": data.analysis.replace(/<br\s*\/?>/gi, '\n').replace(/<\/?p>/gi, '').replace(imgReg, '').replace(divReg, ''),
+    "analysisImg": getImg(data.analysis),
+    // "typeName":data.stTypeName
   }
+  // 案例题 stProp: "ZhenTi" stPropName: "真题" stType: 98 stTypeName: "案例题"
+    if (data.stTypeName == '案例题') {
+      // obj.ask = data.question.replace(brReg, '\n').replace(pReg, '').replace(imgReg, '');
+      // obj.askImg = getImg(data.question);
+      // obj.answer = data.answer.replace(brReg, '\n').replace(pReg, '').replace(imgReg, '');
+      // obj.answerImg = getImg(data.answer);
+      // obj.analysis = data.analysis.replace(brReg, '\n').replace(pReg, '').replace(imgReg, '');
+      // obj.analysisImg = getImg(data.analysis);
+        obj.ask = data.question;
+        obj.answer = data.answer;
+        obj.analysis = data.analysis;
+        isExportExcel = false;
+    }
   console.log(obj);
   jsonData.push(obj);
+}
+
+function getImg(str) {
+    var imgReg = /<img.*?(?:>|\/>)/gi;
+    var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+    var arr = str.match(imgReg);  // arr 为包含所有img标签的数组
+    if (!arr) return '';
+    var res = '';
+    for (var i = 0; i < arr.length; i++) {
+        var src = arr[i].match(srcReg);
+        //获取图片地址
+        console.log('图片地址'+(i+1)+'：'+src[1]);
+        if (i == 0) res += src[1];
+        else res += ',' + src[1];
+    }
+    return res;
 }
 
 function tableToExcel() {
@@ -210,6 +260,30 @@ function tableToExcel() {
   oA.download = title + '.xls';
   // 模拟点击
   oA.click()
+}
+
+function saveJSON(){
+    let data = jsonData;
+    let filename = '试卷.json';
+    let modelTitle = document.querySelector('.modeTitle h4');
+    if (modelTitle) filename = modelTitle.innerText + '.json';
+    if(!data) {
+        alert('保存的数据为空');
+        return;
+    }
+    if(!filename)
+        filename = 'json.json'
+    if(typeof data === 'object'){
+        data = JSON.stringify(data, undefined, 4)
+    }
+    var blob = new Blob([data], {type: 'text/json'}),
+        e = document.createEvent('MouseEvents'),
+        a = document.createElement('a')
+    a.download = filename
+    a.href = window.URL.createObjectURL(blob)
+    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':')
+    e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+    a.dispatchEvent(e)
 }
 
 function addExportBtn() {

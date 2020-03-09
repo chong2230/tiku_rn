@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import Bar from '../../components/Bar';
+import Header from '../../components/Header';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
 
@@ -75,7 +76,7 @@ export default class HistoryTicket extends PureComponent {
             <View style={styles.item}>                    
                 <View style={styles.top}>                        
                     <Text style={[styles.name, expiredStyle]}>{rowData.title}</Text>                    
-                    <Text style={[styles.price, expiredStyle]}>￠ {rowData.price}</Text>
+                    <Text style={[styles.price, expiredStyle]}>{rowData.price}学币</Text>
                 </View>
                 <Text numberOfLines={2} style={[styles.desc, expiredStyle]}>{rowData.content}</Text>
                 <View style={styles.bottom}>
@@ -116,10 +117,16 @@ export default class HistoryTicket extends PureComponent {
     }
 
     render() {
+        let { state, goBack } = this.props.navigation;
         return(
         <View style={styles.container}>
             <Bar />
-
+            <Header title={state.params.title || '历史礼券'} goBack={()=>{
+                if (state.params.callback instanceof Function) {
+                    state.params.callback();
+                }
+                goBack();
+            }}></Header>
             {/* 栏目条 */}
             <FlatList 
                     style={styles.list}
@@ -157,7 +164,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.border,
         padding: 5,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor: 'white'
     },
     top: {
         flexDirection: 'row',

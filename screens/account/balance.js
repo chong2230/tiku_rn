@@ -36,8 +36,9 @@ export default class Balance extends Component {
     constructor(props) {
         super(props);
 
+        const { params } = this.props.navigation.state;
         this.state = ({
-        	detail: {},
+        	goods: JSON.parse(params.goods),
             tickets: [],
             voucher: null,
             voucherId: null,
@@ -45,21 +46,30 @@ export default class Balance extends Component {
         })
     }
 
-    componentWillMount() {
-    	const { params } = this.props.navigation.state;
-        this.setState({
-            detail: JSON.parse(params.detail)
-        });      
+    componentDidMount() {
+        let self = this;
+        this._createOrder();
         this._getAccount();
         this._getTicket();
-    }
-
-    componentDidMount() {
-        let self = this;        
         this.emitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
             console.log('navigationStateChange ', data);
             
         })
+    }
+
+    _createOrder = () => {
+        const { state } = this.props.navigation;
+        let params = {
+            professionId: global.course.professionId,
+            courseId: global.course.courseId || global.course.id,
+            productId: this.state.goods.goodsId,
+        };
+        if (state.params.paperId) params.paperId = state.params.paperId;
+        Common.createOrder(params, (result)=>{
+            if (result.code == 0) {
+                this.orderNo = result.data.orderNo;
+            }
+        });
     }
 
     _getAccount = () => {
@@ -89,7 +99,7 @@ export default class Balance extends Component {
     _chooseTicket = () => {
         let self = this;
         const { navigate } = this.props.navigation;
-        navigate('Ticket', {isVisible: true, title: '使用礼券', type: 'choose', callback: (data)=>{
+        navigate('Ticket', {isVisible: false, title: '使用礼券', type: 'choose', callback: (data)=>{
             if (!data) return;
             self.setState({
                 voucher: data,
@@ -100,21 +110,21 @@ export default class Balance extends Component {
 
     _handle = () => {
         let self = this;
-        let detail = this.state.detail;
-        let cost = detail.price;
+        let goods = this.state.goods;
+        let cost = goods.price;
         if (this.state.voucherId) {
             cost -= this.state.voucher.price;
         }
      	if (this.state.money < cost) {
     		const { navigate } = this.props.navigation;
-        	navigate('Recharge', {isVisible: true, title: '账户', refresh: (money)=>{
+        	navigate('Recharge', {isVisible: false, title: '账户', refresh: (money)=>{
         		// 更新余额
                 self.setState({
                     money : money
                 })
         	}});
     	} else {
-            let name = detail.name || detail.title; // 适配name和title
+            let name = goods.goodsName || goods.title; // 适配name和title
     		Alert.alert('购买确认', '您确定要购买『' + name + '』吗？', [
 		       {text: '取消', onPress: () => {}, style: 'cancel'},
 		       {text: '确定', onPress: () => {this._buy()}},
@@ -123,19 +133,26 @@ export default class Balance extends Component {
     }
 
     _buy = () => {
-    	const { params } = this.props.navigation.state;
-    	Common.buy(params.columnId, this.state.voucherId, (result)=>{ 
+    	const { state } = this.props.navigation;
+
+    	let params = {
+            productId: this.state.goods.goodsId,
+            orderNo: this.orderNo
+        };
+        if (this.state.voucherId) params.userVoucherId = this.state.voucherId;
+    	Common.buy(params, (result)=>{
             if (result.code == 0) {
             	Alert.alert('', '购买成功', [
     			    {text: '确定', onPress: () => {
                         const { navigate, goBack } = this.props.navigation;
-                        if (params.callback instanceof Function) {
-                            params.callback();
+                        if (state.params.refresh instanceof Function) {
+                            state.params.refresh();
                         }
-                        goBack();
+                        goBack(state.params.returnKey);
                         // navigate("ColumnDetail", {id: params.columnId}); // 该方法跳转回专栏详情，不会请求数据
     			    }},
-    			  ])
+    			  ]);
+                DeviceEventEmitter.emit('memberChange');
             } else {
                 this.refs.toast.show(result.msg);
             }
@@ -143,13 +160,13 @@ export default class Balance extends Component {
     }
 
     render() {      
-    	let detail = this.state.detail;
-        let name = detail.name || detail.title; // 适配name和title
+    	let goods = this.state.goods;
+        let name = goods.goodsName || goods.title; // 适配name和title
     	let btnTxt;
-        let cost = detail.price;
+        let cost = goods.price;
         let ticketLabel = '无可用礼券';
         if (this.state.voucherId) {
-            ticketLabel = this.state.voucher.title + '￠' + this.state.voucher.price;
+            ticketLabel = this.state.voucher.title + this.state.voucher.price + '学币';
             cost -= this.state.voucher.price;
             if (cost < 0) cost = 0;
         } else if (this.state.tickets.length > 0) {
@@ -168,12 +185,12 @@ export default class Balance extends Component {
                     goBack();
                 }}></Header>
             	<View style={styles.info}>
-            		{/*<Image resizeMode={'stretch'} source={{uri:Common.baseUrl + detail.image}}*/}
+            		{/*<Image resizeMode={'stretch'} source={{uri:Common.baseUrl + goods.image}}*/}
                        {/*style={styles.img}/>*/}
                     <View style={styles.right}>
                     	<Text style={styles.title}>{name}</Text>
                     	<View style={styles.costStyle}>
-                    		<Text style={styles.cost}>{detail.price}知币</Text>
+                    		<Text style={styles.cost}>{goods.price}学币</Text>
                     		<Text style={styles.multiple}>x1</Text>
                     	</View>                        
                     </View>
@@ -188,12 +205,12 @@ export default class Balance extends Component {
                 <View style={styles.needPay}>
                 	<Text style={styles.emptyLabel}></Text>
                 	<Text style={styles.costLabel}>需付款：</Text>
-                	<Text style={styles.costPrice}>{cost}知币</Text>
+                	<Text style={styles.costPrice}>{cost}学币</Text>
                 </View>   
                 <View style={styles.separator} />
                 <View style={styles.balanceStyle}>
                 	{/*<Icon name="copyright" size={px2dp(15)} color={Colors.highlight} style={styles.rmIcon} />*/}
-                	<Text style={styles.money}>余额：{this.state.money}知币</Text>
+                	<Text style={styles.money}>余额：{this.state.money}学币</Text>
                 	<Icon name="check-circle" size={px2dp(15)} color={Colors.special} style={styles.check} />
                 </View>
                 <View style={styles.separator} />

@@ -35,17 +35,16 @@ export default class Setting extends Component {
             cacheSize: 0,   //缓存大小
             versionTip: '公网测试环境',
             token: null,
+            guest: null,    // 是否为游客
             showPull: false,        // 显示推送
             showPlay: false,        // 显示播放和下载
             showShare: false        // 显示分享
         });
     }
     componentWillMount() {
-        Storage.get('token').then((val)=>{
+        Storage.get('guest').then((val)=>{
             if (val) {
-                this.setState({
-                    token: val
-                });
+                global.guest = val;
             }
         });
         if (Common.env == 'test') {
@@ -82,7 +81,7 @@ export default class Setting extends Component {
 
     _safeAccount = () => {
         const { state, navigate } = this.props.navigation;
-        if (this.state.token == null) {
+        if (global.token == null) {
             this.toast.show('需要登录才能使用该功能哦~');
             // navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical',
             //     refresh: (token)=>{
@@ -137,7 +136,7 @@ export default class Setting extends Component {
             host = 'https://test-practice.youzhi.tech';
             versionTip = '公网测试环境';
         }    
-        if (this.state.token) {
+        if (global.token) {
             this._logout();
         }  
         Common.httpServer = host;
@@ -158,6 +157,8 @@ export default class Setting extends Component {
     _logout = (callback) => {
         Storage.delete('token').then(()=>{
             global.token = null;
+            global.guest = null;    // 是否为游客
+            Storage.delete('guest');
             const { navigate, state } = this.props.navigation;
             setTimeout(function() {
                 if (state.params.refresh) state.params.refresh(null);
@@ -173,12 +174,17 @@ export default class Setting extends Component {
         });   
     }
 
+    _goBindUser = () => {
+        const { navigate } = this.props.navigation;
+        navigate('BindUser', {isVisible: false, title: "绑定账号"});
+    }
+
     render() {
         let pullView, playView, shareView, logoutView, switchView;
         if (this.state.showPull) pullView = <SettingItem txt1 = '推送设置' onPress={this._setPull}/>;
         if (this.state.showPlay) playView = <SettingItem txt1 = '播放和下载' onPress={this._setPlay}/>;
         if (this.state.showShare) shareView = <SettingItem txt1 = '推荐给好友' onPress={this._share}/>;
-        if (this.state.token != null) {
+        if (global.token != null) {
             logoutView = (
                 <TouchableOpacity  onPress={()=> this.alert.show()}>
                         <View style={styles.bottom}>
@@ -190,6 +196,9 @@ export default class Setting extends Component {
         if (Common.env == 'test') {
             switchView = <SettingItem txt1 = '切换版本' count={this.state.versionTip} onPress={this._switch}/>;
         }
+        let logoutTxt = global.guest
+            ? '您的账号为系统自动注册的账号，尚未绑定，存在账号安全风险，退出后将无法再次登录，您确定要退出吗？'
+            : '您确定要退出吗？';
         return (
             <View style={styles.container}>
                 <Bar />
@@ -221,13 +230,20 @@ export default class Setting extends Component {
                 </ScrollView>
                 <Alert
                     ref={(ref)=>this.alert = ref}
-                    modalWidth={270}
-                    modalHeight={124}
-                    titleText="您确定要退出吗？"
+                    modalWidth={319}
+                    modalHeight={160}
+                    titleText='退出确认'
                     titleFontSize={16}
                     titleFontWeight={"bold"}
-                    confirm={this._logout}
+                    desText={logoutTxt}
                     okFontColor={'#4789F7'}
+                    cancelText={global.guest ? '去绑定' : '取消'}
+                    okText={'确定'}
+                    confirm={this._logout}
+                    cancel={()=>{
+                        if (global.guest) this._goBindUser();
+                    }}
+                    
                 />
                 <Toast ref={(ref)=>{this.toast = ref}} position="center" />
             </View>

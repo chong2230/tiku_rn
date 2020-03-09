@@ -166,6 +166,10 @@ export default class Category extends Component{
         }
     };
 
+    _onRefresh = () => {
+        this._getList();
+    }
+
     render() {
         let { state, goBack } = this.props.navigation;        
         return (
@@ -185,6 +189,8 @@ export default class Category extends Component{
 	                renderItem={ this._renderItem }
 	                // 初始加载的条数，不会被卸载
 	                initialNumToRender={10}
+                    onRefresh={this._onRefresh}
+                    refreshing={false}
 	                // 决定当距离内容最底部还有多远时触发onEndReached回调；数值范围0~1，例如：0.5表示可见布局的最底端距离content最底端等于可见布局一半高度的时候调用该回调
 	                onEndReachedThreshold={0.1}
 	                // 当列表被滚动到距离内容最底部不足onEndReacchedThreshold设置的距离时调用

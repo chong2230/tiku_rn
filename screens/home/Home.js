@@ -162,6 +162,7 @@ export default class Home extends Component {
                     this.setState({
                         curCourse: data
                     });
+                    DeviceEventEmitter.emit('memberChange');
                 }
             });  
         } else {
@@ -171,6 +172,7 @@ export default class Home extends Component {
                 this.setState({
                     curCourse: data
                 });
+                DeviceEventEmitter.emit('memberChange');
             }});  
         }        
     }
@@ -301,10 +303,10 @@ export default class Home extends Component {
     }
 
     _goMineContent = (data) => {
-        // if (!global.token) {
-        //     this._goLogin();
-        //     return;
-        // }
+        if (!global.token && data.name == '学习评估') {
+            this._goLogin();
+            return;
+        }
         const { navigate } = this.props.navigation;
         switch(data.name) {
             case '试题收藏':
@@ -317,8 +319,8 @@ export default class Home extends Component {
                 this._getWrongTimuList(data);
                 break;
             case '题库笔记':
-                // break;
-            case '评估报告':
+                break;
+            case '学习评估':
                 navigate("Statistics", {id: data.id, isVisible: false});
                 break;
             default:
@@ -394,6 +396,10 @@ export default class Home extends Component {
     }
 
     render() {
+        let position = {
+            startY: 0,
+            endY: 0
+        };
         return (
             <View styles={styles.container}>
                 <Bar />
@@ -402,7 +408,18 @@ export default class Home extends Component {
                         <Text style={styles.headerTitle}>{this.state.curCourse.name} ▼</Text>
                     </View>
                 </TouchableWithoutFeedback>
-                <ScrollView style={styles.scrollView}>
+                <ScrollView style={styles.scrollView}
+                            onTouchStart={(e)=>{
+                                position.startY = e.nativeEvent.pageY;
+                            }}
+                            onTouchEnd={(e)=>{
+                                position.endY = e.nativeEvent.pageY;
+                                // 竖直方向滑动超过100时，不做左右切换
+                                if (position.endY - position.startY > 100) {
+                                    this._load();
+                                }
+                            }}
+                >
                     {this._renderHeader()}
                     {this._renderSearch()}
                     {this._renderHotContent()}

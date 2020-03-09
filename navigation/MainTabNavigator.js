@@ -39,6 +39,7 @@ import UpdatePassword from '../screens/account/updatePassword';
 import ForgetPassword from '../screens/account/forgetPassword';
 import SetPassword from '../screens/account/setPassword';
 import UpdatePhone from '../screens/account/updatePhone';
+import BindUser from '../screens/account/BindUser';
 import Setting from '../screens/account/setting';
 import About from '../screens/account/about';
 import Service from '../screens/account/service';
@@ -172,6 +173,10 @@ const HomeStack = createStackNavigator(
             screen: Login,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
+        Regist: {
+            screen: Regist,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
     },
     config
 );
@@ -242,6 +247,14 @@ const AccountStack = createStackNavigator(
             screen: Recharge,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
+        Subject: {
+            screen: Subject,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Goods: {
+            screen: Goods,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
         Balance: {
             screen: Balance,
             navigationOptions: ({navigation}) => StackOptions({navigation})
@@ -284,6 +297,10 @@ const AccountStack = createStackNavigator(
         },
         UpdatePhone: {
             screen: UpdatePhone,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        BindUser: {
+            screen: BindUser,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
         Column: {
@@ -332,6 +349,14 @@ const AccountStack = createStackNavigator(
         },
         WrongTimu: {
             screen: WrongTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        Recorrect: {
+            screen: Recorrect,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        DoneTimu: {
+            screen: DoneTimu,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
     },

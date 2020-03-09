@@ -98,7 +98,6 @@ export default class Search extends PureComponent{
             params.curriculumIds = ids.join(',');
         }
         Common.getSearchList(params, (result)=>{
-            console.log('getSearchList ', result);
             if (result.code == 0) {
                 let list = result.data || [];
                 hasMore = list.length == pageSize;
@@ -240,6 +239,8 @@ export default class Search extends PureComponent{
                 {/*}}></Header>*/}
                 <View style={styles.searchArea}>
                     <TextInput placeholder={'请输入要搜索的试题'}
+                               // keyboardType={'web-search'}
+                               returnKeyType={'search'}
                                onChangeText={(text)=>this.setState({searchTxt: text})}
                                onBlur={()=>{this._search()}}
                                style={styles.searchInput}

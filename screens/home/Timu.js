@@ -154,7 +154,11 @@ export default class Timu extends Component {
 							});
 							this._convertAnswers(result.data.askList);
 							// 切换题目时自动滑动到顶部
-							if (index) this.scrollView.scrollTo({x:0,y: 0,animated:true});
+							if (index) {
+								setTimeout(()=>{
+									this.scrollView.scrollTo({x:0,y: 0,animated:false})
+								}, 10);
+                            }
 						} else {
 							this.toast.show(result.msg);
 						}
@@ -728,8 +732,10 @@ export default class Timu extends Component {
 							position.endX = e.nativeEvent.pageX;
 							position.endY = e.nativeEvent.pageY;
 							// 竖直方向滑动超过100时，不做左右切换
-							if (parseInt(position.endY - position.startY) > 100) return;
-							if (position.endX - position.startX > 50) {
+							if (Math.abs(position.endY - position.startY) > 100) {
+								e.preventDefault();
+								return;
+                            } else if (position.endX - position.startX > 50) {
 								this._getPrev(true);
 							} else if (position.endX - position.startX < -50) {
 								this._getNext(true);

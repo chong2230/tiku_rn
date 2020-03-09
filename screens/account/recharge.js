@@ -14,7 +14,7 @@ import {
     ScrollView,
     Platform,
     NativeModules,
-    AsyncStorage
+    AsyncStorage, DeviceEventEmitter
 } from 'react-native';
 
 import RNIap, {
@@ -81,10 +81,10 @@ export default class Recharge extends Component {
             itemSkus.push(list[i].id);
         }
         try {
-            RNIap.getProducts(itemSkus).then(products => {
+            RNIap.getProducts(itemSkus).then(productshas => {
                 console.log('products ', products);
                 self.setState({ products });            
-            }).catch(error => { Alert.alert('获取商品列表失败'); })
+            }).catch(error => { console.log('获取商品列表失败'); })
         } catch(err) {
             console.warn(err); // standardized err.code and err.message available
         }
@@ -126,8 +126,13 @@ export default class Recharge extends Component {
                 // }
                 Common.checkPurchase(receipt, (result) => {
                     if (result.code == 0) {
+                        if (result.data.token) {
+                            global.token = result.data.token;
+                            Storage.save('token', result.data.token);
+                            Storage.save('guest', 1);
+                        }
                         self.setState({
-                            money: result.data
+                            money: result.data.balance
                         });
                         const { params } = this.props.navigation.state;
                         if (params.refresh) params.refresh(result.data);    // 更新余额
@@ -210,17 +215,24 @@ export default class Recharge extends Component {
     }
 
     // 未登录也可以充值
-    pay() {
-        // if (!global.token) {
-        //     this.toast.show('需要登录才能支付哦~');
-        //     return;
-        // }
-        let payIndex = 0;
-        let self = this;
-        if (Platform.os == 'android') {
+    prepay = () => {
+        if (Platform.OS == 'android') {
             this.toast.show('暂不支持充值哦~');
             return;
         }
+        if (!global.token) {
+            Alert.alert('您尚未登录', '未登录状态下充值，系统将自动为您注册一个账号，您可以使用该账号进行App的相关操作。您确定充值吗？',
+                [{text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+                    {text: '确定', onPress: () => {this.pay()}}]
+                )
+        } else {
+            this.pay();
+        }
+    }
+
+    pay = () => {
+        let payIndex = 0;
+        let self = this;
         if (this.state.selectId == null) {
             this.toast.show('请选择要充值的金额~');
             return;
@@ -253,7 +265,7 @@ export default class Recharge extends Component {
         } else {
             intro = "1. 充值成功后，暂不支持账户余额退款、提现或转赠他人；<br>2. 如在充值过程中遇到任何问题，请关注公众号，我们将为您提供解决方案，帮助您快速完成充值。";
         }
-        let btnDisabled = !this.state.selectId || Platform.os == 'android';
+        let btnDisabled = !this.state.selectId;// || Platform.OS == 'android';
         let btnStyle = btnDisabled ? {opacity: 0.6} : null;
         return (
             <ScrollView style={styles.container}>
@@ -275,7 +287,7 @@ export default class Recharge extends Component {
                 <View style={styles.listView}>
                     { listView }
                 </View>
-                <Button text="确认支付" disabled={btnDisabled} onPress={this.pay.bind(this)}
+                <Button text="确认支付" disabled={btnDisabled} onPress={this.prepay.bind(this)}
                         style={[styles.payBtn, btnStyle]} containerStyle={styles.payContainer} />
                 <View style={styles.separator}></View>
                 <View>

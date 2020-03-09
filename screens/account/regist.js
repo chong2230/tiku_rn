@@ -136,10 +136,10 @@ export default class Regist extends Component {
                     bottomLineColor={'rgba(0, 0, 0, 0)'}
                 />
                 <TextInput placeholder="输入昵称" style={styles.name} onChangeText={(text)=>this.setState({uname: text})} />
-                <TextInput placeholder="输入手机号" keyboardType='numeric' style={styles.inputStyle} onChangeText={(text)=>this.setState({phone: text})} />
-                <TextInput placeholder="输入密码" secureTextEntry={true} style={styles.inputStyle} onChangeText={(text)=>this.setState({pwd: text})}  />
-                <TextInput placeholder="确认密码" secureTextEntry={true} style={styles.inputStyle} onChangeText={(text)=>this.setState({pwd2: text})}  />            
-                <TextInput placeholder="电子邮箱（用于找回密码，可不填）" style={styles.inputStyle} onChangeText={(text)=>this.setState({email: text})}  />            
+                <TextInput placeholder="输入手机号（必填）" maxLength={11} keyboardType='numeric' style={styles.inputStyle} onChangeText={(text)=>this.setState({phone: text})} />
+                <TextInput placeholder="输入密码（必填）" secureTextEntry={true} style={styles.inputStyle} onChangeText={(text)=>this.setState({pwd: text})}  />
+                <TextInput placeholder="确认密码（必填）" secureTextEntry={true} style={styles.inputStyle} onChangeText={(text)=>this.setState({pwd2: text})}  />
+                <TextInput placeholder="电子邮箱（用于找回密码）" style={styles.inputStyle} onChangeText={(text)=>this.setState({email: text})}  />
                 <Button text="完成" style={styles.btn} containerStyle={styles.btnContainer} onPress={this._regist} />
                 <View style={styles.other}>
                     <Text style={styles.tip}>点击『完成』，即表示您同意并愿意遵守</Text>

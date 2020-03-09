@@ -53,6 +53,8 @@ export default class News extends Component<{}> {
         const { params } = this.props.navigation.state;
         let param = {
             // category: params.category,
+            professionId: global.course.professionId,
+            courseId: global.course.courseId || global.course.id,
             pageNumber: pageNumber,
             pageSize: pageSize
         }
@@ -132,7 +134,7 @@ export default class News extends Component<{}> {
         return <View style={styles.separator} />;
     }
 
-    refreshing = () => {
+    _onRefresh = () => {
         pageNumber = 1;
         this._load();
     }
@@ -157,9 +159,10 @@ export default class News extends Component<{}> {
                     ListFooterComponent={this._footer}
                     ItemSeparatorComponent={this._separator}
                     renderItem={this._renderItem}
-                    // onRefresh={this.refreshing}
+                    onRefresh={this._onRefresh}
                     refreshing={false}
-                    onEndReachedThreshold={0.1}
+                    // progressViewOffset={50}
+                    onEndReachedThreshold={0.2}
                     onEndReached={
                         this._loadMore
                     }

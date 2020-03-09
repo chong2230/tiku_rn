@@ -10,7 +10,6 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-    Alert,
     DeviceEventEmitter
 } from 'react-native';
 
@@ -18,6 +17,9 @@ import AccountItem from '../../components/AccountItem';
 import Common from '../../utils/Common';
 import Storage from '../../utils/Storage';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
+import Button from "../../components/Button";
+import Alert from '../../components/Alert';
+import Colors from "../../constants/Colors";
 
 export default class Account extends Component {
 
@@ -28,6 +30,7 @@ export default class Account extends Component {
         this.state = {
             token: null,
             info: {},
+            member: null,     // 会员信息
             showNote: false,        // 显示日记
             showFavor: true,     // 显示收藏
             showDownload: false,    // 显示下载
@@ -38,7 +41,9 @@ export default class Account extends Component {
 
     componentDidMount() {
         let self = this;        
-        if (global.token) this._getAccount();
+        if (global.token) {
+            this._load();
+        }
         this.emitter = DeviceEventEmitter.addListener('refreshAccount', (data) => {
             if (data.phone) {
                 data.phone = data.phone.substr(0, 3) + '****' + data.phone.substr(data.phone.length-4, 4);
@@ -47,9 +52,17 @@ export default class Account extends Component {
                 info: Object.assign({}, self.state.info, data)
             })
         })
-        this.emitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
-            if (global.token) self._getAccount();
-        })
+        this.navigationEmitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
+            if (global.token) self._load();
+        });
+        this.memberEmitter = DeviceEventEmitter.addListener('memberChange', (data) => {
+            if (global.token) self._getUserMember();
+        });
+    }
+
+    _load = () => {
+        this._getAccount();
+        this._getUserMember();
     }
 
     _getAccount = () => {
@@ -72,8 +85,20 @@ export default class Account extends Component {
         });
     }
 
+    _getUserMember = () => {
+        Common.getUserMember({
+            courseId: global.course.courseId || global.course.id
+        }, (result)=>{
+            if (result.code == 0) {
+                this.setState({
+                    member: result.data
+                })
+            }
+        })
+    }
+
     _onPress = (type) => {
-        if (global.token == null && type == 0) {
+        if (global.token == null && (type == 0 || type == 2)) {
             this._goLogin();
             return;                
         }
@@ -90,23 +115,26 @@ export default class Account extends Component {
                 }});
                 break;
             case 1:
-                navigate('Recharge', {money: this.state.info.balance, isVisible: false, title: '账户', refresh: (money)=>{
-                    if (money != null) {
-                        self.setState({
-                            info: Object.assign({}, self.state.info, {balance: money})
-                        })
+                navigate('Recharge', {money: this.state.info.balance, isVisible: false, title: '账户', refresh: (data)=>{
+                    if (data != null) {
+                        if (data.token) this._load();
+                        else {
+                            self.setState({
+                                info: Object.assign({}, self.state.info, {balance: data.balance})
+                            })
+                        }
                     }
                 }});
                 break;
             case 2:
-                navigate('Column', {from: 'purchase', isVisible: true, title: '已购'});
+                navigate('Subject', {from: 'purchase', isVisible: false, title: '已购试卷'});
                 break;
             case 4:
             case 8:
                 Alert.alert('', '程序小哥正在快马加鞭，敬请期待噢~');
                 break;
             case 3:
-                navigate('Ticket', {isVisible: true, title: '我的礼券'});
+                navigate('Ticket', {isVisible: false, title: '我的礼券'});
                 break;
             case 5:
                 navigate('Note', {isVisible: true, title: '我的笔记'});
@@ -155,7 +183,7 @@ export default class Account extends Component {
         const { navigate } = this.props.navigation;
         navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
             if (token != null) {
-                this._getAccount();
+                this._load();
             }
         }});
     }
@@ -168,10 +196,28 @@ export default class Account extends Component {
                     info: {}
                 });
             } else {
-                this._getAccount();
+                this._load();
             }
             
         }});
+    }
+
+    _onPressMember = () => {
+        if (this.state.member) {
+            this.alert.show();
+        } else {
+            this._goGoods();
+        }
+    }
+
+    // 进入商品购买列表 TODO: refresh paper, not reload
+    _goGoods = () => {
+        const { navigate, state } = this.props.navigation;
+        navigate("Goods", {
+            isVisible: false, refresh: ()=>{
+                this._load();
+            }
+        });
     }
 
     render() {
@@ -180,6 +226,12 @@ export default class Account extends Component {
             avatarImg = <Image source={{uri: Common.baseUrl + this.state.info.avatarImage}} style={styles.avatarIcon} />;
         } else {
             avatarImg = <Image source={require('../../images/defaultAvatar.jpg')} style={styles.avatarIcon} />;
+        }
+        let name = this.state.info.nickName;
+        if (name) {
+            name += this.state.member ? '（会员）' : '（普通用户）';
+        } else {
+            name = '未登录';
         }
         let noteView, favorView, downloadView, shareView, messageView;
         if (this.state.showNote) noteView = <AccountItem txt1 = "我的笔记" source = {require('../../images/account/note.png')} onPress={()=>this._onPress(5)} />;
@@ -197,15 +249,24 @@ export default class Account extends Component {
                         <View style={styles.avatar}>
                             {avatarImg}
                             <View style={styles.avatarInfo}>
-                                <Text style={styles.name}>{this.state.info.nickName || '未登录'}</Text>
+                                <Text style={styles.name}>{name}</Text>
                                 <Text style={styles.phone}>{this.state.info.phone || '点击头像登录'}</Text>
                             </View>
-                        </View>    
+                            {
+                                global.token ?
+                                    <View style={styles.rightInfo}>
+                                        <Button text={this.state.member && this.state.member.level > 1 ? '会员权益' : '升级会员'}
+                                                style={styles.memberBtn} containerStyle={styles.memberBtnContainer}
+                                                onPress={this._onPressMember} />
+                                    </View>
+                                    : null
+                            }
+                        </View>
                     </TouchableOpacity>                    
                     <View style={styles.separator}></View>
-                    <AccountItem txt1 = "账户" count={this.state.money} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
-                    <AccountItem txt1 = "已购" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
+                    <AccountItem txt1 = "账户" count={this.state.info.balance ? this.state.info.balance + '学币' : ''} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
                     <AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} />
+                    <AccountItem txt1 = "已购试卷" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
                     {shareView}
                     <View style={styles.separator}></View>                    
                     
@@ -220,12 +281,26 @@ export default class Account extends Component {
                     <AccountItem txt1 = "设置" source = {require('../../images/account/set.png')} onPress={this._goSetting}/>                    
                 </ScrollView>
                 <View style={styles.safeBottom}></View>
+                <Alert
+                    ref={(ref)=>this.alert = ref}
+                    modalWidth={319}
+                    modalHeight={180}
+                    titleText="会员权益"
+                    titleFontSize={16}
+                    titleFontWeight={"bold"}
+                    desText={this.state.member ? this.state.member.comments + '\n\n有效期：\n' +
+                         this.state.member.validStart + '~' + this.state.member.validEnd : ''}
+                    showCancelBtn={false}
+                    okFontColor={'#4789F7'}
+                />
             </View>
         );
     }  
 
     componentWillUnmount() {
         this.emitter.remove();
+        this.navigationEmitter.remove();
+        this.memberEmitter.remove();
     }  
 }
 
@@ -256,6 +331,27 @@ const styles = StyleSheet.create({
         justifyContent:'center', 
         flexDirection: 'column',
         left: 20
+    },
+    rightInfo: {
+        position: 'absolute',
+        justifyContent:'center',
+        alignItems: 'center',
+        height: 80,
+        right: 20
+    },
+    memberBtnContainer: {
+        backgroundColor: Colors.highlight,
+        borderRadius: 10,
+        alignItems: 'center',
+        width: 80,
+        height: 30,
+    },
+    memberBtn: {
+        color: 'white',
+        fontSize: 15,
+        fontWeight: '500',
+        height: 30,
+        lineHeight: 30
     },
     name: {
         fontWeight: 'bold', 

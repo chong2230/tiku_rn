@@ -12,12 +12,12 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    // static httpServer = 'https://practice.youzhi.tech';
+    static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    static httpServer = 'https://test-practice.youzhi.tech';
+    // static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
-    static env = 'test';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
+    static env = 'prod';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
 
     static isPreAlpha = false;   // 预览版，为true时，底部导航条带课程
     static isHack = false;   // 默认为false，不使用mock数据
@@ -74,7 +74,6 @@ export default class Common {
             'Content-Type': contentType ? contentType : 'application/x-www-form-urlencoded;charset=UTF-8',
             'Authorization': 'Bearer ' + global.token,
         };
-        console.log('token=', global.token);
         if (!method) method = params ? 'POST' : 'GET';
         params = params || {};
         if (params.pageNumber) params.pageNum = params.pageNumber;
@@ -169,7 +168,8 @@ export default class Common {
 
     // 题库列表
     static getSubjectList(params, cb) {
-        Common.httpRequest('/home/functionInfo', params).then((result)=>{
+        let url = params.from == 'purchase' ? '/pay/hadBuyPapers' : '/home/functionInfo';
+        Common.httpRequest(url, params).then((result)=>{
             // console.log(result);
             cb(result);
         })
@@ -332,6 +332,20 @@ export default class Common {
         })
     }
 
+    // 创建订单
+    static createOrder(params, cb) {
+        Common.httpRequest('/order/create', params).then((result)=>{
+            cb(result);
+        })
+    }
+
+    // 获取会员信息
+    static getUserMember(params, cb) {
+        Common.httpRequest('/user/member', params).then((result)=>{
+            cb(result);
+        })
+    }
+
     // 纠错
     static recorrect(params, cb) {
         Common.httpRequest('/correct/add', params).then((result)=>{
@@ -401,11 +415,8 @@ export default class Common {
     }
 
     // 购买
-    static buy(id, voucherId, cb) {
-        let params = { id: id };
-        if (voucherId) params.userVoucherId = voucherId;
-        Common.httpRequest('/column/buy', params).then((result)=>{
-            console.log(result);
+    static buy(params, cb) {
+        Common.httpRequest('/pay/ios', params).then((result)=>{
             cb(result);
         })
     }
@@ -552,7 +563,7 @@ export default class Common {
 
     // 我的优惠券列表 type: 0 过期 1 有效
     static getMyTickets(params, cb) {
-        Common.httpRequest('/user/voucher', params).then((result)=>{     
+        Common.httpRequest('/voucher/my', params).then((result)=>{
             // result = Mockdata['/user/voucher'];
             cb(result);
         })

@@ -40,11 +40,12 @@ export default class Statistics extends Component {
         super(props);
         // 初始状态
         this.state = {
-            accuracyRate: '80%',       // 正确率
-            examTimes: '10',          // 练习次数
-            doneQuestionNums: '100',   // 答题总数
-            totalStudyTime: '2天5小时',     // 答题总时间
-            evaluationTimes: '2020-2-23',    // 评估时间
+            data: {},
+            // accuracyRate: '',       // 正确率
+            // examTimes: '',          // 练习次数
+            // doneQuestionNums: '',   // 答题总数
+            // totalStudyTime: '',     // 答题总时间
+            // evaluationTimes: '',    // 评估时间
         };
     }
 
@@ -58,48 +59,38 @@ export default class Statistics extends Component {
             if (result.code == 0) {
                 let data = result.data;
                 this.setState({
-                    accuracyRate: data.accuracy,
-                    examTimes: data.examTimes,
-                    doneQuestionNums: data.doneQuestionNums,
-                    totalStudyTime: data.practiceTotalTimeStr,
-                    evaluationTimes: data.ds
+                    data: data
+                    // accuracyRate: data.accuracy,
+                    // examTimes: data.examTimes,
+                    // doneQuestionNums: data.doneQuestionNums,
+                    // totalStudyTime: data.practiceTotalTimeStr,
+                    // evaluationTimes: data.ds
                 })
             }
         })
     }
 
-
-    _onItemClick = (index, count) => {
-        if (count == 0) return;
-        console.log(index);
-        let rIndex = (index + 1) / 2;
-        if (rIndex > 3) return;
-        let { state, navigate } = this.props.navigation;
-        let data = JSON.parse(state.params.info);
-        console.log('_onItemClick ', data);
-        navigate("DoneTimu", {id: data.id, paperId: state.params.paperId, name: data.name,
-            functionName: '', functionId: data.functionId,
-            type: rIndex,    // 区分正确、错误、未做题目
-            isVisible: false,
-            isAnalyse: true
-        });
-    }
-
     render() {
+        let listView = [];
+        let i = 1;
+        for (let key in this.state.data) {
+            listView.push(<DisplayItem txt1={key} txt3={this.state.data[key]} key={i++} />)
+        }
         return (
             <View style={styles.container}>
                 <Bar></Bar>
-                <Header title="评估报告" goBack={()=>{
+                <Header title={"学习评估"} goBack={()=>{
                     let { state, goBack } = this.props.navigation;
                     goBack(state.params.returnKey);
                 }}></Header>
                 <ScrollView style={styles.scrollView}>
-                    <DisplayItem txt1={'考试科目：'} txt3={global.course.name} />
-                    <DisplayItem txt1={'正确率：'} txt3={this.state.accuracyRate} />
-                    <DisplayItem txt1={'练习次数：'} txt3={this.state.examTimes} />
-                    <DisplayItem txt1={'答题总数：'} txt3={this.state.doneQuestionNums} />
-                    <DisplayItem txt1={'学习总时间：'} txt3={this.state.totalStudyTime} />
-                    <DisplayItem txt1={'评估时间：'} txt3={this.state.evaluationTimes} />
+                    {/*<DisplayItem txt1={'考试科目：'} txt3={global.course.name} />*/}
+                    {/*{this.state.accuracyRate ? <DisplayItem txt1={'正确率：'} txt3={this.state.accuracyRate} /> : null}*/}
+                    {/*{this.state.examTimes ? <DisplayItem txt1={'练习次数：'} txt3={this.state.examTimes} /> : null}*/}
+                    {/*{this.state.doneQuestionNums ? <DisplayItem txt1={'答题总数：'} txt3={this.state.doneQuestionNums} /> : null}*/}
+                    {/*{this.state.totalStudyTime ? <DisplayItem txt1={'学习总时间：'} txt3={this.state.totalStudyTime} /> : null}*/}
+                    {/*{this.state.evaluationTimes ? <DisplayItem txt1={'评估时间：'} txt3={this.state.evaluationTimes} /> : null}*/}
+                    {listView}
                 </ScrollView>
                 <Toast ref="toast" position="center" />
             </View>

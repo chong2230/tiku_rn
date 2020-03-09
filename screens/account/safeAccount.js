@@ -26,7 +26,7 @@ export default class SafeAccount extends Component {
 
     _changePhone = () => {
         const { navigate } = this.props.navigation;
-        navigate('UpdatePhone', {isVisible: true, title: "修改手机号"});
+        navigate('UpdatePhone', {isVisible: false, title: "修改手机号"});
     }
 
     _bindWx = () => {

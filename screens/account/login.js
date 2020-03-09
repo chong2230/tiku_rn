@@ -55,6 +55,7 @@ export default class Login extends Component {
                     Storage.save('token', data.token).then(()=>{
                         const { navigate, state, goBack } = this.props.navigation;
                         if (state.params.refresh) state.params.refresh(data.token);
+                        DeviceEventEmitter.emit('navigationStateChange');
                         setTimeout(function() {
                             if (state.params.callback instanceof Function) {
                                 state.params.callback();
@@ -142,7 +143,7 @@ export default class Login extends Component {
                     }}
                     bottomLineColor={'rgba(0, 0, 0)'}
                 />
-                <TextInput placeholder="输入手机号" keyboardType='numeric' style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
+                <TextInput placeholder="输入手机号" maxLength={11} keyboardType='numeric' style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
                 <TextInput placeholder="输入密码" secureTextEntry={true} style={styles.password} onChangeText={(text)=>this.setState({pwd: text})}  />
                 <Button text="登录" style={styles.btn} containerStyle={styles.btnContainer} onPress={this._login} />
                 <View style={styles.other}>

@@ -42,6 +42,7 @@ export default class Subject extends PureComponent{
         super(props);
         this.state = {
             listData : [],
+            member: { level: 0, passed: false },     // 会员信息
             refreshing: false,
             flatHeight: 0,
             indexText: '',
@@ -68,6 +69,7 @@ export default class Subject extends PureComponent{
             professionId: global.course.professionId,
             courseId: global.course.courseId || global.course.id
         };
+        if (state.params.from == 'purchase') params.from = state.params.from; // 已购
         // 根据专业、科目和课程ids来获取数据
         if (!global.course.curriculums) {
             let ids = [];
@@ -76,8 +78,8 @@ export default class Subject extends PureComponent{
         }
         Common.getSubjectList(params, (result)=>{
             console.log('getSubjectList ', result);
-            if (result.code == 0) {
-                let list = result.data || [];
+            if (result.code == 0 && result.data) {
+                let list = result.data.list || result.data || [];
                 hasMore = list.length == pageSize;
                 let data = this.state.listData;
                 if (isLoading) {
@@ -94,6 +96,17 @@ export default class Subject extends PureComponent{
                 });
             }
         });
+        Common.getUserMember({
+            courseId: global.course.courseId || global.course.id
+        }, (result)=>{
+            if (result.code == 0) {
+                if (result.data) {
+                    this.setState({
+                        member: result.data
+                    })
+                }
+            }
+        })
     }
 
     /**
@@ -160,19 +173,31 @@ export default class Subject extends PureComponent{
     // userStatus: 1 未做过 2 已做过 3 已做完
     // 历年真题和模拟试卷不能重新开始，避免知道答案重新开始可以轻松获得100分的问题
     // doModel: 1 练习模式 2 考试模式
+    // /**
+    //      * 会员等级 level
+    //      * 0 普通注册用户
+    //      * 1 仅购买试卷（根据试卷的hadPay判断是否可以使用当前试卷的服务）
+    //      * 2 按时间范围的服务权益（根据validEnd判断是否可以使用当前科目的所有服务）
+    //      * 3 vip（根据考试是否通过标识passed判断是否可以使用当前科目的所有服务）
+    //      */
     _renderItem = (item) =>{
         let { state } = this.props.navigation;
         let rowData = item.item;
-        // For Test
-        // rowData.needPay = true;
         let btnText = '开始做题';
-        if (rowData.userStatus == 2) btnText = '继续做题';
+        let needBuy = (this.state.member.level == 3 && this.state.member.passed)
+            || (this.state.member.level < 2 && rowData.price > 0 && !rowData.hadPay);
+        if (needBuy) {// 未购买会员、购买vip已通过考试、未购买试卷
+            btnText = '购买';
+        } else if (rowData.userStatus == 2) btnText = '继续做题';
         else if (rowData.userStatus == 3) btnText = '重新开始';
         return(
             <View style={styles.item}>
                 <View style={styles.top}>
                     <Text style={styles.type}>{rowData.type}</Text>
                     <Text style={styles.title}>{rowData.name}</Text>
+                    {
+                        rowData.price > 0 ? <Image style={styles.payIcon} source={require('../../images/icon/pay.png')} /> : null
+                    }
                 </View>
                 <View style={styles.bottom}>
                     <Icon
@@ -183,7 +208,7 @@ export default class Subject extends PureComponent{
                     <Text style={styles.level}>{rowData.level}</Text>
                     <View style={{flex: 1}}></View>
                     {
-                        rowData.userStatus == 3 ?
+                        !needBuy && rowData.userStatus == 3 ?
                             <Button text={'查看解析'}
                                     style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
                                     onPress={()=>{this._startPractise(rowData, true)}}></Button>
@@ -196,8 +221,8 @@ export default class Subject extends PureComponent{
                                     style={styles.handleBtn} containerStyle={styles.handleBtnContainer}
                                     onPress={()=>{
                                         // 付费试卷，未付费
-                                        if (rowData.needPay && !rowData.hasPayed) {
-                                            this._goGoods();
+                                        if (needBuy) {
+                                            this._goGoods(rowData);
                                             return;
                                         }
                                         this.selectData = rowData;
@@ -254,11 +279,11 @@ export default class Subject extends PureComponent{
     }
 
     // 进入商品购买列表 TODO: refresh paper, not reload
-    _goGoods = () => {
+    _goGoods = (data) => {
         const { navigate, state } = this.props.navigation;
         if (global.token) {
             navigate("Goods", {
-                isVisible: false, callback: (status)=>{
+                isVisible: false, paperId: data.id, refresh: (status)=>{
                     this._reload();
                     // data.userStatus = status;
                     // this.setState({
@@ -379,6 +404,13 @@ const styles = StyleSheet.create({
     item: {
         alignItems: 'center',
         height: 80,
+    },
+    payIcon: {
+        width: 16,
+        height: 20,
+        marginTop: 10,
+        marginLeft: 10,
+        // position: 'absolute'
     },
     top: {
         width: screenWidth,

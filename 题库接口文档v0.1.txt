@@ -793,7 +793,7 @@ classify 分类（英文，例如：图片下面存在的分类为头像/专栏e
 返回参数说明：
 id：商品id
 money：支付多少钱
-rm：获得多少知币
+rm：获得多少学币
 discountMoney：折扣价
 discount：几折
 type：商品类型，0：月卡等 1：普通商品

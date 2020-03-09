@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import Bar from '../../components/Bar';
+import Header from '../../components/Header';
 import Button from '../../components/Button';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
@@ -90,7 +91,7 @@ export default class Ticket extends PureComponent {
             <View style={[styles.item, chooseStyle]}>                    
                 <View style={styles.top}>                        
                     <Text style={[styles.name, expiredStyle]}>{rowData.title}</Text>                    
-                    <Text style={[styles.price, expiredStyle]}>￠ {rowData.price}</Text>
+                    <Text style={[styles.price, expiredStyle]}>{rowData.price}学币</Text>
                 </View>
                 <Text numberOfLines={2} style={[styles.desc, expiredStyle]}>{rowData.content}</Text>
                 <View style={styles.bottom}>
@@ -152,13 +153,20 @@ export default class Ticket extends PureComponent {
 
     _goHistory = () => {
         const { navigate } = this.props.navigation;
-        navigate('HistoryTicket', { isVisible: true, title: '历史礼券'});
+        navigate('HistoryTicket', { isVisible: false, title: '历史礼券'});
     }
 
     render() {
+        let { state, goBack } = this.props.navigation;
         return(
         <View style={styles.container}>
             <Bar />
+            <Header title={state.params.title || '我的礼券'} goBack={()=>{
+                if (state.params.callback instanceof Function) {
+                    state.params.callback();
+                }
+                goBack();
+            }}></Header>
             <FlatList
                     style={styles.list}
                     ref={(flatList)=>this._flatList = flatList}
@@ -195,7 +203,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: Colors.border,
         padding: 5,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor: 'white'
     },
     top: {
         flexDirection: 'row',
