@@ -68,7 +68,7 @@ export default class UpdatePhone extends Component {
                     }}
                     bottomLineColor={'rgba(0, 0, 0)'} />
                 <Text style={styles.tip}>更换手机号后，您需要使用新的手机号登录</Text>
-                <TextInput placeholder="输入新手机号" style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
+                <TextInput maxLength={11} placeholder="输入新手机号" style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
                 <Button text="完成" style={styles.btn} containerStyle={styles.btnContainer} onPress={this._changePhone} />
                 <Toast ref="toast" position="center" />
             </View>

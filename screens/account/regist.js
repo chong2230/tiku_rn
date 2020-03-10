@@ -86,6 +86,7 @@ export default class Regist extends Component {
                     Storage.save('token', result.data.token).then(()=>{
                         const { navigate, state, goBack } = this.props.navigation;
                         if (state.params.refresh) state.params.refresh(result.data.token);
+                        DeviceEventEmitter.emit('navigationStateChange');
                         setTimeout(function() {
                             goBack(state.params.returnKey);
                         }, 400);

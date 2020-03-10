@@ -87,7 +87,7 @@ export default class BindUser extends Component {
                         goBack();
                     }} />
                 <Text style={styles.tip}>设置手机号后，您可以使用手机号登录</Text>
-                <TextInput placeholder="请输入手机号" style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
+                <TextInput maxLength={11} placeholder="请输入手机号" style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
                 <Text style={styles.tip}>密码长度6~24位，可以是数字、字母等任意字符</Text>
                 <TextInput placeholder="请输入密码" secureTextEntry={true} style={styles.password} onChangeText={(text)=>this.setState({pwd: text})}  />
                 <TextInput placeholder="请确认密码" secureTextEntry={true} style={styles.password} onChangeText={(text)=>this.setState({confirmPwd: text})}  />
