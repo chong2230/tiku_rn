@@ -9,7 +9,6 @@ import {
     ScrollView,
     StatusBar,
     Alert,
-    WebView,
     FlatList,
     TouchableOpacity,
     Dimensions
@@ -19,6 +18,7 @@ import {
 // import HTMLView from 'react-native-htmlview';
 import Icon from 'react-native-vector-icons/FontAwesome';
 // import MyWebView from 'react-native-webview-autoheight';
+// import { WebView } from 'react-native-webview';
 
 import HTMLView from '../../components/HTMLView';
 import Button from '../../components/Button';
@@ -59,14 +59,20 @@ export default class NewsDetail extends Component<{}> {
                 });
             }
         });        
-    }    
+    }
+
+    onWebViewMessage = (event) => {
+        this.setState({ webViewHeight: Number(event.nativeEvent.data) });
+    }
 
     render() {
         let headerView;
         let data = this.state.data;
+        let brReg = /<br\s*\/?>/gi;
+        let meta = '<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />\n';
         let content = data.content || '';
-        if (content) content = content.replace(/\n/g, '').replace(/^(<!--)(-->)$/g, '');
-        console.log('content ', content);
+        if (content) content = content.replace(brReg, '').replace(/\n/g, '').replace(/^(<!--)(-->)$/g, '');
+        // console.log('content ', content);
         if (data && data.image) {
             headerView = <Image resizeMode={'stretch'} source={{uri:Common.baseUrl + data.image}}
                            style={styles.img}/>;
@@ -92,7 +98,16 @@ export default class NewsDetail extends Component<{}> {
                     </View>
                     {headerView}                  
                     
-                    <HTMLView value={content} style={styles.htmlStyle} />                    
+                    <HTMLView value={content} style={styles.htmlStyle} />
+                    {/*<View style={{ height: this.state.webViewHeight }}>*/}
+                        {/*<WebView*/}
+                            {/*// originWhitelist={['*']}*/}
+                            {/*source={{ html: meta+ content }}*/}
+                            {/*scalesPageToFit={Platform.OS == 'ios' ? false : true}*/}
+                            {/*injectedJavaScript='window.ReactNativeWebView.postMessage(document.documentElement.scrollHeight)'*/}
+                            {/*onMessage={this.onWebViewMessage}*/}
+                        {/*/>*/}
+                    {/*</View>*/}
                 </ScrollView>
                 <View style={styles.safeBottom}></View>
             </View>
@@ -119,7 +134,9 @@ var styles = StyleSheet.create({
         alignItems: 'center', 
         justifyContent: 'flex-start',
         height: 20,
-        marginLeft: 10
+        marginLeft: 10,
+        marginTop: 10,
+        marginBottom: 10
     },
     time: {
         fontSize: 13,

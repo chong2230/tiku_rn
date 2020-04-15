@@ -10,7 +10,7 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-    DeviceEventEmitter
+    DeviceEventEmitter, Linking
 } from 'react-native';
 
 import AccountItem from '../../components/AccountItem';
@@ -45,6 +45,13 @@ export default class Account extends Component {
             this._load();
         }
         this.emitter = DeviceEventEmitter.addListener('refreshAccount', (data) => {
+            if (!data) {    // 注销
+                this.setState({
+                    info: {},
+                    member: null
+                });
+                return;
+            }
             if (data.phone) {
                 data.phone = data.phone.substr(0, 3) + '****' + data.phone.substr(data.phone.length-4, 4);
             }
@@ -98,7 +105,7 @@ export default class Account extends Component {
     }
 
     _onPress = (type) => {
-        if (global.token == null && (type == 0 || type == 2)) {
+        if (global.token == null && type == 0) {
             this._goLogin();
             return;                
         }
@@ -106,7 +113,7 @@ export default class Account extends Component {
         const { navigate } = this.props.navigation;
         switch (type) {
             case 0:
-            navigate('Profile', {isVisible: true, title: '个人信息', info: JSON.stringify(this.state.info),
+            navigate('Profile', {isVisible: false, title: '个人信息', info: JSON.stringify(this.state.info),
                 refresh: (data)=>{
                     // console.log(data);
                     this.setState({
@@ -181,11 +188,19 @@ export default class Account extends Component {
 
     _goLogin = () => {
         const { navigate } = this.props.navigation;
-        navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
+        navigate('Login', { isVisible: false, from: 'Account', title: '密码登录', transition: 'forVertical', refresh: (token)=>{
             if (token != null) {
                 this._load();
             }
         }});
+    }
+
+    // 在线咨询
+    _goChat = () => {
+        let qq = '498643367';
+        let url = Platform.OS === 'ios' ? 'mqq://im/chat?chat_type=wpa&uin='+qq+'&version=1&src_type=web'
+            : 'mqqwpa://im/chat?chat_type=wpa&uin=' + qq;
+        Linking.openURL(url).catch(err => console.error('An error occurred', err));
     }
 
     _goSetting = () => {
@@ -253,7 +268,7 @@ export default class Account extends Component {
                                 <Text style={styles.phone}>{this.state.info.phone || '点击头像登录'}</Text>
                             </View>
                             {
-                                global.token ?
+                                global.token && !global.isAudit ?
                                     <View style={styles.rightInfo}>
                                         <Button text={this.state.member && this.state.member.level > 1 ? '会员权益' : '升级会员'}
                                                 style={styles.memberBtn} containerStyle={styles.memberBtnContainer}
@@ -264,8 +279,8 @@ export default class Account extends Component {
                         </View>
                     </TouchableOpacity>                    
                     <View style={styles.separator}></View>
-                    <AccountItem txt1 = "账户" count={this.state.info.balance ? this.state.info.balance + '学币' : ''} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
-                    <AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} />
+                    <AccountItem txt1 = "账户" count={this.state.info.balance ? this.state.info.balance + '余额' : ''} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
+                    {!global.isAudit ? <AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} /> : null}
                     <AccountItem txt1 = "已购试卷" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
                     {shareView}
                     <View style={styles.separator}></View>                    
@@ -278,6 +293,7 @@ export default class Account extends Component {
                     <AccountItem txt1 = "做题记录" source = {require('../../images/account/publish.png')} onPress={()=>this._onPress(9)} />
                     {/*<AccountItem txt1 = "错题库" source = {require('../../images/account/note.png')} onPress={()=>this._onPress(10)} />*/}
                     <View style={styles.separator}></View>
+                    <AccountItem txt1 = "在线咨询" source = {require('../../images/account/message.png')} onPress={this._goChat}/>
                     <AccountItem txt1 = "设置" source = {require('../../images/account/set.png')} onPress={this._goSetting}/>                    
                 </ScrollView>
                 <View style={styles.safeBottom}></View>

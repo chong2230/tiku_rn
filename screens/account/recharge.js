@@ -66,6 +66,8 @@ export default class Recharge extends Component {
         this.state.money = params.money;
         Common.getRechargeList((result)=>{ 
             if (result.code == 0) {
+                // let arr=[6,30,68,198,328,648];
+                // for (let i=0; i<result.data.length; i++){result.data[i].rm=arr[i]}
                 self.setState({listData: result.data});
                 self.fetchProducts(result.data);
                 self.getAvailablePurchases();
@@ -126,11 +128,11 @@ export default class Recharge extends Component {
                 // }
                 Common.checkPurchase(receipt, (result) => {
                     if (result.code == 0) {
-                        if (result.data.token) {
-                            global.token = result.data.token;
-                            Storage.save('token', result.data.token);
-                            Storage.save('guest', 1);
-                        }
+                        // if (result.data.token) {
+                        //     global.token = result.data.token;
+                        //     Storage.save('token', result.data.token);
+                        //     Storage.save('guest', 1);
+                        // }
                         self.setState({
                             money: result.data.balance
                         });
@@ -220,14 +222,14 @@ export default class Recharge extends Component {
             this.toast.show('暂不支持充值哦~');
             return;
         }
-        if (!global.token) {
-            Alert.alert('您尚未登录', '未登录状态下充值，系统将自动为您注册一个账号，您可以使用该账号进行App的相关操作。您确定充值吗？',
-                [{text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
-                    {text: '确定', onPress: () => {this.pay()}}]
-                )
-        } else {
+        // if (!global.token) {
+        //     Alert.alert('您尚未登录', '未登录状态下充值，系统将自动为您注册一个账号，您可以使用该账号进行App的相关操作。您确定充值吗？',
+        //         [{text: '取消', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+        //             {text: '确定', onPress: () => {this.pay()}}]
+        //         )
+        // } else {
             this.pay();
-        }
+        // }
     }
 
     pay = () => {
@@ -278,7 +280,7 @@ export default class Recharge extends Component {
                         bottomLineColor={'rgba(0, 0, 0)'} />
                 <View style={styles.top}>
                     <Text style={styles.title}>余额</Text>
-                    <Text style={styles.money}> {this.state.money || 0.00} 学币</Text>
+                    <Text style={styles.money}> {this.state.money || 0.00} </Text>
                 </View>
                 <View style={styles.center}>
                     <Text style={styles.rechargeLabel}>充值</Text>

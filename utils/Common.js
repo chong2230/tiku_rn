@@ -12,9 +12,9 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    static httpServer = 'https://practice.youzhi.tech';
+    // static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    // static httpServer = 'https://test-practice.youzhi.tech';
+    static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
     static env = 'prod';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
@@ -124,10 +124,11 @@ export default class Common {
                 if (!Common.inError) {
                     var text = "网络出错啦！";
                     if (['none','NONE','unknown','UNKNOWN'].indexOf(Common.netStatus) >= 0) text = "网络出错啦，请检查网络设置！";
-                    Alert.alert(text);
+                    // Alert.alert(text);
+                    global.toastComponentRef && global.toastComponentRef.show(text);
                     Common.inError = true;
                 }
-                return error;
+                return MockData[url] ? MockData[url] : error;
             });
     }
 
@@ -140,27 +141,21 @@ export default class Common {
     }
 
     static getBanners(params, cb) {
-        Common.httpRequest('/home/slide', {
-
-        }).then((result)=>{
+        Common.httpRequest('/home/slide', params).then((result)=>{
             // console.log(result);
             cb(result);
         })
     }
 
-    static getHomeFunc(cb) {
-        Common.httpRequest('/home/functions', {
-            
-        }).then((result)=>{
+    static getHomeFunc(params, cb) {
+        Common.httpRequest('/home/functions', params).then((result)=>{
             // console.log(result);
             cb(result);
         })
     }
 
-    static getHomeMy(cb) {
-        Common.httpRequest('/home/my', {
-            
-        }).then((result)=>{
+    static getHomeMy(params, cb) {
+        Common.httpRequest('/home/my', params).then((result)=>{
             // console.log(result);
             cb(result);
         })
@@ -619,12 +614,15 @@ export default class Common {
     }
 
     // 第三方登录 type 微信：'wx', QQ：'qq', 微博：'wb'
-    static thirdPartyLogin(type, openid, accessToken, cb) {
-        Common.httpRequest('/user/thirdPartyLogin', {
-            type: type,
-            openid: openid,
-            accessToken: accessToken
-        }).then((result)=>{
+    static thirdPartyLogin(params, cb) {
+        Common.httpRequest('/user/thirdPartyLogin', params).then((result)=>{
+            cb(result);
+        })
+    }
+
+    // 用户注销
+    static logoff(params, cb) {
+        Common.get('/user/cancel', params).then((result)=>{
             cb(result);
         })
     }

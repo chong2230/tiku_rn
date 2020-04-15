@@ -2,6 +2,7 @@ import React, {Component,PropTypes} from 'react';
 import {
     Text,
     StyleSheet,
+    Image,
     View,
     TouchableOpacity,
     Alert,
@@ -9,13 +10,17 @@ import {
     DeviceEventEmitter,
     Linking,
     Platform,
-    NativeModules
+    NativeModules,
+    requireNativeComponent
 } from 'react-native';
 
+import DeviceInfo from 'react-native-device-info';
 import openShare from 'react-native-open-share';
 import ImageButton from './ImageButton';
+import {compareVer} from '../utils/Util';
 
 const LoginModule = NativeModules.loginModule;
+var NativeView = requireNativeComponent('SignWithApple');
 
 var deviceW = Dimensions.get('window').width;
 
@@ -35,6 +40,7 @@ export default  class ThirdPartyLogin extends Component {
         this.state = {
             showWxBtn: false,
             showWbBtn: false,
+            showAppleBtn: false,
             isWechatInstalled: false,
             isQQInstalled: false,
             isWeiboInstalled: false
@@ -76,6 +82,12 @@ export default  class ThirdPartyLogin extends Component {
                 console.log('请先安装微博');
             }
         });
+        let systemVersion = DeviceInfo.getSystemVersion();
+        if (Platform.OS == 'ios' && compareVer(systemVersion, '13.0') >= 0) {
+            this.setState({
+                showAppleBtn: true
+            })
+        }
     }
 
     _wechatLogin = () => {
@@ -198,15 +210,21 @@ export default  class ThirdPartyLogin extends Component {
         let wxBtn, qqBtn, wbBtn;
         let otherLogin = '';
         if (this.state.showWxBtn && this.state.isWechatInstalled) {
-            wxBtn = <ImageButton source={require('../images/icon-wx.jpg')} style={styles.imageButton} onPress={this._wechatLogin} />;
+            wxBtn = <ImageButton source={require('../images/icon-wx.jpg')}
+                                 style={[styles.imageButton, this.state.showAppleBtn ? styles.loginBtn : null]}
+                                 onPress={this._wechatLogin} />;
             otherLogin = '其他方式登录';
         }
         if (this.state.isQQInstalled) {
-            qqBtn = <ImageButton source={require('../images/icon-qq.jpg')} style={styles.imageButton} onPress={this._qqLogin} />;
+            qqBtn = <ImageButton source={require('../images/icon-qq.jpg')}
+                                 style={[styles.imageButton, this.state.showAppleBtn ? styles.loginBtn : null]}
+                                 onPress={this._qqLogin} />;
             otherLogin = '其他方式登录';
         }
         if (this.state.showWbBtn && this.state.isWeiboInstalled) {
-            wbBtn = <ImageButton source={require('../images/icon-wb.jpg')} style={styles.imageButton} onPress={this._weiboLogin} />;
+            wbBtn = <ImageButton source={require('../images/icon-wb.jpg')}
+                                 style={[styles.imageButton, this.state.showAppleBtn ? styles.loginBtn : null]}
+                                 onPress={this._weiboLogin} />;
             otherLogin = '其他方式登录';
         }
         return (
@@ -216,6 +234,28 @@ export default  class ThirdPartyLogin extends Component {
                     {wxBtn}
                     {qqBtn}
                     {wbBtn}
+                    {
+                        this.state.showAppleBtn ?
+                            <NativeView
+                                style={styles.appleView}  //这里的 style 可以定义原生iOSView的样式
+                                onClick={(info)=>{
+                                    console.log(info);
+                                    if(info.nativeEvent.success){
+                                        let res = info.nativeEvent.success;
+                                        // alert(info.nativeEvent.success)
+                                        this.props.loginCallback('apple', res.userID, res.token);
+                                    }else if(info.nativeEvent.error){
+                                        Alert.alert('提示', info.nativeEvent.error)
+                                    }
+                                }}
+                            >
+                                <Image
+                                    source={require('../images/account/apple_login.png')}
+                                    style={[styles.imageButton, styles.appleBtn]}
+                                    />
+                                <Text style={styles.appleText}>苹果账号登录</Text>
+                            </NativeView> : null
+                    }
                 </View>
             </View>
         )
@@ -236,7 +276,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 60,
         marginRight: 60,
-        justifyContent: 'center',
+        justifyContent: 'space-around',
         alignItems: 'center'
     },
     imageButton: {
@@ -245,6 +285,29 @@ const styles = StyleSheet.create({
         marginTop: 30,
         marginBottom: 30
         // margin: (deviceW-100-120)/4
+    },
+    loginBtn: {
+        width: 30,
+        height: 30
+    },
+    appleView: {
+        width: 118, 
+        height:30
+    },
+    appleBtn: {
+        width: 118,
+        height: 30,
+        top: -30,
+        left: 0,
+        position: 'absolute'
+    },
+    appleText: {
+        fontSize: 12,
+        fontWeight: '500',
+        textAlign: 'center',
+        top: 9,
+        left: 31,
+        position: 'absolute'
     }
 
 });

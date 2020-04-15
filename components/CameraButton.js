@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types';
 import {
     TouchableOpacity,
     StyleSheet,
@@ -12,6 +13,7 @@ import {
 
 import ImagePicker from 'react-native-image-picker';
 import Common from '../utils/Common';
+import Storage from "../utils/Storage";
 
 const options = {
     title: '选择图片', 
@@ -37,6 +39,26 @@ const options = {
 };
 
 class CameraButton extends React.Component {
+
+    static propTypes = {
+        name: PropTypes.string,
+        source: PropTypes.any,
+        style: PropTypes.any,
+        iconOnly: PropTypes.bool,
+        iconStyle: PropTypes.any,
+        useCorp: PropTypes.bool,
+        pickSuccess: PropTypes.func,
+        pickFail: PropTypes.func
+    };
+
+    static defaultProps = {
+        name: '',
+        iconOnly: true,
+        useCorp: true,
+        pickSuccess: ()=>{},
+        pickFail: ()=>{}
+    }
+
     constructor(props){
         super(props);
         this.state = {
@@ -44,15 +66,17 @@ class CameraButton extends React.Component {
         }
     }
     render() {
-        const {photos,type,avatarImage} = this.props;
+        const {photos,type,avatarImage, source} = this.props;
         let conText;
-        if(photos.length > 0){
+        if(photos && photos.length > 0){
             conText = (<View style={styles.countBox}>
                 <Text style={styles.count}>{photos.length}</Text>
             </View>);
         }
         let img;
-        if (avatarImage) {
+        if (source) {
+            img = <Image source={source} style={[styles.avatarIcon, this.props.iconStyle]} />;
+        } else if (avatarImage) {
             img = <Image source={{uri : Common.baseUrl + avatarImage}} style={styles.avatarIcon} />;
         } else {
             img = <Image source={require('../images/defaultAvatar.jpg')} style={styles.avatarIcon} />;
@@ -61,10 +85,10 @@ class CameraButton extends React.Component {
             <TouchableOpacity
                 onPress={this.showImagePicker.bind(this)}
                 style={[this.props.style,styles.cameraBtn]}>
-                <View style={styles.avatar}>                    
-                    <Text style={{fontSize: 15}}>头像</Text>
+                <View style={styles.avatar}>
+                    {!this.props.iconOnly ? <Text style={styles.avatarText}>头像</Text> : null}
                     {img}
-                    {conText}
+                    {!this.props.iconOnly ? conText : null}
                 </View>
             </TouchableOpacity>
         )
@@ -95,7 +119,7 @@ class CameraButton extends React.Component {
                 // this.setState({
                 //     loading:true
                 // });
-                this.props.onFileUpload(file, response.fileName||'none.jpg')
+                this.onFileUpload(file, response.fileName||'none.jpg')
                 // .then(result=>{
                 //     this.setState({
                 //         loading:false
@@ -104,12 +128,42 @@ class CameraButton extends React.Component {
             }
         });
     }
+
+    onFileUpload = (uri, fileName) => {
+        let self = this;
+        let url = Common.httpServer + '/file/upload';
+        let formData = new FormData();
+        let file = {uri: uri, type: 'multipart/form-data', name: fileName};
+
+        formData.append("file", file);
+        formData.append("classify", "avatar");
+
+        fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type':'multipart/form-data',
+                'Authorization': 'Bearer ' + global.token
+            },
+            body:formData,
+        })
+            .then((response) => response.json() )
+            .then((responseData)=>{
+                console.log('responseData', responseData);
+                this.props.onFileUpload(responseData);
+            })
+            .catch((error)=>{console.error('error',error)});
+    }
 }
 const styles = StyleSheet.create({
     avatar: {
         flexDirection:'row',
         alignItems: 'center',
         justifyContent:'space-between'
+    },
+    avatarText: {
+        fontSize: 15,
+        color: '#1a1a1a',
+        textAlign: 'left'
     },
     avatarIcon: {
         width: 50,

@@ -117,6 +117,21 @@ Kino.ajax('/api/course/paper/loadInfoByPK.do', function(mydata) {
             }else{
               shitidata['det']['subjectiveAnswerImg'] = [];
             }
+
+            if (stIdIndex == stIdArr.length - 1) {
+              // addExportBtn();
+                if (isExportExcel) tableToExcel();
+                else {
+                  saveJSON();
+                  // Excel也保存一份
+                  setTimeout(function() {
+                    tableToExcel();
+                  }, 500);
+                }
+            } else {
+              // 延迟10秒请求下一题，避免请求太频繁
+              setTimeout(function(){next();}, delay);
+            }
             
           }
         }, {
@@ -126,14 +141,7 @@ Kino.ajax('/api/course/paper/loadInfoByPK.do', function(mydata) {
             shitiId: stIdArr[stIdIndex]
           }
         });
-        if (stIdIndex == stIdArr.length - 1) {
-          // addExportBtn();
-            if (isExportExcel) tableToExcel();
-            else saveJSON();
-        } else {
-          // 延迟10秒请求下一题，避免请求太频繁
-          setTimeout(function(){next();}, delay);
-        }
+        
       }
     }, {
       type: "POST",
@@ -155,6 +163,8 @@ function convertData(data) {
     var pReg = /<\/?p.*?(?:>|\/>)/gi;
     var brReg = /<br\s*\/?>/gi;
     var divReg = /<div\s*\/?>/gi;
+    var commentReg = /((<!--)[\S\s]*)(--\>)/ig;
+    var htmlReg = /(<([^>]+)>)/ig;
   let question = data.questionMap.length > 0 ? data.questionMap[0] : {};
   if (data.questionMap.length > 1) {  // 多个问题处理
      question = {'A':'', 'B':'', 'C':'', 'D':'', 'E':'', 'F':''};
@@ -181,7 +191,8 @@ function convertData(data) {
     'choiceF': question['F'] ? question['F'] : '',
     "answer": data.answerStr,
     "answerImg": "",
-    "analysis": data.analysis.replace(/<br\s*\/?>/gi, '\n').replace(/<\/?p>/gi, '').replace(imgReg, '').replace(divReg, ''),
+    "analysis": data.analysis.replace(/<br\s*\/?>/gi, '\n').replace(/<\/?p>/gi, '').replace(imgReg, '')
+        .replace(divReg, '').replace(commentReg, '').replace(htmlReg, ''),
     "analysisImg": getImg(data.analysis),
     // "typeName":data.stTypeName
   }

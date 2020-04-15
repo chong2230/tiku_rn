@@ -91,7 +91,7 @@ export default class Ticket extends PureComponent {
             <View style={[styles.item, chooseStyle]}>                    
                 <View style={styles.top}>                        
                     <Text style={[styles.name, expiredStyle]}>{rowData.title}</Text>                    
-                    <Text style={[styles.price, expiredStyle]}>{rowData.price}学币</Text>
+                    <Text style={[styles.price, expiredStyle]}>{rowData.price}余额</Text>
                 </View>
                 <Text numberOfLines={2} style={[styles.desc, expiredStyle]}>{rowData.content}</Text>
                 <View style={styles.bottom}>

@@ -49,6 +49,8 @@ import Ticket from '../screens/account/ticket';
 import HistoryTicket from '../screens/account/historyTicket';
 import Message from '../screens/account/message';
 import Suggest from '../screens/account/suggest';
+import AccountLogoff from '../screens/account/AccountLogoff';
+import AccountLogoffNotice from '../screens/account/AccountLogoffNotice';
 import Colors from '../constants/Colors';
 import ImageButton from '../components/ImageButton';
 import Common from '../utils/Common';
@@ -357,6 +359,14 @@ const AccountStack = createStackNavigator(
         },
         DoneTimu: {
             screen: DoneTimu,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        AccountLogoff: {
+            screen: AccountLogoff,
+            navigationOptions: ({navigation}) => StackOptions({navigation})
+        },
+        AccountLogoffNotice: {
+            screen: AccountLogoffNotice,
             navigationOptions: ({navigation}) => StackOptions({navigation})
         },
     },

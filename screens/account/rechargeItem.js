@@ -38,7 +38,7 @@ export default class RechargeItem extends Component {
         return (
             <TouchableWithoutFeedback onPress={()=>{this._onItemClick()}}>
                 <View style={[styles.item, borderStyle]}>
-                    <Text style={[styles.rm, textStyle]}>{data.rm} 学币</Text>
+                    <Text style={[styles.rm, textStyle]}>{data.rm} 余额</Text>
                     <Text style={[styles.money, textStyle]}> ¥ {data.money}</Text>
                 </View>
             </TouchableWithoutFeedback>

@@ -41,11 +41,16 @@ export default class SafeAccount extends Component {
         
     }
 
+    _logoff = () => {
+        const { navigate, state } = this.props.navigation;
+        navigate('AccountLogoff', {isVisible: false, title: '账号注销', returnKey: state.params.returnKey});
+    }
+
     render() {
         return (
             <View>
                 <Bar />
-                <Header title={'账号安全'} goBack={()=>{
+                <Header title={'账号与安全'} goBack={()=>{
                         let { goBack } = this.props.navigation;
                         goBack();
                     }} bottomLineColor={'rgba(0, 0, 0)'} />
@@ -54,6 +59,7 @@ export default class SafeAccount extends Component {
                 {/*<SafeAccountItem txt1 = '绑定微信' onPress={this._bindWx}/>*/}
                 {/*<SafeAccountItem txt1 = '绑定QQ'  onPress={this._bindQq}/>*/}
                 {/*<SafeAccountItem txt1 = '绑定微博' onPress={this._bindWeibo}/>*/}
+                <SafeAccountItem txt1 = '注销账号' onPress={this._logoff}/>
             </View>
         );
     }

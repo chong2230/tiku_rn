@@ -161,6 +161,7 @@ export default class Alert extends React.Component {
                                         fontSize: this.props.descFontSize,
                                         fontWeight: this.props.descFontWeight,
                                         color: this.props.descFontColor,
+                                        lineHeight: this.props.descLineHeight ? this.props.descLineHeight : 20,
                                         // marginTop: this.props.titleMarginTop ? this.props.titleMarginTop : 18,
                                         marginBottom: this.props.titleMarginBottom ? this.props.titleMarginBottom : 10,
                                         marginLeft: 10,

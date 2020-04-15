@@ -91,7 +91,7 @@ export default class Setting extends Component {
             //     }
             // });
         } else {
-            navigate('SafeAccount', {isVisible: false, title: "账户安全"});
+            navigate('SafeAccount', {isVisible: false, title: "账户安全", returnKey: state.key});
         }        
     }
 
@@ -208,7 +208,7 @@ export default class Setting extends Component {
                     }}
                     bottomLineColor={'rgba(0, 0, 0)'} />
                 <ScrollView style={{marginBottom:0}}>
-                    <SettingItem txt1 = '账号安全' onPress={this._safeAccount}/>
+                    <SettingItem txt1 = '账号与安全' onPress={this._safeAccount}/>
                     <View style={styles.separator}></View>
                     {pullView}
                     {playView}

@@ -166,7 +166,7 @@ export default class Balance extends Component {
         let cost = goods.price;
         let ticketLabel = '无可用礼券';
         if (this.state.voucherId) {
-            ticketLabel = this.state.voucher.title + this.state.voucher.price + '学币';
+            ticketLabel = this.state.voucher.title + this.state.voucher.price + '余额';
             cost -= this.state.voucher.price;
             if (cost < 0) cost = 0;
         } else if (this.state.tickets.length > 0) {
@@ -190,31 +190,33 @@ export default class Balance extends Component {
                     <View style={styles.right}>
                     	<Text style={styles.title}>{name}</Text>
                     	<View style={styles.costStyle}>
-                    		<Text style={styles.cost}>{goods.price}学币</Text>
+                    		<Text style={styles.cost}>{goods.price}余额</Text>
                     		<Text style={styles.multiple}>x1</Text>
                     	</View>                        
                     </View>
                 </View>
-                <View style={styles.separator} />                
+                <View style={styles.separator} /> 
+                {!global.isAudit ?               
                 <View style={styles.ticket}>
                     <Text style={styles.ticketLabel}>礼券：</Text>
                     <TouchableOpacity onPress={this._chooseTicket}>
                         <Text style={styles.ownTicket}>{ticketLabel} &gt;</Text>
                     </TouchableOpacity>
-                </View>
+                </View> : null
+                }
                 <View style={styles.needPay}>
                 	<Text style={styles.emptyLabel}></Text>
                 	<Text style={styles.costLabel}>需付款：</Text>
-                	<Text style={styles.costPrice}>{cost}学币</Text>
+                	<Text style={styles.costPrice}>{cost}余额</Text>
                 </View>   
                 <View style={styles.separator} />
                 <View style={styles.balanceStyle}>
                 	{/*<Icon name="copyright" size={px2dp(15)} color={Colors.highlight} style={styles.rmIcon} />*/}
-                	<Text style={styles.money}>余额：{this.state.money}学币</Text>
+                	<Text style={styles.money}>余额：{this.state.money}余额</Text>
                 	<Icon name="check-circle" size={px2dp(15)} color={Colors.special} style={styles.check} />
                 </View>
                 <View style={styles.separator} />
-                <Text style={styles.tip}>提示：礼券不与其他优惠同享</Text>            
+                {!global.isAudit ? <Text style={styles.tip}>提示：礼券不与其他优惠同享</Text> : null}
                 <Button text={btnTxt} onPress={this._handle} 
                         style={styles.payBtn} containerStyle={styles.payContainer} />
                 <View style={styles.safeBottom}></View>

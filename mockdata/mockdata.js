@@ -3,6 +3,29 @@
 **/
 const MockData = {
 
+	'/system/checkVersionUpdate': {
+        "code": 0,
+        "data": {
+            "appName": "有知学堂APP",
+            "code": "1.3.0",
+            "descr": "1. 新增学习评估报告 2. 新增充值支付功能 3. 新增会员功能 4. 新增礼券功能",
+            "downloadUrl": "https://apps.apple.com/cn/app/id1487972395",
+            "forceUpdate": 1,
+            "gmtCreate": "2020-03-09 22:50:09.621000000",
+            "gmtModified": "2020-03-09 22:50:09.621000000",
+            "id": 8,
+            "innerVer": 100130,
+            "isAudit": 1,
+            "isUpdate": 0,
+            "qrcodeImage": "",
+            "shareImage": "",
+            "status": 1,
+            "type": "ios",
+            "updateUrl": "https://apps.apple.com/cn/app/id1487972395",
+            "versionCode": "1.3.0"
+        },
+        "msg": "SUCCESS"
+    },
 	'/search/list': {
 	  "code": 0,
 	  "data": [
@@ -279,103 +302,124 @@ const MockData = {
 	},
 	// 专业列表
 	'/profession/list': {
-		"code": 0,
-		"data": [{
-			"comments": "",
-			"courseCategory": [{
-				"courses": [{
-					"category": "传输",
-					"comments": "",
-					"curriculums": [{
-						"comments": "",
-						"courseId": 1,
-						"gmtCreate": "2019-12-16 10:52:06.686000000",
-						"gmtModified": "2019-12-16 16:15:59.067000000",
-						"id": 1,
-						"image": "",
-						"name": "传输L1",
-						"professionId": 1,
-						"status": 1
-					}],
-					"gmtCreate": "2019-12-16 10:52:04.733000000",
-					"gmtModified": "2019-12-16 16:15:09.033000000",
-					"id": 1,
-					"image": "",
-					"name": "传输L1",
-					"professionId": 1,
-					"status": 1
-				}, {
-					"category": "传输",
-					"comments": "",
-					"curriculums": [{
-						"comments": "",
-						"courseId": 5,
-						"gmtCreate": "2020-01-08 10:58:58.561000000",
-						"gmtModified": "2020-01-13 23:19:00.395000000",
-						"id": 8,
-						"image": "",
-						"name": "传输L2",
-						"professionId": 1,
-						"status": 1
-					}],
-					"gmtCreate": "2020-01-08 10:58:57.358000000",
-					"gmtModified": "2020-01-13 23:18:41.324000000",
-					"id": 5,
-					"image": "",
-					"name": "传输L2",
-					"professionId": 1,
-					"status": 1
-				}],
-				"name": "传输"
-			}],
-			"id": 1,
-			"image": "",
-			"name": "中国移动通信集团技能认证",
-			"status": 1
-		}, {
-			"comments": "",
-			"courseCategory": [{
-				"courses": [{
-					"category": "默认",
-					"comments": "",
-					"curriculums": [{
-						"comments": "",
-						"courseId": 3,
-						"gmtCreate": "2019-12-25 12:32:52.895000000",
-						"gmtModified": "2019-12-30 13:37:58.428000000",
-						"id": 5,
-						"image": "",
-						"name": "初级会计实务",
-						"professionId": 2,
-						"status": 1
-					}, {
-						"comments": "",
-						"courseId": 3,
-						"gmtCreate": "2019-12-25 12:33:16.192000000",
-						"gmtModified": "2019-12-30 13:38:11.735000000",
-						"id": 6,
-						"image": "",
-						"name": "经济法基础",
-						"professionId": 2,
-						"status": 1
-					}],
-					"gmtCreate": "2019-12-25 12:31:23.137000000",
-					"gmtModified": "2019-12-30 13:37:41.691000000",
-					"id": 3,
-					"image": "",
-					"name": "初级会计师",
-					"professionId": 2,
-					"status": 1
-				}],
-				"name": "默认"
-			}],
-			"id": 2,
-			"image": "",
-			"name": "会计专业",
-			"status": 1
-		}],
-		"msg": "SUCCESS"
-	},
+        "code": 0,
+        "data": [{
+            "comments": "",
+            "courseCategory": [{
+                "courses": [{
+                    "category": "传输",
+                    "comments": "",
+                    "curriculums": [{
+                        "comments": "",
+                        "courseId": 1,
+                        "gmtCreate": "2019-12-16 10:52:06.686000000",
+                        "gmtModified": "2019-12-16 16:15:59.067000000",
+                        "id": 1,
+                        "image": "",
+                        "name": "传输L1",
+                        "professionId": 1,
+                        "status": 1
+                    }],
+                    "gmtCreate": "2019-12-16 10:52:04.733000000",
+                    "gmtModified": "2019-12-16 16:15:09.033000000",
+                    "id": 1,
+                    "image": "",
+                    "name": "传输L1",
+                    "professionId": 1,
+                    "status": 1
+                }, {
+                    "category": "传输",
+                    "comments": "",
+                    "curriculums": [{
+                        "comments": "",
+                        "courseId": 4,
+                        "gmtCreate": "2020-01-10 17:04:23.880000000",
+                        "gmtModified": "2020-03-01 23:06:12.457000000",
+                        "id": 7,
+                        "image": "",
+                        "name": "传输L2",
+                        "professionId": 1,
+                        "status": 1
+                    }],
+                    "gmtCreate": "2020-01-10 17:04:18.095000000",
+                    "gmtModified": "2020-03-01 23:05:42.092000000",
+                    "id": 4,
+                    "image": "",
+                    "name": "传输L2",
+                    "professionId": 1,
+                    "status": 1
+                }, {
+                    "category": "传输",
+                    "comments": "",
+                    "curriculums": [{
+                        "comments": "",
+                        "courseId": 6,
+                        "gmtCreate": "2020-03-19 00:51:32.505000000",
+                        "gmtModified": "2020-03-19 00:52:44.529000000",
+                        "id": 10,
+                        "image": "",
+                        "name": "传输L3",
+                        "professionId": 1,
+                        "status": 1
+                    }],
+                    "gmtCreate": "2020-03-19 00:51:25.894000000",
+                    "gmtModified": "2020-03-19 00:51:25.894000000",
+                    "id": 6,
+                    "image": "",
+                    "name": "传输L3",
+                    "professionId": 1,
+                    "status": 1
+                }],
+                "name": "传输"
+            }],
+            "id": 1,
+            "image": "",
+            "name": "网络维护认证考试",
+            "status": 1
+        }, {
+            "comments": "",
+            "courseCategory": [{
+                "courses": [{
+                    "category": "默认",
+                    "comments": "",
+                    "curriculums": [{
+                        "comments": "",
+                        "courseId": 3,
+                        "gmtCreate": "2019-12-25 12:32:52.895000000",
+                        "gmtModified": "2020-03-09 16:47:09.779000000",
+                        "id": 5,
+                        "image": "",
+                        "name": "初级会计实务",
+                        "professionId": 2,
+                        "status": 1
+                    }, {
+                        "comments": "",
+                        "courseId": 3,
+                        "gmtCreate": "2019-12-25 12:33:16.192000000",
+                        "gmtModified": "2020-03-11 12:53:19.677000000",
+                        "id": 6,
+                        "image": "",
+                        "name": "经济法基础",
+                        "professionId": 2,
+                        "status": 1
+                    }],
+                    "gmtCreate": "2019-12-25 12:31:23.137000000",
+                    "gmtModified": "2020-03-11 12:52:35.393000000",
+                    "id": 3,
+                    "image": "",
+                    "name": "初级会计师",
+                    "professionId": 2,
+                    "status": 1
+                }],
+                "name": "默认"
+            }],
+            "id": 2,
+            "image": "",
+            "name": "会计专业",
+            "status": 1
+        }],
+        "msg": "SUCCESS"
+    },
 	// 科目列表
 	'/course/list': {
 		"code": 0,
@@ -417,117 +461,95 @@ const MockData = {
 		"msg": "SUCCESS"
 	},
 	'/home/slide': {
-	    "code":0,
-	    "msg":"SUCCESS",
-	    "data":[
-	        {
-	            "image":"img/basic_algorithm/56e63f3528134a50a19412cdf21bcc38.png",
-	            "columnId":5,
-	            "columnTitle":"数据结构基础"
-	        },
-	        {
-	            "image":"img/basic_algorithm/fa30311a5df1403686ad04a8b3a1485d.png",
-	            "columnId":12,
-	            "columnTitle":"排序算法"
-	        },
-	        {
-	            "image":"img/front_end/0ce4133110344d8d8b84999f73e19d9f.png",
-	            "columnId":11,
-	            "columnTitle":"React入门"
-	        }
-	    ]
-	},
+        "code": 0,
+        "data": [{
+            "id": 4,
+            "image": "/img/question/iA08zJG7.jpeg",
+            "name": "2020会计初级报名时间及入口",
+            "type": "news"
+        }, {
+            "id": 11,
+            "image": "/img/news/fOvqS8KM.png",
+            "name": "2020高级会计职称报考指南",
+            "type": "news"
+        }, {
+            "id": 31,
+            "image": "/img/news/avuJU151.png",
+            "name": "2020年全国会计专业技术初级资格考试大纲已公布！",
+            "type": "news"
+        }],
+        "msg": "SUCCESS"
+    },
 	'/home/functions': {
-	    "code":0,
-	    "data":[
-	        {
-	            "chargeable":1,
-	            "id":1,
-	            "image":"/img/icon/entrance_4.png",
-	            "name":"每日一练",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":2,
-	            "image":"/img/icon/entrance_5.png",
-	            "name":"历年真题",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":3,
-	            "image":"/img/icon/entrance_6.png",
-	            "name":"模拟试卷",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":4,
-	            "image":"",
-	            "name":"章节练习",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":5,
-	            "image":"",
-	            "name":"知识点练习",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":6,
-	            "image":"",
-	            "name":"高频考点",
-	            "type":"试卷列表",
-	            "usable":1
-	        },
-	        {
-	            "chargeable":1,
-	            "id":7,
-	            "image":"",
-	            "name":"高频错题",
-	            "type":"试卷列表",
-	            "usable":1
-	        }
-	    ],
-	    "msg":"SUCCESS"
-	},
+        "code": 0,
+        "data": [{
+            "chargeable": 1,
+            "id": 1,
+            "image": "/img/icon/entrance_4.png",
+            "name": "每日一练",
+            "type": "试卷列表",
+            "usable": 1
+        }, {
+            "chargeable": 1,
+            "id": 2,
+            "image": "/img/icon/entrance_5.png",
+            "name": "历年真题",
+            "type": "试卷列表",
+            "usable": 1
+        }, {
+            "chargeable": 1,
+            "id": 3,
+            "image": "/img/icon/entrance_6.png",
+            "name": "模拟试卷",
+            "type": "试卷列表",
+            "usable": 1
+        }, {
+            "chargeable": 1,
+            "id": 4,
+            "image": "/img/icon/entrance_5.png",
+            "name": "章节练习",
+            "type": "试卷列表",
+            "usable": 1
+        }, {
+            "chargeable": 1,
+            "id": 6,
+            "image": "/img/icon/entrance_5.png",
+            "name": "高频考点",
+            "type": "试卷列表",
+            "usable": 1
+        }, {
+            "chargeable": 1,
+            "id": 7,
+            "image": "/img/icon/entrance_5.png",
+            "name": "高频错题",
+            "type": "试卷列表",
+            "usable": 1
+        }],
+        "msg": "SUCCESS"
+    },
 	'/home/my': {
-	    "code":0,
-	    "data":{
-	        "accuracy":0,
-	        "contents":[
-	            {
-	                "id":11,
-	                "image":"",
-	                "title":"试题收藏"
-	            },
-	            {
-	                "id":12,
-	                "image":"",
-	                "title":"做题记录"
-	            },
-	            {
-	                "id":13,
-	                "image":"",
-	                "title":"错题库"
-	            },
-	            {
-	                "id":14,
-	                "image":"",
-	                "title":"题库笔记"
-	            }
-	        ]
-	    },
-	    "msg":"SUCCESS"
-	},
+        "code": 0,
+        "data": {
+            "contents": [{
+                "id": 1,
+                "image": "/img/icon/entrance_5.png",
+                "name": "试题收藏"
+            }, {
+                "id": 2,
+                "image": "/img/icon/entrance_5.png",
+                "name": "做题记录"
+            }, {
+                "id": 3,
+                "image": "/img/icon/entrance_5.png",
+                "name": "错题库"
+            }, {
+                "id": 4,
+                "image": "/img/icon/entrance_6.png",
+                "name": "学习评估"
+            }]
+        },
+        "msg": "SUCCESS"
+    },
 
 	// 题库列表 params: {functionId:1}
 	'/home/functionInfo': {

@@ -12,7 +12,7 @@ import {
     FlatList,
     StatusBar,
     TouchableWithoutFeedback,
-    Dimensions
+    Dimensions, DeviceEventEmitter
 } from 'react-native';
 
 // import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,8 +45,12 @@ export default class News extends Component<{}> {
     }
 
     componentWillMount() {
+        let self = this;
         pageNumber = 1;
         this._load();
+        this.navigationEmitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
+            self._load();
+        });
     }
 
     _load = () => {
@@ -150,7 +154,7 @@ export default class News extends Component<{}> {
     render() {
         return (
             <View style={styles.container}>
-                <Bar />
+                {/*<Bar />*/}
                 <FlatList 
                     style={styles.list}
                     ref={(flatList)=>this._flatList = flatList}

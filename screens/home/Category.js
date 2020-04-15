@@ -26,6 +26,7 @@ import Alert from '../../components/Alert';
 import Toast from '../../components/Toast';
 import {TabbarSafeBottomMargin} from "../../utils/Device";
 import Storage from "../../utils/Storage";
+import MockData from '../../mockdata/mockdata';
 
 const {width: screenWidth, height: screenHeight} = Dimensions.get('window');
 const emptyHeight = screenWidth/screenHeight * 289;
@@ -46,7 +47,16 @@ export default class Category extends Component{
     }
 
     componentDidMount() {
+        this._initData();
         this._getList();
+    }
+
+    _initData = () => {
+        Storage.get('/profession/list').then((data)=>{
+            this.setState({
+                sourceData: data ? JSON.parse(data) : MockData['/profession/list']['data']
+            })
+        });
     }
 
     _getList = () => {
@@ -55,7 +65,8 @@ export default class Category extends Component{
             if (result.code == 0) {
                 this.setState({
                     sourceData: result.data
-                })
+                });
+                Storage.save('/profession/list', JSON.stringify(result.data));
             }
         });
     }

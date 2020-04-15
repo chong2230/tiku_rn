@@ -252,7 +252,7 @@ export default class Subject extends PureComponent{
         // console.log('start ', data);
         if (!type) type = isAnalyse ? 1 : (data.userStatus == 2 ? 3 : 2);   // type: 1 查看解析 2 开始做题 3 继续做题
         const { navigate, state } = this.props.navigation;
-        if (global.token) {
+        if (global.isAudit || global.token) {
             navigate("Timu", {id: data.id, name: data.name,
                 functionName: state.params.title, functionId: state.params.id,
                 type: type,
@@ -281,7 +281,7 @@ export default class Subject extends PureComponent{
     // 进入商品购买列表 TODO: refresh paper, not reload
     _goGoods = (data) => {
         const { navigate, state } = this.props.navigation;
-        if (global.token) {
+        if (global.isAudit || global.token) {
             navigate("Goods", {
                 isVisible: false, paperId: data.id, refresh: (status)=>{
                     this._reload();

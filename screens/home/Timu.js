@@ -6,6 +6,7 @@ import {
 	Image,
 	ScrollView,
 	TouchableOpacity,
+    TouchableWithoutFeedback,
 	Modal,
 	StyleSheet,
 	Dimensions,
@@ -14,11 +15,14 @@ import {
 } from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
+import ImageViewer from 'react-native-image-zoom-viewer';
+// import CameraRoll from "@react-native-community/cameraroll";
 
 import Bar from '../../components/Bar';
 import Header from '../../components/Header';
 import TimuCardModal from './TimuCardModal';
 import Button from '../../components/Button';
+import CameraButton from '../../components/CameraButton';
 import Toast from '../../components/Toast';
 import Alert from '../../components/Alert';
 import Colors from '../../constants/Colors';
@@ -43,8 +47,10 @@ export default class Timu extends Component {
 			askList: [],
 	  		currentAnswers: [],		// 当前题目的回答
 	  		showAnalyse: [],		// 是否为题目解析
+			viewImages: [],
 	  		showModal: false,
 	  		showCardModal: false,
+            showImageModal: false
 	  	};
 	  	this.showMultiChoiceTip = false;		// 多选题提示
 	  	this.showUncertainChoiceTip = false;	// 不定项选择题提示
@@ -140,7 +146,7 @@ export default class Timu extends Component {
 		                        if (ask.choiceE) choice['e'] = ask.choiceE;
 		                        info.choices.push(choice);
 		                        info.answers.push(ask.answer);
-		                        info.answersImg.push(ask.answerImg);
+		                        info.answersImg.push(ask.answerImg || '/img/avatar/gB3rKrYQ.JPG,/img/avatar/VgDwOt5l.PNG');
 		                        info.analysis.push(ask.analysis);
 		                        info.analysisImg.push(ask.analysisImg);
 		                        // if (result.data.askList.length == 1) info.question = ask.question || '';
@@ -223,6 +229,8 @@ export default class Timu extends Component {
 				self.setState({
 					info: info
 				})
+			} else {
+				this.toast.show(result.msg);
 			}
 		})
 	}
@@ -280,7 +288,7 @@ export default class Timu extends Component {
 			if (isSlip) this.toast.show('已是第一题哦~');
 			return;
 		}
-        clearTimeout(this.nextTimeout);
+        this._clear();
 		let id = this.state.list[this.state.index-2].id;
 		this._getTimu(id, this.state.index - 1);
 	}
@@ -290,7 +298,7 @@ export default class Timu extends Component {
 			if (isSlip) this.toast.show('已是最后一题哦~');
 			return;
 		}
-        clearTimeout(this.nextTimeout);
+        this._clear();
 		let id = this.state.list[this.state.index].id;
 		this._getTimu(id, this.state.index + 1);
 	}
@@ -352,6 +360,7 @@ export default class Timu extends Component {
 			let askAndAnswer = {};
             askAndAnswer.askId = ask.id;
             askAndAnswer.answer = currentAnswers[i];
+            if (info.answersImg[i]) askAndAnswer.answerImg = info.answersImg[i];
             obj.askAndAnswers.push(askAndAnswer);
 		}
 		qaas.push(obj);
@@ -380,6 +389,11 @@ export default class Timu extends Component {
                         this._getNext();
 					}, 1000);
                 }
+			} else if (result.code == 2) {
+				this._goLogin();
+
+			} else {
+				this.toast.show(result.msg);
 			}
 		})
 	}
@@ -423,7 +437,8 @@ export default class Timu extends Component {
 	onRequestClose = () => {
         this.setState({
             showModal: false,
-            showCardModal: false
+            showCardModal: false,
+            showImageModal: false
         });
     }
 
@@ -449,6 +464,8 @@ export default class Timu extends Component {
                 }
 	            navigate('Report', {info: JSON.stringify(result.data), 
 	            	paperId: info.paperId, returnKey: state.key, isVisible: false});
+			} else {
+				this.toast.show(result.msg);
 			}
 		})
 
@@ -466,6 +483,62 @@ export default class Timu extends Component {
 		}, 2000);
     }
 
+    onFileUpload = (resp, index) => {
+		if (resp.code == 0) {
+			let info = this.state.info;
+			// 对题目的某个问题添加图片
+            if (info.answersImg[index]) {
+            	info.answersImg[index] += ',' + resp.data;
+            } else {
+            	info.answersImg[index] = resp.data;
+			}
+			this.setState({
+				info: info
+			}, ()=>{
+                this._saveTimu();
+			});
+		} else {
+			this.toast.show(resp.msg);
+		}
+	}
+
+    _goViewImage = (index) => {
+        let info = this.state.info;
+        if (info.answersImg[index]) {
+        	let imgs = info.answersImg[index].split(',');
+        	let viewImages = [];
+        	for (let i in imgs) {
+                let obj = {};
+                obj.url = Common.baseUrl + imgs[i];
+        		viewImages.push(obj);
+			}
+        	this.setState({
+                viewImages: viewImages,
+				showModal: true,
+                showImageModal: true
+			})
+        }
+	}
+
+    savePhoto(url) {
+		console.log('savePhoto ', url);
+        // let promise = CameraRoll.saveToCameraRoll(url);
+        // promise.then(function (result) {
+        //     alert("已保存到系统相册")
+        // }).catch(function (error) {
+        //     alert('保存失败！\n' + error);
+        // });
+    }
+
+    _goLogin = () => {
+        const { navigate } = this.props.navigation;
+        navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
+                if (token != null) {
+                    // this._load();
+                }
+            }});
+    }
+
     // 一道题有多个问题和答案
     _renderQuestions = () => {
         switch (this.state.info.type) {
@@ -473,7 +546,9 @@ export default class Timu extends Component {
                 return this._renderFillBlankQuestions();
             case '简答题':
             case '计算分析题':
+            case '计算题':
             case '综合题':
+            case '案例题':
                 return this._renderShortAnswerQuestions();
 			default:
 				// 单选题、单项选择题、多选题、多项选择题、不定项、不定项题、不定项选择题、判断题
@@ -559,6 +634,27 @@ export default class Timu extends Component {
             let choice = info.choices[i];
             let choicesView = [];
             let value = this.state.currentAnswers[i];
+            // 适配一个问题多张图片
+            let imgsView = [];
+            if (info.answersImg[i]) {
+                let imgs = info.answersImg[i].split(',');
+                for (let j in imgs) {
+                    let imgView =
+						<TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'image-'+j}>
+							<Image source={{uri: Common.baseUrl + imgs[j]}} style={styles.image} />
+						</TouchableWithoutFeedback>;
+                    imgsView.push(imgView);
+                }
+            }
+            if (imgsView.length < 3) {
+                let addBtn = <CameraButton style={styles.cameraBtn} key={'image-add'}
+                                           source={require('../../images/account/add_icon.png')}
+                                           iconStyle={styles.image}
+                                           onFileUpload={(resp)=>{
+                                               this.onFileUpload(resp, i);
+                                           }} />
+                imgsView.push(addBtn);
+			}
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
 					{ this._renderQuestionText(i) }
@@ -570,6 +666,9 @@ export default class Timu extends Component {
 						value={value}
 					    onChangeText={(text)=>{this._onChangeText(text, i)}}
 						style={[styles.input, styles.multiInput]}></TextInput>
+					<View style={styles.imgsView}>
+                    { imgsView }
+					</View>
                 </View>
             );
             questionsView.push(questionView);
@@ -774,6 +873,18 @@ export default class Timu extends Component {
                                         onRequestClose = {() => {this.onRequestClose()}} />
                                     : null
                                 }
+							{
+								this.state.showImageModal ?
+                                    <ImageViewer imageUrls={this.state.viewImages}
+                                                 menuContext={{ "saveToLocal": "保存图片", "cancel": "取消" }}
+                                                 onChange={(index) => { }} // 图片切换时触发
+                                                 onClick={() => { // 图片单击事件
+                                                     this.onRequestClose()
+                                                 }}
+                                                 onSave={(url) => { this.savePhoto(url) }}
+									/>
+									: null
+							}
                         </Modal> 
                     </View>: null
                 }
@@ -796,9 +907,13 @@ export default class Timu extends Component {
 		);
 	}
 
-    componentWillUnmount() {
-    	clearTimeout(this.nextTimeout);
+	_clear = () => {
+        clearTimeout(this.nextTimeout);
         clearTimeout(this.inputTimeout);
+	}
+
+    componentWillUnmount() {
+    	this._clear();
     }
 }
 
@@ -893,6 +1008,18 @@ const styles = StyleSheet.create({
     recorrectButton: {
         margin: 20,
         color: Colors.gray
+	},
+    imgsView: {
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    image: {
+        width: 79,
+        height: 79,
+		marginTop: 10,
+		marginLeft: 10,
+        borderRadius: 4,
+        right: 0
 	},
 	safeBottom: {
         backgroundColor: 'white',

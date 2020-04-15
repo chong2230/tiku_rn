@@ -55,7 +55,7 @@ export default class Login extends Component {
                     Storage.save('token', data.token).then(()=>{
                         const { navigate, state, goBack } = this.props.navigation;
                         if (state.params.refresh) state.params.refresh(data.token);
-                        DeviceEventEmitter.emit('navigationStateChange');
+                        if (state.params.from != 'Account') DeviceEventEmitter.emit('navigationStateChange');
                         setTimeout(function() {
                             if (state.params.callback instanceof Function) {
                                 state.params.callback();
@@ -74,6 +74,7 @@ export default class Login extends Component {
     _regist = () => {
         const { navigate, state } = this.props.navigation;
         navigate('Regist', { isVisible: false, title: '注册',
+            from: state.params.from,
             returnKey: state.params.from == 'setting' ? state.params.returnKey : state.key,
             refresh: (token)=>{
                 if (state.params.refresh) state.params.refresh(token);
@@ -107,7 +108,12 @@ export default class Login extends Component {
     }
 
     _loginCallback = (type, openid, accessToken) => {
-        Common.thirdPartyLogin(type, openid, accessToken, (result) => {
+        let params = {
+            type: type,
+            openid: openid,
+            accessToken: accessToken
+        }
+        Common.thirdPartyLogin(params, (result) => {
             if (result.code == 0) {
                 let data = result.data;
                 this.refs.toast.show('登录成功');
@@ -118,6 +124,7 @@ export default class Login extends Component {
                     if (state.params.callback instanceof Function) {    // 同login
                         state.params.callback();
                     }
+                    if (state.params.from != 'Account') DeviceEventEmitter.emit('navigationStateChange');
                     setTimeout(function() {
                         goBack();
                     }, 400);

@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         paddingLeft: 10,
         borderBottomColor: '#e0e0e0',
-        borderBottomWidth: 1,
+        borderBottomWidth: 1
     },
     leftIcon: {
         width: 20,

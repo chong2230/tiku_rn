@@ -19,6 +19,8 @@ import {
     Modal
 } from 'react-native';
 
+import Bar from '../../components/Bar';
+import Header from '../../components/Header';
 // import Picker from 'react-native-picker';
 import Colors from '../../constants/Colors';
 import DisplayItem from '../../components/DisplayItem';
@@ -29,6 +31,7 @@ import Toast from '../../components/Toast';
 import { trim } from '../../utils/Util';
 import SexModal from './SexModal';
 import EducationModal from './EducationModal';
+import {StatusBarHeight, StatusBarAndNavigationBarHeight} from '../../utils/Device';
 
 const deviceW = Dimensions.get('window').width;
 let FileUpload = NativeModules.FileUpload;
@@ -192,49 +195,26 @@ export default class Profile extends Component {
         return str;
     }
 
-    onFileUpload = (uri, fileName) => {
-        let self = this;
-        let url = Common.httpServer + '/file/upload';
-        let formData = new FormData();
-        let file = {uri: uri, type: 'multipart/form-data', name: fileName};
-     
-        formData.append("file", file);
-        formData.append("classify", "avatar");
-     
-        fetch(url,{
-            method:'POST',
-            headers:{
-                'Content-Type':'multipart/form-data',
-                'Authorization': 'Bearer ' + global.token
-            },
-            body:formData,
-        })
-        .then((response) => response.json() )
-        .then((responseData)=>{
-            console.log('responseData', responseData);
-            if (responseData.code == 0) {
-                let user = {};
-                user.avatarImage = responseData.data;
-                self._updateUser(user, function() {
-                    let info = Object.assign({}, self.state.info, user);
-                    self.setState({
-                        info: info
-                    });   
-                    const { state } = self.props.navigation;
-                    if (state.params.refresh) state.params.refresh(info); 
+    onFileUpload = (responseData) => {
+        if (responseData.code == 0) {
+            let user = {};
+            user.avatarImage = responseData.data;
+            self._updateUser(user, function() {
+                let info = Object.assign({}, self.state.info, user);
+                self.setState({
+                    info: info
                 });
-            } else if (responseData.code == 2) {
-                global.token = null;
-                Storage.delete('token');
-                self.refs.toast.show(responseData.msg); 
-            } else {
-                self.refs.toast.show(responseData.msg); 
-            }
-        })
-        .catch((error)=>{console.error('error',error)});
-     
+                const { state } = self.props.navigation;
+                if (state.params.refresh) state.params.refresh(info);
+            });
+        } else if (responseData.code == 2) {
+            global.token = null;
+            Storage.delete('token');
+            self.refs.toast.show(responseData.msg);
+        } else {
+            self.refs.toast.show(responseData.msg);
+        }
     }
-
 
     render() {          
         let sex = this._getSex();
@@ -246,10 +226,16 @@ export default class Profile extends Component {
         return (
             <TouchableWithoutFeedback onPress={this._onPress.bind(this)}>
                 <View style={styles.container} keyboardShouldPersistTaps={'always'}>
+                    <Bar />
+                    <Header title="个人信息" goBack={() => {
+                        let { goBack } = this.props.navigation;
+                        goBack();
+                    }}></Header>
                     <View style={styles.avatar}>
 
                         <CameraButton style={styles.cameraBtn}
                             avatarImage={this.state.info.avatarImage}
+                            iconOnly={false}
                             photos={[]}
                             onFileUpload={this.onFileUpload} />
                     </View>
@@ -323,9 +309,9 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     nameInputStyle: {
-        top: 102
+        top: 102 + StatusBarAndNavigationBarHeight
     },
     emailInputStyle: {
-        top: 188
+        top: 188 + StatusBarAndNavigationBarHeight
     }
 });

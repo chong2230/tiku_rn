@@ -7,6 +7,7 @@ import DeviceInfo from 'react-native-device-info';
 import LoadingView from './components/LoadingView';
 import Common from './utils/Common';
 import Alert from './components/Alert';
+import Toast from './components/Toast';
 import Colors from './constants/Colors';
 
 class setup extends Component {
@@ -34,6 +35,7 @@ class setup extends Component {
                 assert: () => {},
             };
             global.alert = () => {}
+            global.isAudit = true;
         }
     }
 
@@ -43,12 +45,14 @@ class setup extends Component {
                 let data = result.data;
                 // For Test
                 // data = {
-                //     descr: '增加做题模式；\n查看正确题目、错误题目和未做题目；\n添加QQ登录功能；',
+                //     // descr: '增加做题模式；\n查看正确题目、错误题目和未做题目；\n添加QQ登录功能；',
+                //     descr: '1. iOS13支持苹果第三方登录\n2. app销户功能 \n3. 在线资询 4. minor bug fix',
                 //     isUpdate: 1,
                 //     forceUpdate: 0,
                 //     updateUrl: '',
                 //     versionCode: "1.2"
                 // };
+                global.isAudit = data.isAudit;  // 是否审查中
                 let ver = DeviceInfo.getVersion();
                 if (data.isUpdate) {
                     this.setState({
@@ -102,6 +106,9 @@ class setup extends Component {
                         cancelFontColor={Colors.gray}
                         showCancelBtn={this.state.forceUpdate == 0}
                     />
+                }
+                {
+                    <Toast ref={(ref)=>{global.toastComponentRef = ref}} position="center" />
                 }
             </View>
         );

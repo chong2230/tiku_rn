@@ -26,6 +26,7 @@ import Common from '../../utils/Common';
 import Storage from '../../utils/Storage';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 import CircleButton from "../../components/CircleButton";
+import MockData from '../../mockdata/mockdata';
 
 const deviceW = Dimensions.get('window').width;
 const deviceH = Dimensions.get('window').height;
@@ -55,14 +56,32 @@ export default class Home extends Component {
     }
 
     componentDidMount() {
+        let self = this;
         SplashScreen.hide();
         this._initData();
         this.emitter = DeviceEventEmitter.addListener('refreshHome', (data) => {
-            this._initData();
+            self._initData();
+        });
+        this.navigationEmitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
+            self._load();
         });
     }
 
     _initData = () => {
+        let hotData = MockData['/home/functions']['data'];
+        let myData = MockData['/home/my']['data'];
+        Storage.get('hotData').then((data)=>{
+            if (data) hotData = JSON.parse(data);
+            this.setState({
+                hotData: hotData
+            });    
+        });
+        Storage.get('myData').then((data)=>{
+            if (data) myData = JSON.parse(data);
+            this.setState({
+                myData: myData
+            });    
+        });
         Storage.get('token').then((val)=>{
             if (val) {
                 global.token = val;
@@ -110,7 +129,7 @@ export default class Home extends Component {
     _load = () => {
         let params = {
             professionId: global.course.professionId,
-            courseId: global.course.id
+            courseId: global.course.courseId || global.course.id,
         };
         Common.getBanners(params, (result)=>{
             if (result.code == 0) {
@@ -120,23 +139,25 @@ export default class Home extends Component {
                 });
                 this.setState({
                     dataSource: dataSource.cloneWithPages(result.data),
-                })
+                });
             }
         });
-        Common.getHomeFunc((result)=>{
+        Common.getHomeFunc(params, (result)=>{
             console.log('getHomeFunc ', result);
             if (result.code == 0) {
                 this.setState({
                     hotData: result.data
                 })
+                Storage.save('hotData', JSON.stringify(result.data));
             }
         });
-        Common.getHomeMy((result)=>{
+        Common.getHomeMy(params, (result)=>{
             console.log('getHomeMy ', result);
             if (result.code == 0) {
                 this.setState({
                     myData: result.data
                 })
+                Storage.save('myData', JSON.stringify(result.data));
             }
         });
     }
@@ -162,7 +183,7 @@ export default class Home extends Component {
                     this.setState({
                         curCourse: data
                     });
-                    DeviceEventEmitter.emit('memberChange');
+                    DeviceEventEmitter.emit('navigationStateChange');
                 }
             });  
         } else {
@@ -172,7 +193,7 @@ export default class Home extends Component {
                 this.setState({
                     curCourse: data
                 });
-                DeviceEventEmitter.emit('memberChange');
+                DeviceEventEmitter.emit('navigationStateChange');
             }});  
         }        
     }
@@ -490,7 +511,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 10,
         marginRight: 10,
-        marginBottom: 10,
+        marginBottom: 8,
         borderRadius: 10,
         backgroundColor: '#f8f8f8'
     },
@@ -545,7 +566,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 8,
         marginLeft: 8,
-        marginBottom: 10,
+        marginBottom: 8,
         height: 20,
     },
     hotView: {
@@ -553,11 +574,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: itemWidth,
-        height: 80,
+        height: 75,
         marginBottom: 10
     },
     name: {
-        marginTop: 10,
+        marginTop: 8,
         width: itemWidth,
         textAlign: 'center'
     },
@@ -571,13 +592,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: itemWidth,
-        height: 80,
+        height: 75,
         // marginTop: 10,
         marginBottom: 10
     },
     separator: {
         backgroundColor: '#f2f2f2',
-        height: 10
+        height: 8
     },
     safeBottom: {
         backgroundColor: 'white',
