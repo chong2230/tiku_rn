@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 
 import ImagePicker from 'react-native-image-picker';
+import Colors from '../constants/Colors';
 import Common from '../utils/Common';
 import Storage from "../utils/Storage";
 
@@ -19,7 +20,8 @@ const options = {
     title: '选择图片', 
     cancelButtonTitle: '取消',
     takePhotoButtonTitle: '拍照', 
-    chooseFromLibraryButtonTitle: '图片库', 
+    chooseFromLibraryButtonTitle: '图片库',
+    tintColor: Colors.highlight,
     cameraType: 'back',
     mediaType: 'photo',
     videoQuality: 'high', 

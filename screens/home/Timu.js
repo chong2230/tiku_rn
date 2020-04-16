@@ -16,11 +16,12 @@ import {
 
 import DeviceInfo from 'react-native-device-info';
 import ImageViewer from 'react-native-image-zoom-viewer';
-// import CameraRoll from "@react-native-community/cameraroll";
+import CameraRoll from "@react-native-community/cameraroll";
 
 import Bar from '../../components/Bar';
 import Header from '../../components/Header';
 import TimuCardModal from './TimuCardModal';
+import HTMLView from '../../components/HTMLView';
 import Button from '../../components/Button';
 import CameraButton from '../../components/CameraButton';
 import Toast from '../../components/Toast';
@@ -146,7 +147,7 @@ export default class Timu extends Component {
 		                        if (ask.choiceE) choice['e'] = ask.choiceE;
 		                        info.choices.push(choice);
 		                        info.answers.push(ask.answer);
-		                        info.answersImg.push(ask.answerImg || '/img/avatar/gB3rKrYQ.JPG,/img/avatar/VgDwOt5l.PNG');
+		                        if (ask.answerImg) info.answersImg.push(ask.answerImg); // '/img/avatar/gB3rKrYQ.JPG,/img/avatar/VgDwOt5l.PNG'
 		                        info.analysis.push(ask.analysis);
 		                        info.analysisImg.push(ask.analysisImg);
 		                        // if (result.data.askList.length == 1) info.question = ask.question || '';
@@ -522,12 +523,12 @@ export default class Timu extends Component {
 
     savePhoto(url) {
 		console.log('savePhoto ', url);
-        // let promise = CameraRoll.saveToCameraRoll(url);
-        // promise.then(function (result) {
-        //     alert("已保存到系统相册")
-        // }).catch(function (error) {
-        //     alert('保存失败！\n' + error);
-        // });
+        let promise = CameraRoll.saveToCameraRoll(url);
+        promise.then(function (result) {
+            alert("已保存到系统相册")
+        }).catch(function (error) {
+            alert('保存失败！\n' + error);
+        });
     }
 
     _goLogin = () => {
@@ -687,10 +688,14 @@ export default class Timu extends Component {
 	_renderAsk = (index) => {
 		let ask = this.state.askList[index].ask.replace(/^\d*\./, '')
 			.replace(/^\d*、/, '').replace(/^\d*．/, '');
+		let content = (this.state.askList.length > 1 ? '' : this.state.index + '. ') + ask;
+        let textProps = {
+            style: styles.commentHtmlTextStyle
+        }
 		// 一题多问，问题不显示序号
 		return (
             this.state.askList[index].ask ?
-                <Text style={styles.title}>{(this.state.askList.length > 1 ? '' : this.state.index + '. ') + ask}</Text>
+                <HTMLView value={content} style={styles.htmlStyle} textComponentProps={textProps} />
                 : null
 		);
 	}
@@ -945,6 +950,18 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		marginBottom: 5
 	},
+    htmlStyle: {
+        flex: 1,
+        flexDirection: 'column',
+        // padding: 10,
+        marginVertical: 10,
+        backgroundColor: 'white'
+    },
+    commentHtmlTextStyle: {
+        fontSize: 16,
+        color: Colors.default,
+        lineHeight: 20
+    },
 	choiceText: {
 		fontSize: 16,
 		color: Colors.default,

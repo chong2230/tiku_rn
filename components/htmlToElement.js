@@ -121,7 +121,7 @@ export default function htmlToElement(rawHtml, customOpts = {}, done) {
           case 'h3':
           case 'h4':
           case 'h5':
-            linebreakAfter = opts.lineBreak;
+            // linebreakAfter = opts.lineBreak; // 加了此句后，会有多的空行
             break;
           }
         }

@@ -34,6 +34,7 @@
 		348D553024475B9600F76BE2 /* SignWithApple.m in Sources */ = {isa = PBXBuildFile; fileRef = 348D552724475B9600F76BE2 /* SignWithApple.m */; };
 		348D553124475B9600F76BE2 /* CoustomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 348D552924475B9600F76BE2 /* CoustomView.m */; };
 		348D553224475B9600F76BE2 /* SignHandleKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 348D552A24475B9600F76BE2 /* SignHandleKeyChain.m */; };
+		348D55342447EAFC00F76BE2 /* main.jsbundle in Resources */ = {isa = PBXBuildFile; fileRef = 348D55332447EAFC00F76BE2 /* main.jsbundle */; };
 		34D316BB23AF750500EC9478 /* ApiUtilBridgeModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D316B823AF750500EC9478 /* ApiUtilBridgeModule.m */; };
 		34D316BE23AF761900EC9478 /* WechatPayHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D316BD23AF761900EC9478 /* WechatPayHelper.m */; };
 		872C074D8F4C426DD91F8A49 /* libPods-tiku_rn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AA6CDBE2A11800367222FB79 /* libPods-tiku_rn.a */; };
@@ -99,6 +100,7 @@
 		348D552924475B9600F76BE2 /* CoustomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoustomView.m; sourceTree = "<group>"; };
 		348D552A24475B9600F76BE2 /* SignHandleKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignHandleKeyChain.m; sourceTree = "<group>"; };
 		348D552B24475B9600F76BE2 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
+		348D55332447EAFC00F76BE2 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = ../bundle/main.jsbundle; sourceTree = "<group>"; };
 		34D316B623AF750500EC9478 /* ApiUtilBridgeModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApiUtilBridgeModule.h; sourceTree = "<group>"; };
 		34D316B823AF750500EC9478 /* ApiUtilBridgeModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ApiUtilBridgeModule.m; sourceTree = "<group>"; };
 		34D316BC23AF761900EC9478 /* WechatPayHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WechatPayHelper.h; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				348D55332447EAFC00F76BE2 /* main.jsbundle */,
 				34043959238AC2C2000AAC80 /* assets */,
 				13B07FAE1A68108700A75B9A /* tiku_rn */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -468,6 +471,7 @@
 				3404395B238AC2C2000AAC80 /* assets in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				348D552F24475B9600F76BE2 /* README.md in Resources */,
+				348D55342447EAFC00F76BE2 /* main.jsbundle in Resources */,
 				348D552C24475B9600F76BE2 /* LICENSE in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

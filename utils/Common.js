@@ -17,7 +17,7 @@ export default class Common {
     static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
-    static env = 'prod';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
+    static env = 'test';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
 
     static isPreAlpha = false;   // 预览版，为true时，底部导航条带课程
     static isHack = false;   // 默认为false，不使用mock数据

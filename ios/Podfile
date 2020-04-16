@@ -47,6 +47,8 @@ target 'tiku_rn' do
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
+  pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
+
   target 'tiku_rnTests' do
     inherit! :search_paths
     # Pods for testing
