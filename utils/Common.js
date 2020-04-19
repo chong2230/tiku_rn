@@ -12,12 +12,12 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    // static httpServer = 'https://practice.youzhi.tech';
+    static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    static httpServer = 'https://test-practice.youzhi.tech';
+    // static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
-    static env = 'test';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
+    static env = 'prod';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
 
     static isPreAlpha = false;   // 预览版，为true时，底部导航条带课程
     static isHack = false;   // 默认为false，不使用mock数据
@@ -127,8 +127,11 @@ export default class Common {
                     // Alert.alert(text);
                     global.toastComponentRef && global.toastComponentRef.show(text);
                     Common.inError = true;
+                    setTimeout(()=>{
+                        Common.inError = false;
+                    }, 2000);
                 }
-                return MockData[url] ? MockData[url] : error;
+                return /*MockData[url] ? MockData[url] : */error;   // mock数据会导致显示不准确，不使用
             });
     }
 

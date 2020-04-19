@@ -79,6 +79,7 @@ export default class Subject extends PureComponent{
         Common.getSubjectList(params, (result)=>{
             console.log('getSubjectList ', result);
             if (result.code == 0 && result.data) {
+                this.setState({refreshing: false}); //结束
                 let list = result.data.list || result.data || [];
                 hasMore = list.length == pageSize;
                 let data = this.state.listData;
@@ -148,7 +149,7 @@ export default class Subject extends PureComponent{
     // 下拉刷新
     _renderRefresh = () => {
         this.setState({refreshing: true}); //开始刷新
-        this.currPage = 1;
+        pageNumber = 1;
         this._load();
     };
 

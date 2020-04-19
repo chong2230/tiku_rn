@@ -131,10 +131,12 @@ export default class Timu extends Component {
 							let info = {
 								question: "",
 		                        choices: [],
+                                asksImg: [],
 		                        answers: [],
 		                        answersImg: [],
 		                        analysis: [],
-		                        analysisImg: []
+		                        analysisImg: [],
+                                myAnswersImg: []
 
 							};
 							for (let i in result.data.askList) {
@@ -146,8 +148,10 @@ export default class Timu extends Component {
 		                        if (ask.choiceD) choice['d'] = ask.choiceD;
 		                        if (ask.choiceE) choice['e'] = ask.choiceE;
 		                        info.choices.push(choice);
+                                info.asksImg.push(ask.askImg);
 		                        info.answers.push(ask.answer);
-		                        if (ask.answerImg) info.answersImg.push(ask.answerImg); // '/img/avatar/gB3rKrYQ.JPG,/img/avatar/VgDwOt5l.PNG'
+		                        info.answersImg.push(ask.answerImg); // '/img/avatar/gB3rKrYQ.JPG,/img/avatar/VgDwOt5l.PNG'
+								info.myAnswersImg.push(ask.myAnswerImg);
 		                        info.analysis.push(ask.analysis);
 		                        info.analysisImg.push(ask.analysisImg);
 		                        // if (result.data.askList.length == 1) info.question = ask.question || '';
@@ -230,7 +234,9 @@ export default class Timu extends Component {
 				self.setState({
 					info: info
 				})
-			} else {
+			} else if (result.code == 2) {
+                this._goLogin();
+            } else {
 				this.toast.show(result.msg);
 			}
 		})
@@ -361,7 +367,7 @@ export default class Timu extends Component {
 			let askAndAnswer = {};
             askAndAnswer.askId = ask.id;
             askAndAnswer.answer = currentAnswers[i];
-            if (info.answersImg[i]) askAndAnswer.answerImg = info.answersImg[i];
+            if (info.myAnswersImg[i]) askAndAnswer.answerImg = info.myAnswersImg[i];
             obj.askAndAnswers.push(askAndAnswer);
 		}
 		qaas.push(obj);
@@ -428,7 +434,10 @@ export default class Timu extends Component {
 					}, ()=>{
 						this._showCard();
 					});
-				} else {
+				} else if (result.code == 2) {
+                    this._goLogin();
+
+                } else {
 	                this.toast.show(result.msg);
 				}
 			});
@@ -465,7 +474,10 @@ export default class Timu extends Component {
                 }
 	            navigate('Report', {info: JSON.stringify(result.data), 
 	            	paperId: info.paperId, returnKey: state.key, isVisible: false});
-			} else {
+			} else if (result.code == 2) {
+                this._goLogin();
+
+            } else {
 				this.toast.show(result.msg);
 			}
 		})
@@ -488,17 +500,19 @@ export default class Timu extends Component {
 		if (resp.code == 0) {
 			let info = this.state.info;
 			// 对题目的某个问题添加图片
-            if (info.answersImg[index]) {
-            	info.answersImg[index] += ',' + resp.data;
+            if (info.myAnswersImg[index]) {
+            	info.myAnswersImg[index] += ',' + resp.data;
             } else {
-            	info.answersImg[index] = resp.data;
+            	info.myAnswersImg[index] = resp.data;
 			}
 			this.setState({
 				info: info
 			}, ()=>{
                 this._saveTimu();
 			});
-		} else {
+		} else if (resp.code == 2) {
+            this._goLogin();
+        } else {
 			this.toast.show(resp.msg);
 		}
 	}
@@ -594,6 +608,9 @@ export default class Timu extends Component {
                     <TouchableOpacity onPress={()=>{}}>
                         <View>{choicesView}</View>
                     </TouchableOpacity>
+                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'ask-image-'+i}>
+                        <Image source={{uri: Common.baseUrl + info.asksImg[i]}} style={styles.image} key={'askImg-'+i}></Image>
+                    </TouchableWithoutFeedback>
                 </View>
             );
             questionsView.push(questionView);
@@ -637,8 +654,8 @@ export default class Timu extends Component {
             let value = this.state.currentAnswers[i];
             // 适配一个问题多张图片
             let imgsView = [];
-            if (info.answersImg[i]) {
-                let imgs = info.answersImg[i].split(',');
+            if (info.myAnswersImg[i]) {
+                let imgs = info.myAnswersImg[i].split(',');
                 for (let j in imgs) {
                     let imgView =
 						<TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'image-'+j}>
@@ -648,10 +665,12 @@ export default class Timu extends Component {
                 }
             }
             if (imgsView.length < 3) {
-                let addBtn = <CameraButton style={styles.cameraBtn} key={'image-add'}
+                let addBtn = <CameraButton style={[styles.cameraBtn, imgsView.length == 0 ? {marginLeft: 0} : null]} key={'image-add'}
                                            source={require('../../images/account/add_icon.png')}
+                                           classify={'answer'}
                                            iconStyle={styles.image}
                                            onFileUpload={(resp)=>{
+                                           		console.log(resp);
                                                this.onFileUpload(resp, i);
                                            }} />
                 imgsView.push(addBtn);
@@ -687,7 +706,7 @@ export default class Timu extends Component {
 	// 年份被截取，暂不过滤数字+空格 /^\d*\s/
 	_renderAsk = (index) => {
 		let ask = this.state.askList[index].ask.replace(/^\d*\./, '')
-			.replace(/^\d*、/, '').replace(/^\d*．/, '');
+			.replace(/^\d*、/, '').replace(/^\d*．/, '').replace(/\\r/g, '').replace(/\\n/g, '');
 		let content = (this.state.askList.length > 1 ? '' : this.state.index + '. ') + ask;
         let textProps = {
             style: styles.commentHtmlTextStyle
@@ -714,26 +733,26 @@ export default class Timu extends Component {
 		}
         // 适配答案有一图和多图的情况
         let answerImgView = [];
-        if (info.answerImg && info.answerImg instanceof Array) {
-        	for (let i in info.answerImg) {
+        if (info.answersImg && info.answersImg instanceof Array) {
+        	for (let i in info.answersImg) {
         		answerImgView.push(
-                    <Image source={{uri: Common.baseUrl + info.answerImg[i]}} style={styles.answerImg} key={'answerImg-'+i}></Image>
+                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'answer-image-'+i}>
+                        <Image source={{uri: Common.baseUrl + info.answersImg[i]}} style={styles.image} key={'answerImg-'+i}></Image>
+                    </TouchableWithoutFeedback>
 				);
 			}
-		} else if (typeof info.answerImg == 'string') {
-            answerImgView = <Image source={{uri: Common.baseUrl + info.answerImg}} style={styles.answerImg}></Image>;
-        }
+		}
         // 适配解析有一图和多图的情况
         let analysisImgView = [];
         if (info.analysisImg && info.analysisImg instanceof Array) {
             for (let i in info.analysisImg) {
                 analysisImgView.push(
-                    <Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.analysisImg} key={'analysisImg-'+i}></Image>
+                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'analysis-image-'+i}>
+                    	<Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.image} key={'analysisImg-'+i}></Image>
+					</TouchableWithoutFeedback>
                 );
             }
-        } else if (typeof info.analysisImg == 'string') {
-            analysisImgView = <Image source={{uri: Common.baseUrl + info.analysisImg}} style={styles.analysisImg}></Image>;
-		}
+        }
         let analyseView = (
             <View style={styles.analyseView}>
                 <Text style={styles.analyseTip}>答案与解析</Text>
@@ -1000,7 +1019,11 @@ const styles = StyleSheet.create({
 	analyseAnswer: {
 		fontSize: 16,
 		height: 20,
-        color: Colors.highlight
+        color: Colors.highlight,
+        width: width - 20,
+        marginTop: 10,
+        marginBottom: 10,
+        paddingRight: 10
 	},
 	analyseContent: {
 		width: width - 20,
@@ -1034,7 +1057,7 @@ const styles = StyleSheet.create({
         width: 79,
         height: 79,
 		marginTop: 10,
-		marginLeft: 10,
+		marginRight: 10,
         borderRadius: 4,
         right: 0
 	},

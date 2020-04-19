@@ -46,6 +46,7 @@ class CameraButton extends React.Component {
         name: PropTypes.string,
         source: PropTypes.any,
         style: PropTypes.any,
+        classify: PropTypes.string,
         iconOnly: PropTypes.bool,
         iconStyle: PropTypes.any,
         useCorp: PropTypes.bool,
@@ -55,6 +56,7 @@ class CameraButton extends React.Component {
 
     static defaultProps = {
         name: '',
+        classify: 'avatar',
         iconOnly: true,
         useCorp: true,
         pickSuccess: ()=>{},
@@ -138,7 +140,7 @@ class CameraButton extends React.Component {
         let file = {uri: uri, type: 'multipart/form-data', name: fileName};
 
         formData.append("file", file);
-        formData.append("classify", "avatar");
+        formData.append("classify", this.props.classify);
 
         fetch(url,{
             method:'POST',

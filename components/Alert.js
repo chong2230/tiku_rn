@@ -124,6 +124,28 @@ export default class Alert extends React.Component {
         );
     }
 
+    renderDescText() {
+        if (!this.props.desText) return null;
+        let descView = [];
+        let descArr = this.props.desText.split('<br>');
+        for (let i in descArr) {
+            let marginBottom = i == descArr.length -1 ? (this.props.titleMarginBottom ? this.props.titleMarginBottom : 10) : 0
+            descView.push(
+                <Text style={{
+                    fontSize: this.props.descFontSize,
+                    fontWeight: this.props.descFontWeight,
+                    color: this.props.descFontColor,
+                    textAlign: descArr.length == 1 ? 'center' : 'left',
+                    width: this.props.modalWidth - 40,
+                    lineHeight: this.props.descLineHeight ? this.props.descLineHeight : 20,
+                    marginBottom: marginBottom,
+                    position: 'relative'
+                }} key={'desc-'+i}>{descArr[i]}</Text>
+            )
+        }
+        return descView;
+    }
+
     renderContent(){
         return(
             <TouchableWithoutFeedback onPress={this._onPress}>
@@ -156,18 +178,7 @@ export default class Alert extends React.Component {
                                     marginRight:15,
                                 }}>{this.props.titleText}</Text>
                                 {
-                                    this.props.desText ?
-                                    <Text style={{
-                                        fontSize: this.props.descFontSize,
-                                        fontWeight: this.props.descFontWeight,
-                                        color: this.props.descFontColor,
-                                        lineHeight: this.props.descLineHeight ? this.props.descLineHeight : 20,
-                                        // marginTop: this.props.titleMarginTop ? this.props.titleMarginTop : 18,
-                                        marginBottom: this.props.titleMarginBottom ? this.props.titleMarginBottom : 10,
-                                        marginLeft: 10,
-                                        marginRight: 10,
-                                    }}>{this.props.desText}</Text>
-                                        : null
+                                    this.renderDescText()
                                 }
                             </View>
                         }
