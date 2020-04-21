@@ -517,10 +517,9 @@ export default class Timu extends Component {
 		}
 	}
 
-    _goViewImage = (index) => {
-        let info = this.state.info;
-        if (info.answersImg[index]) {
-        	let imgs = info.answersImg[index].split(',');
+    _goViewImage = (data) => {
+        if (data) {
+        	let imgs = data.split(',');
         	let viewImages = [];
         	for (let i in imgs) {
                 let obj = {};
@@ -608,9 +607,13 @@ export default class Timu extends Component {
                     <TouchableOpacity onPress={()=>{}}>
                         <View>{choicesView}</View>
                     </TouchableOpacity>
-                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'ask-image-'+i}>
-                        <Image source={{uri: Common.baseUrl + info.asksImg[i]}} style={styles.image} key={'askImg-'+i}></Image>
-                    </TouchableWithoutFeedback>
+					{
+                        info.asksImg[i] ?
+                            <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.asksImg[i])}} key={'ask-image-'+i}>
+                                <Image source={{uri: Common.baseUrl + info.asksImg[i]}} style={styles.image} key={'askImg-'+i}></Image>
+                            </TouchableWithoutFeedback>
+							: null
+					}
                 </View>
             );
             questionsView.push(questionView);
@@ -658,7 +661,7 @@ export default class Timu extends Component {
                 let imgs = info.myAnswersImg[i].split(',');
                 for (let j in imgs) {
                     let imgView =
-						<TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'image-'+j}>
+						<TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.myAnswersImg[i])}} key={'image-'+j}>
 							<Image source={{uri: Common.baseUrl + imgs[j]}} style={styles.image} />
 						</TouchableWithoutFeedback>;
                     imgsView.push(imgView);
@@ -736,7 +739,7 @@ export default class Timu extends Component {
         if (info.answersImg && info.answersImg instanceof Array) {
         	for (let i in info.answersImg) {
         		answerImgView.push(
-                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'answer-image-'+i}>
+                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.answersImg[i])}} key={'answer-image-'+i}>
                         <Image source={{uri: Common.baseUrl + info.answersImg[i]}} style={styles.image} key={'answerImg-'+i}></Image>
                     </TouchableWithoutFeedback>
 				);
@@ -747,7 +750,7 @@ export default class Timu extends Component {
         if (info.analysisImg && info.analysisImg instanceof Array) {
             for (let i in info.analysisImg) {
                 analysisImgView.push(
-                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(i)}} key={'analysis-image-'+i}>
+                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.analysisImg[i])}} key={'analysis-image-'+i}>
                     	<Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.image} key={'analysisImg-'+i}></Image>
 					</TouchableWithoutFeedback>
                 );

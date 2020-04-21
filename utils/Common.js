@@ -12,9 +12,9 @@ import Storage from './Storage';
 
 export default class Common {
     // Prod Env
-    static httpServer = 'https://practice.youzhi.tech';
+    // static httpServer = 'https://practice.youzhi.tech';
     // TEST Env
-    // static httpServer = 'https://test-practice.youzhi.tech';
+    static httpServer = 'https://test-practice.youzhi.tech';
     static hackServer = 'http://rap2api.taobao.org/app/mock/227957';
     static baseUrl = 'https://static.youzhi.tech/';
     static env = 'prod';    // 配置环境，用于生产和测试环境切换 test: 测试环境 prod: 生产环境
