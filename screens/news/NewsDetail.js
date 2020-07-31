@@ -96,7 +96,7 @@ export default class NewsDetail extends Component<{}> {
                         <Text style={styles.time}>{formatDate(data.publishTime)}</Text>
                         <Text style={styles.authorName}>{data.author}</Text>
                     </View>
-                    {headerView}                  
+                    {headerView}
                     
                     <HTMLView value={content} style={styles.htmlStyle} />
                     {/*<View style={{ height: this.state.webViewHeight }}>*/}

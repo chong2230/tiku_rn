@@ -21,6 +21,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Bar from '../../components/Bar';
 import Colors from '../../constants/Colors';
 import Common from '../../utils/Common';
+import MockData from '../../mockdata/mockdata';
 import {formateMinSec, formatDate} from '../../utils/Util';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 
@@ -65,6 +66,7 @@ export default class News extends Component<{}> {
         Common.getNews(param, (result)=>{
             if (result.code == 0) {
                 let list = result.data.list || result.data || [];
+                if (list.length == 0) list = MockData['/news/list']['data']['list'];
                 hasMore = list.length == pageSize;
                 let data = this.state.listData;
                 if (isLoading) {
@@ -92,7 +94,7 @@ export default class News extends Component<{}> {
                         <Text numberOfLines={2} style={styles.title}>{rowData.name}</Text>  
                         <View style={{flexDirection: 'row'}}>
                             <Text style={styles.publisher}>{rowData.publisher}</Text>
-                            <Text style={styles.createTime}>{rowData.publishTime}</Text>
+                            <Text style={styles.createTime}>{formatDate(rowData.publishTime)}</Text>
                         </View>                                                                  
                     </View>   
                     <Image source={require('../../images/icon_right.png')} style={styles.rightIcon} />              

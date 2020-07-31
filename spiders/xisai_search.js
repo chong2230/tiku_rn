@@ -14,7 +14,7 @@ var subjectCode = Kino.getUrlParam('subjectCode'); //subjectCode
 var sjId = Kino.getUrlParam('sjId'); //sjId试卷id
 
 var jsonData = [];  // 导出数据
-var delay = 2000;  // 延迟n秒
+var delay = 1000;  // 延迟n秒
 var isExportExcel = true;
 
 //查找制定元素在数组中的索引值

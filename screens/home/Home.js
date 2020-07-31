@@ -133,12 +133,20 @@ export default class Home extends Component {
         };
         Common.getBanners(params, (result)=>{
             if (result.code == 0) {
+                let mockdata = MockData['/home/slide']['data'];
+                let list = result.data || [];
+                let len = list.length;
+                if (len < 3) {
+                    for (let i=0; i<3-len; i++) {
+                        list.push(mockdata[i]);
+                    }
+                }
                 this.timer && clearInterval(this.timer);
                 var dataSource = new ViewPager.DataSource({
                     pageHasChanged: (p1, p2) => p1 !== p2
                 });
                 this.setState({
-                    dataSource: dataSource.cloneWithPages(result.data),
+                    dataSource: dataSource.cloneWithPages(list),
                 });
             }
         });

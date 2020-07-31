@@ -36,7 +36,7 @@ export default class Login extends Component {
 
     _check = () => {
         if (this.state.phone == '') {
-            this.refs.toast.show('请输入手机号');
+            this.refs.toast.show('请输入手机号或账号');
             return false;
         } else if (this.state.pwd == '') {
             this.refs.toast.show('请输入密码');
@@ -150,7 +150,7 @@ export default class Login extends Component {
                     }}
                     bottomLineColor={'rgba(0, 0, 0)'}
                 />
-                <TextInput placeholder="输入手机号" maxLength={11} keyboardType='numeric' style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
+                <TextInput placeholder="输入手机号或账号" style={styles.phone} onChangeText={(text)=>this.setState({phone: text})} />
                 <TextInput placeholder="输入密码" secureTextEntry={true} style={styles.password} onChangeText={(text)=>this.setState({pwd: text})}  />
                 <Button text="登录" style={styles.btn} containerStyle={styles.btnContainer} onPress={this._login} />
                 <View style={styles.other}>

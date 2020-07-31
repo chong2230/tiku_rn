@@ -63,11 +63,11 @@ export default class Timu extends Component {
 		this._load();
 	}
 
-	_load = () => {
-		this._getTimuList();
+	_load = (id) => {
+		this._getTimuList(id);
 	}
 
-	_getTimuList = () => {
+	_getTimuList = (id) => {
 		let { state } = this.props.navigation;
 		let params = {
 			professionId: global.course.professionId,
@@ -98,7 +98,7 @@ export default class Timu extends Component {
 					total: result.data.length,
                     showAnalyse: showAnalyse
 				}, ()=>{
-					this._getTimu();
+					this._getTimu(id);
 				});
 			} else {
                 this.toast.show(result.msg);
@@ -109,13 +109,15 @@ export default class Timu extends Component {
 	// sign参数签名
 	_getTimu = (id, index) => {
 		if (!id) id = this._getCurrent();
+        let { state } = this.props.navigation;
 		let params = { 
 			plt: Platform.OS,
             dt: new Date().getTime(),
             ver: DeviceInfo.getVersion(),
             guid: DeviceInfo.getUniqueId(),
             nonce: Math.floor(Math.random() * 100000) + 999999,
-			questionId: id 
+			questionId: id,
+			paperId: state.params.id || state.params.paperId
 		};
 		// let cloneParams = Object.assign({}, params, {dt: params.dt + '', nonce: params.nonce + ''});
 		// if (ApiUtilBridgeModule) {
@@ -129,6 +131,9 @@ export default class Timu extends Component {
 						this._showLoading(false);
 						if (result.code == 0) {
 							let info = {
+                                professionId: global.course.professionId,
+                                courseId: global.course.courseId || global.course.id,
+                                paperId: state.params.id,
 								question: "",
 		                        choices: [],
                                 asksImg: [],
@@ -472,6 +477,7 @@ export default class Timu extends Component {
 	            if (state.params.callback instanceof Function) {
                     state.params.callback(3);
                 }
+                console.log('handlePaper ', result.data);
 	            navigate('Report', {info: JSON.stringify(result.data), 
 	            	paperId: info.paperId, returnKey: state.key, isVisible: false});
 			} else if (result.code == 2) {
@@ -548,7 +554,8 @@ export default class Timu extends Component {
         const { navigate } = this.props.navigation;
         navigate('Login', { isVisible: false, title: '密码登录', transition: 'forVertical', refresh: (token)=>{
                 if (token != null) {
-                    // this._load();
+                    let id = this.state.list[this.state.index-1].id;
+                    this._load(id);
                 }
             }});
     }
@@ -563,6 +570,9 @@ export default class Timu extends Component {
             case '计算题':
             case '综合题':
             case '案例题':
+            case '写作题':
+            case '问答题':
+            case '设计题':
                 return this._renderShortAnswerQuestions();
 			default:
 				// 单选题、单项选择题、多选题、多项选择题、不定项、不定项题、不定项选择题、判断题
@@ -586,14 +596,29 @@ export default class Timu extends Component {
                 		&& choiceText.indexOf(key.toUpperCase() + '．') != 0) {
                 			choiceText = key.toUpperCase() + '. ' + choice[key];
                     }
+                    let selectChoiceText = this.state.currentAnswers[i] && this.state.currentAnswers[i].indexOf(key) != -1 ?
+		                                        styles.selectChoiceText : null;
+		            let textProps = {
+			            style: styles.commentHtmlTextStyle
+			        };                            
                     let choiceView = (
                         <TouchableOpacity onPress={()=>{this._choose(key, i)}} key={info.id + '_choice_' + i + '_' + key}>
                             <View>
-                                <Text style={[styles.choiceText,
-                                    this.state.currentAnswers[i] && this.state.currentAnswers[i].indexOf(key) != -1 ?
-                                        styles.selectChoiceText : null]}>
-                                    {choiceText}
-                                </Text>
+                            	{
+                            		choiceText.indexOf('<img') != -1 
+                            			? (
+                            				<View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+	                            				<Text style={[styles.choiceText, selectChoiceText]}>
+				                                    {key.toUpperCase() + '. '}
+				                                </Text>
+                            					<HTMLView value={choice[key]} style={[styles.htmlStyle, selectChoiceText]} /> 
+                            				</View>
+                            			)
+                            			: <Text style={[styles.choiceText, selectChoiceText]}>
+		                                    {choiceText}
+		                                </Text>
+                            	}
+                                
                             </View>
                         </TouchableOpacity>
                     );
@@ -604,16 +629,14 @@ export default class Timu extends Component {
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     { this._renderQuestionText(i) }
                     { this._renderAsk(i) }
-                    <TouchableOpacity onPress={()=>{}}>
-                        <View>{choicesView}</View>
-                    </TouchableOpacity>
-					{
+                    {
                         info.asksImg[i] ?
                             <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.asksImg[i])}} key={'ask-image-'+i}>
                                 <Image source={{uri: Common.baseUrl + info.asksImg[i]}} style={styles.image} key={'askImg-'+i}></Image>
                             </TouchableWithoutFeedback>
 							: null
 					}
+                    <View>{choicesView}</View>
                 </View>
             );
             questionsView.push(questionView);
@@ -738,22 +761,26 @@ export default class Timu extends Component {
         let answerImgView = [];
         if (info.answersImg && info.answersImg instanceof Array) {
         	for (let i in info.answersImg) {
-        		answerImgView.push(
-                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.answersImg[i])}} key={'answer-image-'+i}>
-                        <Image source={{uri: Common.baseUrl + info.answersImg[i]}} style={styles.image} key={'answerImg-'+i}></Image>
-                    </TouchableWithoutFeedback>
-				);
+        		if (info.answersImg[i]) {
+                    answerImgView.push(
+                        <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.answersImg[i])}} key={'answer-image-'+i}>
+                            <Image source={{uri: Common.baseUrl + info.answersImg[i]}} style={styles.image} key={'answerImg-'+i}></Image>
+                        </TouchableWithoutFeedback>
+                    );
+				}
 			}
 		}
         // 适配解析有一图和多图的情况
         let analysisImgView = [];
         if (info.analysisImg && info.analysisImg instanceof Array) {
             for (let i in info.analysisImg) {
-                analysisImgView.push(
-                    <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.analysisImg[i])}} key={'analysis-image-'+i}>
-                    	<Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.image} key={'analysisImg-'+i}></Image>
-					</TouchableWithoutFeedback>
-                );
+            	if (info.analysisImg[i]) {
+                    analysisImgView.push(
+                        <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.analysisImg[i])}} key={'analysis-image-'+i}>
+                            <Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.image} key={'analysisImg-'+i}></Image>
+                        </TouchableWithoutFeedback>
+                    );
+				}
             }
         }
         let analyseView = (
@@ -872,7 +899,8 @@ export default class Timu extends Component {
 						{info.type}
 						{tip == '' ? null : <Text style={{color: Colors.special}}>{' ' + tip}</Text>}
 					</Text>
-					{ info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null }
+					// { info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null }
+					{ info.name ? <HTMLView value={this.state.index+ '. ' + name} style={[styles.htmlStyle, styles.title]} />  : null }					
 					{this._renderQuestions()}
 					{this.state.showAnalyse[this.state.index - 1] ? this._renderAnalysis() : null}
 				</ScrollView>
@@ -1021,7 +1049,7 @@ const styles = StyleSheet.create({
 	},
 	analyseAnswer: {
 		fontSize: 16,
-		height: 20,
+		// height: 20,
         color: Colors.highlight,
         width: width - 20,
         marginTop: 10,

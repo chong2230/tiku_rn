@@ -426,7 +426,9 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     title: {
+        flex: 1,
         color: '#1A1A1A',
+        width: screenWidth - 100,
         marginLeft: 10,
         fontSize: 16,
         alignSelf: 'center'
