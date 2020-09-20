@@ -56,7 +56,7 @@ class HtmlView extends PureComponent {
     this.startHtmlRender(this.props.value);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.value !== nextProps.value || this.props.stylesheet !== nextProps.stylesheet || this.props.textComponentProps !== nextProps.textComponentProps) {
       this.startHtmlRender(nextProps.value, nextProps.stylesheet, nextProps.textComponentProps);
     }
@@ -149,10 +149,11 @@ HtmlView.propTypes = {
   TextComponent: PropTypes.func,
   textComponentProps: PropTypes.object,
   value: PropTypes.string,
+  margin: PropTypes.number,
 };
 
 HtmlView.defaultProps = {
-  addLineBreaks: true,
+  addLineBreaks: false,
   onLinkPress: url => Linking.openURL(url),
   onLinkLongPress: null,
   onError: console.error.bind(console),

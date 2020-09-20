@@ -1,48 +1,50 @@
 {
-  "name": "tiku_rn",
-  "version": "0.0.1",
-  "private": true,
-  "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
-    "test": "jest",
-    "lint": "eslint ."
-  },
-  "dependencies": {
-    "@react-native-community/cameraroll": "^1.5.2",
-    "htmlparser2-without-node-native": "^3.9.2",
-    "react": "16.9.0",
-    "react-native": "0.61.4",
-    "react-native-code-push": "^6.0.0",
-    "react-native-device-info": "^5.4.0",
-    "react-native-gesture-handler": "^1.5.0",
-    "react-native-iap": "^4.3.0",
-    "react-native-image-picker": "^1.1.0",
-    "react-native-image-zoom-viewer": "^2.2.27",
-    "react-native-open-share": "git+https://github.com/mozillo/react-native-open-share.git",
-    "react-native-reanimated": "^1.4.0",
-    "react-native-screens": "^1.0.0-alpha.23",
-    "react-native-splash-screen": "^3.2.0",
-    "react-native-vector-icons": "^6.6.0",
-    "react-native-video": "^5.0.2",
-    "react-native-webview": "^7.5.2",
-    "react-navigation": "^4.0.10",
-    "react-navigation-stack": "^1.10.3",
-    "react-navigation-tabs": "^2.5.6",
-    "react-timer-mixin": "^0.13.4"
-  },
-  "devDependencies": {
-    "@babel/core": "7.7.2",
-    "@babel/runtime": "7.7.2",
-    "@react-native-community/eslint-config": "0.0.5",
-    "babel-jest": "24.9.0",
-    "eslint": "6.6.0",
-    "jest": "24.9.0",
-    "metro-react-native-babel-preset": "0.56.3",
-    "react-test-renderer": "16.9.0"
-  },
-  "jest": {
-    "preset": "react-native"
-  }
+    "name": "tiku_rn",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "android": "react-native run-android",
+        "ios": "react-native run-ios",
+        "start": "react-native start",
+        "bundle-ios": "react-native bundle --entry-file index.js --platform ios --dev false --bundle-output bundle/main.jsbundle --assets-dest bundle/",
+        "bundle-android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
+        "test": "jest",
+        "lint": "eslint ."
+    },
+    "dependencies": {
+        "@react-native-community/cameraroll": "^1.5.2",
+        "htmlparser2-without-node-native": "^3.9.2",
+        "react": "16.9.0",
+        "react-native": "0.61.4",
+        "react-native-device-info": "^5.4.0",
+        "react-native-gesture-handler": "^1.5.0",
+        "react-native-iap": "^4.3.0",
+        "react-native-image-picker": "^1.1.0",
+        "react-native-image-zoom-viewer": "^2.2.27",
+        "react-native-open-share": "git+https://github.com/mozillo/react-native-open-share.git",
+        "react-native-reanimated": "^1.4.0",
+        "react-native-screens": "^1.0.0-alpha.23",
+        "react-native-splash-screen": "^3.2.0",
+        "react-native-update": "^5.6.0",
+        "react-native-vector-icons": "^6.6.0",
+        "react-native-video": "^5.0.2",
+        "react-native-webview": "^7.5.2",
+        "react-navigation": "^4.0.10",
+        "react-navigation-stack": "^1.10.3",
+        "react-navigation-tabs": "^2.5.6",
+        "react-timer-mixin": "^0.13.4"
+    },
+    "devDependencies": {
+        "@babel/core": "7.7.2",
+        "@babel/runtime": "7.7.2",
+        "@react-native-community/eslint-config": "0.0.5",
+        "babel-jest": "24.9.0",
+        "eslint": "6.6.0",
+        "jest": "24.9.0",
+        "metro-react-native-babel-preset": "0.56.3",
+        "react-test-renderer": "16.9.0"
+    },
+    "jest": {
+        "preset": "react-native"
+    }
 }

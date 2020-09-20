@@ -88,6 +88,10 @@
 		3448683F23C227A900A985DA /* OpenShareHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenShareHeader.h; path = tiku_rn/RNModule/Bridge/OpenShare/OpenShareHeader.h; sourceTree = SOURCE_ROOT; };
 		3448684023C227A900A985DA /* OpenShare+Renren.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "OpenShare+Renren.h"; path = "tiku_rn/RNModule/Bridge/OpenShare/OpenShare+Renren.h"; sourceTree = SOURCE_ROOT; };
 		3448684823C230F200A985DA /* 有知学堂.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "有知学堂.entitlements"; path = "tiku_rn/有知学堂.entitlements"; sourceTree = "<group>"; };
+		346DE28C24DB9FA5002A4EB9 /* UMAnalyticsModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMAnalyticsModule.h; sourceTree = "<group>"; };
+		346DE28D24DB9FA5002A4EB9 /* RNUMConfigure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNUMConfigure.m; sourceTree = "<group>"; };
+		346DE28E24DB9FA5002A4EB9 /* UMAnalyticsModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UMAnalyticsModule.m; sourceTree = "<group>"; };
+		346DE28F24DB9FA5002A4EB9 /* RNUMConfigure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNUMConfigure.h; sourceTree = "<group>"; };
 		348D552024475B9600F76BE2 /* SignWithApple.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignWithApple.h; sourceTree = "<group>"; };
 		348D552124475B9600F76BE2 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		348D552224475B9600F76BE2 /* CoustomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoustomView.h; sourceTree = "<group>"; };
@@ -224,6 +228,17 @@
 			path = OpenShare;
 			sourceTree = "<group>";
 		};
+		346DE28B24DB9FA5002A4EB9 /* UM */ = {
+			isa = PBXGroup;
+			children = (
+				346DE28C24DB9FA5002A4EB9 /* UMAnalyticsModule.h */,
+				346DE28D24DB9FA5002A4EB9 /* RNUMConfigure.m */,
+				346DE28E24DB9FA5002A4EB9 /* UMAnalyticsModule.m */,
+				346DE28F24DB9FA5002A4EB9 /* RNUMConfigure.h */,
+			);
+			path = UM;
+			sourceTree = "<group>";
+		};
 		348D551F24475B9600F76BE2 /* SignWithApple */ = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +270,7 @@
 		34D316B423AF750500EC9478 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
+				346DE28B24DB9FA5002A4EB9 /* UM */,
 				348D551F24475B9600F76BE2 /* SignWithApple */,
 				34D316B523AF750500EC9478 /* util */,
 			);
@@ -672,6 +688,7 @@
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Octicons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Zocial.ttf",
+				"${PODS_ROOT}/../../node_modules/react-native-update/ios/pushy_build_time.txt",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -691,6 +708,7 @@
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Octicons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SimpleLineIcons.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Zocial.ttf",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/pushy_build_time.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -834,9 +852,13 @@
 				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development: yuanyong wei (HC533M5KTV)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 26;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U42K255SH7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/tiku_rn/UMComponents",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -870,7 +892,7 @@
 				);
 				INFOPLIST_FILE = tiku_rn/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.3.6;
+				MARKETING_VERSION = 1.3.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -892,8 +914,12 @@
 				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 22;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = U42K255SH7;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/tiku_rn/UMComponents",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_ROOT}/Headers/Public\"",
@@ -927,7 +953,7 @@
 				);
 				INFOPLIST_FILE = tiku_rn/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.3.6;
+				MARKETING_VERSION = 1.3.7;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

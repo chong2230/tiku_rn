@@ -558,6 +558,26 @@ export default class Timu extends Component {
                     this._load(id);
                 }
             }});
+	}
+	
+	renderNode(node, index, siblings, parent, defaultRenderer) {
+        if (node.name == 'li') {
+            let specialSyle = htmlStyles.li;//node.attribs.style
+            let liTitle = {};
+            if (node.attribs['class'] == 'tit') {
+                liTitle = htmlStyles.liTitle;
+            }
+            return (
+                <Text key={index} style={[specialSyle, liTitle]}>
+                    {/*{defaultRenderer(node.children, parent)}*/}
+                    {node.children[0].data}
+                </Text>
+            )
+        } else if (node.name == 'br') {
+			return (
+				<Text key={index} style={{height: 0, backgroundColor: 'red'}}></Text>
+			);
+		}
     }
 
     // 一道题有多个问题和答案
@@ -573,6 +593,7 @@ export default class Timu extends Component {
             case '写作题':
             case '问答题':
             case '设计题':
+			case '论文题':	
                 return this._renderShortAnswerQuestions();
 			default:
 				// 单选题、单项选择题、多选题、多项选择题、不定项、不定项题、不定项选择题、判断题
@@ -624,7 +645,8 @@ export default class Timu extends Component {
                     );
                     choicesView.push(choiceView);
                 }
-            }
+			}
+			let imgs = info.asksImg[i] ? info.asksImg[i].split(',') : [];
             let questionView = (
                 <View style={styles.question} key={info.id + '_choice_' + i}>
                     { this._renderQuestionText(i) }
@@ -632,7 +654,7 @@ export default class Timu extends Component {
                     {
                         info.asksImg[i] ?
                             <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.asksImg[i])}} key={'ask-image-'+i}>
-                                <Image source={{uri: Common.baseUrl + info.asksImg[i]}} style={styles.image} key={'askImg-'+i}></Image>
+                                <Image source={{uri: Common.baseUrl + imgs[0]}} style={styles.bigImage} resizeMode={'contain'} key={'askImg-'+i}></Image>
                             </TouchableWithoutFeedback>
 							: null
 					}
@@ -751,10 +773,18 @@ export default class Timu extends Component {
         let answer = info.answers;
         if (answer && answer instanceof Array) answer = answer.join('    ');
         let analysis = isJson(info.analysis) ? JSON.parse(info.analysis) : info.analysis;
-        let analysisView = [];
+		let analysisView = [];
+		let analyseTextProps = {
+			style: styles.analyseContent
+		};
 		if (analysis && analysis instanceof Array) {
 			for (let i in analysis) {
-				analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i].replace(/^\d*\./, '')}</Text>)
+				// analysisView.push(<Text style={styles.analyseContent} key={'analysis-'+i}>{analysis[i].replace(/^\d*\./, '')}</Text>)
+				analysisView.push(<HTMLView value={analysis[i].replace(/^\d*\./, '')} 
+					renderNode={this.renderNode.bind(this)}
+					style={styles.htmlStyle} textComponentProps={analyseTextProps} 
+					stylesheet={htmlStyles}
+					key={'analysis-'+i} /> );
 			}
 		}
         // 适配答案有一图和多图的情况
@@ -762,9 +792,10 @@ export default class Timu extends Component {
         if (info.answersImg && info.answersImg instanceof Array) {
         	for (let i in info.answersImg) {
         		if (info.answersImg[i]) {
+					let imgs = info.answersImg[i].split(',');
                     answerImgView.push(
                         <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.answersImg[i])}} key={'answer-image-'+i}>
-                            <Image source={{uri: Common.baseUrl + info.answersImg[i]}} style={styles.image} key={'answerImg-'+i}></Image>
+                            <Image resizeMode={'contain'} source={{uri: Common.baseUrl + imgs[0]}} style={styles.bigImage} key={'answerImg-'+i}></Image>
                         </TouchableWithoutFeedback>
                     );
 				}
@@ -775,18 +806,27 @@ export default class Timu extends Component {
         if (info.analysisImg && info.analysisImg instanceof Array) {
             for (let i in info.analysisImg) {
             	if (info.analysisImg[i]) {
+					let imgs = info.analysisImg[i].split(',');
                     analysisImgView.push(
                         <TouchableWithoutFeedback onPress={()=>{this._goViewImage(info.analysisImg[i])}} key={'analysis-image-'+i}>
-                            <Image source={{uri: Common.baseUrl + info.analysisImg[i]}} style={styles.image} key={'analysisImg-'+i}></Image>
+                            <Image resizeMode={'contain'} source={{uri: Common.baseUrl + imgs[0]}} style={styles.bigImage} key={'analysisImg-'+i}></Image>
                         </TouchableWithoutFeedback>
                     );
 				}
             }
-        }
+		}
+		let textProps = {
+			style: styles.analyseAnswer
+		};
         let analyseView = (
             <View style={styles.analyseView}>
                 <Text style={styles.analyseTip}>答案与解析</Text>
-                <Text style={styles.analyseAnswer}>参考答案：{answer}</Text>
+                {/* <Text style={styles.analyseAnswer}>参考答案：{answer}</Text> */}
+				<HTMLView value={'参考答案：' + answer} 
+					renderNode={this.renderNode.bind(this)}
+					style={styles.htmlStyle}
+					textComponentProps={textProps} 
+					stylesheet={htmlStyles} /> 
                 {answerImgView}
                 {analysisView}
                 {analysisImgView}
@@ -899,7 +939,7 @@ export default class Timu extends Component {
 						{info.type}
 						{tip == '' ? null : <Text style={{color: Colors.special}}>{' ' + tip}</Text>}
 					</Text>
-					// { info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null }
+					{/* { info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null } */}
 					{ info.name ? <HTMLView value={this.state.index+ '. ' + name} style={[styles.htmlStyle, styles.title]} />  : null }					
 					{this._renderQuestions()}
 					{this.state.showAnalyse[this.state.index - 1] ? this._renderAnalysis() : null}
@@ -1004,7 +1044,7 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         // padding: 10,
-        marginVertical: 10,
+        marginVertical: 5,
         backgroundColor: 'white'
     },
     commentHtmlTextStyle: {
@@ -1052,8 +1092,8 @@ const styles = StyleSheet.create({
 		// height: 20,
         color: Colors.highlight,
         width: width - 20,
-        marginTop: 10,
-        marginBottom: 10,
+        // marginTop: 10,
+        // marginBottom: 10,
         paddingRight: 10
 	},
 	analyseContent: {
@@ -1092,6 +1132,12 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         right: 0
 	},
+	bigImage: {
+		width: width - 30,
+		height: 200,
+		marginTop: 10,
+        borderRadius: 4
+	},
 	safeBottom: {
         backgroundColor: 'white',
         height: TabbarSafeBottomMargin
@@ -1104,4 +1150,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         zIndex: 10
     },
+});
+
+const htmlStyles = StyleSheet.create({
+    a: {
+        fontWeight: '300',
+        color: '#FF3366', // make links coloured pink
+	},
+	br: {
+		backgroundColor: 'red'
+	}
 });

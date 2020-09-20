@@ -1,10 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {StyleSheet, Text, Dimensions} from 'react-native';
 import htmlparser from 'htmlparser2-without-node-native';
 import entities from 'entities';
 
 import AutoSizedImage from './AutoSizedImage';
 
+const deviceW = Dimensions.get('window').width;
 const defaultOpts = {
   lineBreak: '\n',
   paragraphBreak: '\n',
@@ -16,12 +17,42 @@ const defaultOpts = {
 };
 
 const Img = props => {
-  const width =
-    parseInt(props.attribs['width'], 10) || parseInt(props.attribs['data-width'], 10) || 20;
-  const height =
+  let width =
+    parseInt(props.attribs['width'], 10) || parseInt(props.attribs['data-width'], 10) || 40;
+  let height =
     parseInt(props.attribs['height'], 10) ||
     parseInt(props.attribs['data-height'], 10) ||
-    20;
+    40;
+  // 自适应屏幕
+  const margin = parseInt(props.attribs['margin'], 10) || 30;
+  // console.log('style: ', props.attribs['style']);
+  function trim(str) {
+    if (!str) return '';
+    return str.replace(/(^\s*)|(\s*$)/g, '');
+  }
+  // 取style里的width和height
+  const style = props.attribs['style'] || '';
+  const arr = style.split(';');
+  let obj = {};
+  for (let i in arr) {
+    if (arr[i] == '') continue;
+    let val = arr[i].split(':');
+    obj[trim(val[0])] = trim(val[1]);
+  }
+  const w = obj['width'];
+  const h = obj['height'];
+  if (w && w.indexOf('px') != -1) {
+    width = parseInt(w.replace('px', ''));
+  }
+  if (h && h.indexOf('px') != -1) {
+    height = parseInt(h.replace('px', ''));
+  }
+  // 样式为max-width时未处理
+  // 自适应屏幕
+  if (width > deviceW - margin) {
+    height = height / width * (deviceW - margin);
+    width = deviceW - margin;
+  }
 
   const imgStyle = {
     width,

@@ -12,6 +12,9 @@
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"
 #import "OpenShareHeader.h"
+#import "RCTPushy.h"
+//#import "RNUMConfigure.h"
+//#import <UMAnalytics/MobClick.h>
 
 @implementation AppDelegate
 
@@ -22,6 +25,10 @@
   [OpenShare connectWeixinWithAppId:@"wx1fe3c4b1d0608ef3"];
   [OpenShare connectRenrenWithAppId:@"228525" AndAppKey:@"1dd8cba4215d4d4ab96a49d3058c1d7f"];
   
+//  [UMConfigure setLogEnabled:YES];
+//  [MobClick setScenarioType:E_UM_NORMAL];
+//  [RNUMConfigure initWithAppkey:@"5bd48045f1f55640f3000a25" channel:@"App Store"];
+
   
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
@@ -45,6 +52,8 @@
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
+  // 非DEBUG情况下替换为热更新bundle
+//  return [RCTPushy bundleURL];
 #endif
 }
 

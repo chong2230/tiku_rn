@@ -21,3 +21,74 @@ dependencies {
     compile 'com.android.support:support-annotations:21.0.2'
 }
 
+3. Undefined symbols for architecture x86_64:
+  "_sqlite3_close", referenced from:
+      -[UMUaDB initlizeDB:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB closeDB:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_column_count", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_column_int", referenced from:
+      -[UMUaDB rowCountInTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB rowSdCountInTable:sessionId:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_column_name", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_column_text", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      ...
+  "_sqlite3_errcode", referenced from:
+      -[UMUaDB runSql:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_errmsg", referenced from:
+      -[UMUaDB rowCountInTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      ...
+  "_sqlite3_exec", referenced from:
+      -[UMUaDB initlizeDB:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB runSql:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_finalize", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB rowCountInTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      ...
+  "_sqlite3_free", referenced from:
+      -[UMUaDB runSql:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_open_v2", referenced from:
+      -[UMUaDB initlizeDB:] in UMAnalytics(UMUaDB.o)
+  "_sqlite3_prepare_v2", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB rowCountInTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      ...
+  "_sqlite3_step", referenced from:
+      -[UMUaDB existColumnName:withTableName:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB rowCountInTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadErTableWithVersion:withSid:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTable:] in UMAnalytics(UMUaDB.o)
+      -[UMUaDB loadEtTableWithVersion:] in UMAnalytics(UMUaDB.o)
+      ...
+ld: symbol(s) not found for architecture x86_64
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+
+Showing Recent Messages
+Undefined symbol: _sqlite3_close
+

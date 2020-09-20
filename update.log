@@ -1,0 +1,161 @@
+(base) cluodeMacBook-Pro:tiku_rn cluo$ yarn add react-native-update
+yarn add v0.15.1
+[1/4] 🔍  Resolving packages...
+warning react-navigation-stack@1.10.3: This version of React Navigation Stack is no longer supported. Please upgrade to 2.x.x. See https://reactnavigation.org/docs/4.x/upgrading-from-3.x#react-navigation-stack for instructions.
+[2/4] 🚚  Fetching packages...
+[3/4] 🔗  Linking dependencies...
+warning Incorrect peer dependency "eslint@^5.0.0".
+warning Incorrect peer dependency "eslint@^5.0.0".
+warning Incorrect peer dependency "eslint@^3.0.0 || ^4.0.0 || ^5.0.0".
+warning Incorrect peer dependency "eslint@^3.17.0 || ^4 || ^5".
+warning Unmet peer dependency "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta".
+warning Incorrect peer dependency "react-native-screens@>=1.0.0 || >= 2.0.0-alpha.0 || >= 2.0.0-beta.0 || >= 2.0.0".
+warning Unmet peer dependency "@react-native-community/toolbar-android@^0.1.0-rc.1".
+[4/4] 📃  Building fresh packages...
+success Saved lockfile.
+success Saved 143 new dependencies.
+├─ @react-native-community/cameraroll@1.8.1
+├─ @react-navigation/core@3.7.6
+│  ├─ hoist-non-react-statics@3.3.2
+│  └─ react-is@16.13.1
+├─ @react-navigation/native@3.8.0
+│  ├─ hoist-non-react-statics@3.3.2
+│  └─ react-is@16.13.1
+├─ @types/color-name@1.1.1
+├─ agent-base@4.3.0
+├─ ast-types@0.13.3
+├─ buffer-crc32@0.2.13
+├─ cliui@6.0.0
+│  └─ string-width@4.2.0
+├─ code-push@3.1.5
+├─ combined-stream@1.0.8
+├─ component-emitter@1.3.0
+├─ cookiejar@2.1.2
+├─ data-uri-to-buffer@1.2.0
+├─ degenerator@1.0.4
+│  ├─ escodegen@1.14.3
+│  │  └─ esprima@4.0.1
+│  └─ esprima@3.1.3
+├─ dom-serializer@0.2.2
+│  ├─ domelementtype@2.0.1
+│  └─ entities@2.0.3
+├─ domelementtype@1.3.1
+├─ domhandler@2.4.2
+├─ domutils@1.7.0
+├─ dooboolab-welcome@1.2.0
+├─ eme-encryption-scheme-polyfill@2.0.1
+├─ entities@1.1.2
+├─ es6-promise@4.2.8
+├─ es6-promisify@5.0.0
+├─ esprima@4.0.1
+├─ eventemitter2@1.0.5
+├─ fast-safe-stringify@2.0.7
+├─ file-uri-to-path@1.0.0
+├─ form-data@3.0.0
+├─ formidable@1.2.2
+├─ ftp@0.3.10
+│  ├─ isarray@0.0.1
+│  ├─ readable-stream@1.1.14
+│  └─ string_decoder@0.10.31
+├─ get-uri@2.0.4
+│  └─ debug@2.6.9
+├─ glob@7.1.6
+├─ htmlparser2-without-node-native@3.9.2
+├─ http-errors@1.7.3
+├─ http-proxy-agent@2.1.0
+│  └─ debug@3.1.0
+├─ https-proxy-agent@3.0.1
+│  └─ debug@3.2.6
+├─ inherits@2.0.4
+├─ invariant@2.2.4
+├─ ip@1.1.5
+├─ keymirror@0.1.1
+├─ methods@1.1.2
+├─ ms@2.1.2
+├─ netmask@1.0.6
+├─ pac-proxy-agent@3.0.1
+├─ pac-resolver@3.0.0
+├─ path-to-regexp@1.8.0
+│  └─ isarray@0.0.1
+├─ plist@3.0.1
+├─ prop-types@15.7.2
+├─ proxy-agent@3.1.1
+│  ├─ debug@4.2.0
+│  ├─ lru-cache@5.1.1
+│  └─ yallist@3.1.1
+├─ proxy-from-env@1.1.0
+├─ qs@6.9.4
+├─ query-string@6.13.1
+├─ raw-body@2.4.1
+│  └─ bytes@3.1.0
+├─ react-lifecycles-compat@3.0.4
+├─ react-native-code-push@6.3.0
+│  ├─ ansi-styles@4.2.1
+│  ├─ chalk@4.1.0
+│  ├─ cli-width@3.0.0
+│  ├─ color-convert@2.0.1
+│  ├─ color-name@1.1.4
+│  ├─ has-flag@4.0.0
+│  ├─ hoist-non-react-statics@3.3.2
+│  ├─ inquirer@7.3.3
+│  ├─ lodash@4.17.19
+│  ├─ react-is@16.13.1
+│  ├─ run-async@2.4.1
+│  ├─ rxjs@6.6.2
+│  ├─ semver@7.3.2
+│  ├─ string-width@4.2.0
+│  └─ supports-color@7.1.0
+├─ react-native-device-info@5.6.3
+├─ react-native-iap@4.5.0
+├─ react-native-image-pan-zoom@2.1.12
+├─ react-native-image-zoom-viewer@2.2.27
+├─ react-native-open-share@0.1.0
+├─ react-native-safe-area-view@0.14.9
+├─ react-native-splash-screen@3.2.0
+├─ react-native-tab-view@2.15.0
+├─ react-native-update@5.6.0
+├─ react-native-vector-icons@6.7.0
+├─ react-native-video@5.0.2
+├─ react-native-webview@7.6.0
+│  └─ escape-string-regexp@2.0.0
+├─ react-navigation-stack@1.10.3
+├─ react-navigation-tabs@2.9.0
+│  ├─ hoist-non-react-statics@3.3.2
+│  └─ react-is@16.13.1
+├─ react-navigation@4.4.0
+├─ react-timer-mixin@0.13.4
+├─ readable-stream@2.3.7
+├─ recursive-fs@2.1.0
+├─ shaka-player@2.5.14
+├─ simple-plist@1.1.0
+├─ smart-buffer@4.1.0
+├─ socks-proxy-agent@4.0.2
+│  └─ agent-base@4.2.1
+├─ socks@2.3.3
+├─ split-on-first@1.1.0
+├─ strict-uri-encode@2.0.0
+├─ superagent-proxy@2.0.0
+│  └─ debug@3.2.6
+├─ superagent@5.3.1
+│  ├─ mime@2.4.6
+│  ├─ readable-stream@3.6.0
+│  ├─ safe-buffer@5.2.1
+│  ├─ semver@7.3.2
+│  └─ string_decoder@1.3.0
+├─ thunkify@2.1.2
+├─ unpipe@1.0.0
+├─ util-deprecate@1.0.2
+├─ uuid@7.0.3
+├─ wrap-ansi@6.2.0
+│  ├─ ansi-styles@4.2.1
+│  ├─ color-convert@2.0.1
+│  ├─ color-name@1.1.4
+│  └─ string-width@4.2.0
+├─ xcode@3.0.1
+├─ xregexp@2.0.0
+├─ yargs-parser@18.1.3
+├─ yargs@15.4.1
+│  └─ string-width@4.2.0
+└─ yazl@2.5.1
+✨  Done in 124.19s.
+
