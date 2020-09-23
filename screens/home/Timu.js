@@ -762,7 +762,7 @@ export default class Timu extends Component {
 		// 一题多问，问题不显示序号
 		return (
             this.state.askList[index].ask ?
-                <HTMLView value={content} style={styles.htmlStyle} textComponentProps={textProps} />
+                <HTMLView value={content} style={[styles.htmlStyle, styles.title]} textComponentProps={textProps} />
                 : null
 		);
 	}
