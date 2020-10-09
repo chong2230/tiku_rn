@@ -92,3 +92,22 @@ clang: error: linker command failed with exit code 1 (use -v to see invocation)
 Showing Recent Messages
 Undefined symbol: _sqlite3_close
 
+3. [Android]Cannot fit requested classes in a single dex file. Try supplying a main-dex list.
+解决问题有3步
+步骤1
+在app module中的build.gradle中添加依赖
+implementation 'com.android.support:multidex:1.0.3'
+
+步骤2
+在app module中的build.gradle中的defaultConfig中添加以下代码
+multiDexEnabled true
+
+步骤3
+如果你自定义了Application需要在类中重写一个方法
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        // 主要是添加下面这句代码
+        MultiDex.install(this)
+    }
+    
+https://www.jianshu.com/p/95211b445154/

@@ -21,6 +21,7 @@ import Common from './utils/Common';
 import MyAlert from './components/Alert';
 import Toast from './components/Toast';
 import Colors from './constants/Colors';
+import AnalyticsUtil from './utils/AnalyticsUtil';
 
 const {appKey} = _updateConfig[Platform.OS];
 
@@ -50,6 +51,7 @@ class setup extends Component {
             };
             global.alert = () => {}
             global.isAudit = true;
+            AnalyticsUtil.onEvent('ntk_appstart');  // App启动统计事件
         }
     }
 

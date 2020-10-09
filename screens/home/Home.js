@@ -27,6 +27,7 @@ import Storage from '../../utils/Storage';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
 import CircleButton from "../../components/CircleButton";
 import MockData from '../../mockdata/mockdata';
+import AnalyticsUtil from '../../utils/AnalyticsUtil';
 
 const deviceW = Dimensions.get('window').width;
 const deviceH = Dimensions.get('window').height;
@@ -65,6 +66,7 @@ export default class Home extends Component {
         this.navigationEmitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
             self._load();
         });
+        AnalyticsUtil.onEvent('ntk_home');
     }
 
     _initData = () => {

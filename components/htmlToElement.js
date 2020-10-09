@@ -18,11 +18,11 @@ const defaultOpts = {
 
 const Img = props => {
   let width =
-    parseInt(props.attribs['width'], 10) || parseInt(props.attribs['data-width'], 10) || 40;
+    parseInt(props.attribs['width'], 10) || parseInt(props.attribs['data-width'], 10) || 0;
   let height =
     parseInt(props.attribs['height'], 10) ||
     parseInt(props.attribs['data-height'], 10) ||
-    40;
+    0;
   // 自适应屏幕
   const margin = parseInt(props.attribs['margin'], 10) || 30;
   // console.log('style: ', props.attribs['style']);

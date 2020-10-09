@@ -13,7 +13,7 @@ import {
     Image,
     ScrollView,
     TouchableOpacity,
-    Dimensions,
+    Dimensions, Platform
 } from 'react-native';
 
 import Bar from '../../components/Bar';
@@ -87,6 +87,7 @@ export default class Goods extends Component {
     }
 
     _renderItem = (data) => {
+        let unit = Platform.OS === 'ios' ? '余额' : '元';
         return (
             <TouchableOpacity onPress={()=>this._choose(data)} key={data.goodsId}>
             <View style={styles.item}>
@@ -94,7 +95,7 @@ export default class Goods extends Component {
                         require('../../images/icon/radio_selected.png') : require('../../images/icon/radio.png')}
                     style={styles.radioIcon} />
                 <Text style={styles.name}>{data.goodsName}</Text>
-                <Text style={styles.price}>价格：{data.price}余额</Text>
+                <Text style={styles.price}>价格：{data.price + unit}</Text>
             </View>
             </TouchableOpacity>
         );
@@ -140,6 +141,7 @@ export default class Goods extends Component {
     }
 
     render() {
+        let unit = Platform.OS === 'ios' ? '余额' : '元';
         return (
             <View style={styles.container}>
                 <Bar></Bar>
@@ -153,7 +155,7 @@ export default class Goods extends Component {
                     {this._renderRight()}
                 </ScrollView>
                 <View style={styles.bottom}>
-                    <Text style={styles.money}>金额：{this.state.cost}余额</Text>
+                    <Text style={styles.money}>金额：{this.state.cost + unit}</Text>
                     <Button disabled={this.state.selected == 0}
                             text={'去购买'}
                             style={styles.buyBtn}

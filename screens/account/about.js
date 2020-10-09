@@ -27,7 +27,11 @@ export default class About extends Component {
         // 初始状态
         this.state = {
             token: null,
-            info: {}
+            info: {},
+            tel: '',
+        	email: 'service@youzhi.tech',
+        	account: '有知教育',//I18n.t('common.name')
+            qq: '878332066'
         };
     }
 
@@ -42,6 +46,10 @@ export default class About extends Component {
     }
 
     render() {
+        let telItem;
+        if (this.state.tel) {
+            telItem = <DisplayItem txt1='联系电话' txt2={this.state.tel} showRight={true} onPress={()=>this.linking('tel:'+this.state.tel)}/>;
+        }
         return (
             <View style={styles.container}>
                 <View style={styles.top}>
@@ -52,6 +60,10 @@ export default class About extends Component {
                     <Text style={styles.versionLabel}>版本信息</Text>
                     <Text style={styles.versionValue}>{DeviceInfo.getVersion()}</Text>
                 </View>
+                {/* {telItem}
+                <DisplayItem txt1='联系邮箱' txt2={this.state.email} />
+                <DisplayItem txt1='公众号' txt2={this.state.account} />  
+                <DisplayItem txt1='官方QQ客服群' txt2={this.state.qq} />  */}
                 <SettingItem txt1 = '联系我们' onPress={this._contact}/>
                 <SettingItem txt1 = '服务条款' onPress={this._service}/>
                 <View style={{flex: 1}}></View>

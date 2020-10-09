@@ -419,6 +419,13 @@ export default class Common {
         })
     }
 
+    // Android购买
+    static buyAndroid(params, cb) {
+        Common.httpRequest('/pay/pay', params).then((result)=>{
+            cb(result);
+        })
+    }
+
     // 获取用户信息
     static getAccount(cb) {
         Common.httpRequest('/user/info', {

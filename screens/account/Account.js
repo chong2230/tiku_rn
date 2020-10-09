@@ -10,7 +10,7 @@ import {
     Image,
     TouchableOpacity,
     ScrollView,
-    DeviceEventEmitter, Linking
+    DeviceEventEmitter, Linking, Platform
 } from 'react-native';
 
 import AccountItem from '../../components/AccountItem';
@@ -20,6 +20,7 @@ import { TabbarSafeBottomMargin } from '../../utils/Device';
 import Button from "../../components/Button";
 import Alert from '../../components/Alert';
 import Colors from "../../constants/Colors";
+import AnalyticsUtil from '../../utils/AnalyticsUtil';
 
 export default class Account extends Component {
 
@@ -65,6 +66,7 @@ export default class Account extends Component {
         this.memberEmitter = DeviceEventEmitter.addListener('memberChange', (data) => {
             if (global.token) self._getUserMember();
         });
+        AnalyticsUtil.onEvent('ntk_my');
     }
 
     _load = () => {
@@ -218,7 +220,7 @@ export default class Account extends Component {
     }
 
     _onPressMember = () => {
-        if (this.state.member) {
+        if (this.state.member && this.state.member > 1) {
             this.alert.show();
         } else {
             this._goGoods();
@@ -244,7 +246,7 @@ export default class Account extends Component {
         }
         let name = this.state.info.nickName;
         if (name) {
-            name += this.state.member ? '（会员）' : '（普通用户）';
+            name += this.state.member && this.state.member.level > 1 ? '（会员）' : '（普通用户）';
         } else {
             name = '未登录';
         }
@@ -279,7 +281,9 @@ export default class Account extends Component {
                         </View>
                     </TouchableOpacity>                    
                     <View style={styles.separator}></View>
-                    <AccountItem txt1 = "账户" count={this.state.info.balance ? this.state.info.balance + '余额' : ''} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} />
+                    {
+                        Platform.OS === 'ios' ? <AccountItem txt1 = "账户" count={this.state.info.balance ? this.state.info.balance + '余额' : ''} source = {require('../../images/account/nick.png')} onPress={()=>this._onPress(1)} /> : null
+                    }                    
                     {!global.isAudit ? <AccountItem txt1 = "礼券" count={this.state.ticket} source = {require('../../images/account/ticket.png')} onPress={()=>this._onPress(3)} /> : null}
                     <AccountItem txt1 = "已购试卷" source = {require('../../images/account/star.png')} onPress={()=>this._onPress(2)} />
                     {shareView}
@@ -304,7 +308,7 @@ export default class Account extends Component {
                     titleText="会员权益"
                     titleFontSize={16}
                     titleFontWeight={"bold"}
-                    desText={this.state.member ? this.state.member.comments + '\n\n有效期：\n' +
+                    desText={this.state.member && this.state.member.level > 1 ? this.state.member.comments + '\n\n有效期：\n' +
                          this.state.member.validStart + '~' + this.state.member.validEnd : ''}
                     showCancelBtn={false}
                     okFontColor={'#4789F7'}

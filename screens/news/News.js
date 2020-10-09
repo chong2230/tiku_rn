@@ -24,6 +24,7 @@ import Common from '../../utils/Common';
 import MockData from '../../mockdata/mockdata';
 import {formateMinSec, formatDate} from '../../utils/Util';
 import { TabbarSafeBottomMargin } from '../../utils/Device';
+import AnalyticsUtil from '../../utils/AnalyticsUtil';
 
 const deviceW = Dimensions.get('window').width;
 // const len = 280;
@@ -52,6 +53,7 @@ export default class News extends Component<{}> {
         this.navigationEmitter = DeviceEventEmitter.addListener('navigationStateChange', (data) => {
             self._load();
         });
+        AnalyticsUtil.onEvent('ntk_news');
     }
 
     _load = () => {

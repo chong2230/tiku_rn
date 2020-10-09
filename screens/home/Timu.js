@@ -594,6 +594,7 @@ export default class Timu extends Component {
             case '问答题':
             case '设计题':
 			case '论文题':	
+			case '论述题':
                 return this._renderShortAnswerQuestions();
 			default:
 				// 单选题、单项选择题、多选题、多项选择题、不定项、不定项题、不定项选择题、判断题
@@ -762,7 +763,7 @@ export default class Timu extends Component {
 		// 一题多问，问题不显示序号
 		return (
             this.state.askList[index].ask ?
-                <HTMLView value={content} style={[styles.htmlStyle, styles.title]} textComponentProps={textProps} />
+                <HTMLView value={content} style={styles.htmlStyle} textComponentProps={textProps} />
                 : null
 		);
 	}
@@ -900,7 +901,10 @@ export default class Timu extends Component {
             startY: 0,            
             endX: 0,
             endY: 0
-        };
+		};
+		let textProps = {
+            style: styles.commentHtmlTextStyle
+        }
 		return (
 			<View style={styles.container}>
 				<Bar></Bar> 
@@ -940,7 +944,7 @@ export default class Timu extends Component {
 						{tip == '' ? null : <Text style={{color: Colors.special}}>{' ' + tip}</Text>}
 					</Text>
 					{/* { info.name ? <Text style={styles.title}>{this.state.index+ '. ' + name}</Text> : null } */}
-					{ info.name ? <HTMLView value={this.state.index+ '. ' + name} style={[styles.htmlStyle, styles.title]} />  : null }					
+					{ info.name ? <HTMLView value={this.state.index+ '. ' + name} style={[styles.htmlStyle, styles.title]}  textComponentProps={textProps} />  : null }					
 					{this._renderQuestions()}
 					{this.state.showAnalyse[this.state.index - 1] ? this._renderAnalysis() : null}
 				</ScrollView>

@@ -11,7 +11,7 @@ import {
     StatusBar,
     Alert,
     Dimensions,
-    DeviceEventEmitter
+    DeviceEventEmitter, Platform
 } from 'react-native';
 
 import Header from '../../components/Header';
@@ -116,7 +116,7 @@ export default class Balance extends Component {
         if (this.state.voucherId) {
             cost -= this.state.voucher.price;
         }
-     	if (this.state.money < cost) {
+     	if (Platform.OS === 'ios' && this.state.money < cost) {
     		const { navigate } = this.props.navigation;
         	navigate('Recharge', {isVisible: false, title: '账户', refresh: (money)=>{
         		// 更新余额
@@ -134,6 +134,10 @@ export default class Balance extends Component {
     }
 
     _buy = () => {
+        if (Platform.OS === 'android') {
+            this._buyAndroid();
+            return;
+        }
     	const { state } = this.props.navigation;
 
     	let params = {
@@ -160,9 +164,27 @@ export default class Balance extends Component {
     	});
     }
 
+    _buyAndroid = () => {
+        let params = {
+            productId: this.state.goods.goodsId,
+            orderNo: this.orderNo,
+            typeId: 1   // 支付方式,1-支付宝；2-微信；3-支付宝沙箱测试
+        };
+        if (this.state.voucherId) params.userVoucherId = this.state.voucherId;
+    	Common.buyAndroid(params, (result)=>{
+            console.log(result);
+            if (result.code == 0) {
+                this.aliPayAction(result.data.prePayId);            	
+            } else {
+                this.refs.toast.show(result.msg);
+            }
+    	});
+    }
+
     async aliPayAction(payStr){
         //payStr为从后台获取的支付字符串
          Alipay.pay(payStr).then((data) =>{
+             console.log('pay: ', data);
             let resultDic = {};
         /*笔者iOS端和安卓端返回的支付回调结果数据不一致，可能和支付宝sdk版本有关，
         读者可自行根据返回数据进行相关处理，iOS(RCTAlipay.m)和安卓(AlipayModule)
@@ -173,9 +195,25 @@ export default class Balance extends Component {
                  resultDic = data;
              }
              if (resultDic.resultStatus == '9000'){
-                 //支付成功
+                 //支付成功                
+                Alert.alert('', '购买成功', [
+    			    {text: '确定', onPress: () => {
+                        const { state, goBack } = this.props.navigation;
+                        if (state.params.refresh instanceof Function) {
+                            state.params.refresh();
+                        }
+                        goBack(state.params.returnKey);
+                        // navigate("ColumnDetail", {id: params.columnId}); // 该方法跳转回专栏详情，不会请求数据
+    			    }},
+    			  ]);
+                DeviceEventEmitter.emit('memberChange');
              }else {
                  //支付失败
+                 Alert.alert('', '购买失败', [
+    			    {text: '确定', onPress: () => {
+                        
+    			    }},
+    			  ]);
              }
          }).catch((err) => {
              console.log('err='+err);
@@ -183,20 +221,21 @@ export default class Balance extends Component {
          });
      }
 
-    render() {      
+    render() {  
+        const unit = Platform.OS === 'ios' ? '余额' : '元';
     	let goods = this.state.goods;
         let name = goods.goodsName || goods.title; // 适配name和title
     	let btnTxt;
         let cost = goods.price;
         let ticketLabel = '无可用礼券';
         if (this.state.voucherId) {
-            ticketLabel = this.state.voucher.title + this.state.voucher.price + '余额';
+            ticketLabel = this.state.voucher.title + this.state.voucher.price + unit;
             cost -= this.state.voucher.price;
             if (cost < 0) cost = 0;
         } else if (this.state.tickets.length > 0) {
             ticketLabel = '有' + this.state.tickets.length + '张礼券';
         }
-        if (this.state.money < cost) {
+        if (Platform.OS === 'ios' && this.state.money < cost) {
             btnTxt = '余额不足，请充值';
         } else {
             btnTxt = '购买';
@@ -214,7 +253,7 @@ export default class Balance extends Component {
                     <View style={styles.right}>
                     	<Text style={styles.title}>{name}</Text>
                     	<View style={styles.costStyle}>
-                    		<Text style={styles.cost}>{goods.price}余额</Text>
+                    		<Text style={styles.cost}>{goods.price + unit}</Text>
                     		<Text style={styles.multiple}>x1</Text>
                     	</View>                        
                     </View>
@@ -231,17 +270,21 @@ export default class Balance extends Component {
                 <View style={styles.needPay}>
                 	<Text style={styles.emptyLabel}></Text>
                 	<Text style={styles.costLabel}>需付款：</Text>
-                	<Text style={styles.costPrice}>{cost}余额</Text>
+                	<Text style={styles.costPrice}>{cost + unit}</Text>
                 </View>   
                 <View style={styles.separator} />
-                <View style={styles.balanceStyle}>
-                	{/*<Icon name="copyright" size={px2dp(15)} color={Colors.highlight} style={styles.rmIcon} />*/}
-                	<Text style={styles.money}>余额：{this.state.money}余额</Text>
-                	<Icon name="check-circle" size={px2dp(15)} color={Colors.special} style={styles.check} />
-                </View>
-                <View style={styles.pays}>
-                    <Text>支付宝</Text>
-                </View>
+                {
+                    Platform.OS === 'ios' ?
+                    <View style={styles.balanceStyle}>
+                        {/*<Icon name="copyright" size={px2dp(15)} color={Colors.highlight} style={styles.rmIcon} />*/}
+                        <Text style={styles.money}>余额：{this.state.money}余额</Text>
+                        <Icon name="check-circle" size={px2dp(15)} color={Colors.special} style={styles.check} />
+                    </View> : 
+                    <View style={styles.payStyle}>
+                        <Text style={styles.payLabel}>支付方式：支付宝</Text>
+                        <Icon name="check-circle" size={px2dp(15)} color={Colors.special} style={styles.check} />
+                    </View>
+                }
                 <View style={styles.separator} />
                 {!global.isAudit ? <Text style={styles.tip}>提示：礼券不与其他优惠同享</Text> : null}
                 <Button text={btnTxt} onPress={this._handle} 
@@ -348,6 +391,17 @@ const styles = StyleSheet.create({
     	marginLeft: 10
     },
     money: {
+    	flex: 1,
+    	fontSize: 15,
+    	marginLeft: 20
+    },
+    payStyle: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        height: 50
+    },
+    payLabel: {
     	flex: 1,
     	fontSize: 15,
     	marginLeft: 20

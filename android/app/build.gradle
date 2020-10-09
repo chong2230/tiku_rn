@@ -132,11 +132,12 @@ android {
         applicationId "com.tiku_rn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 9
-        versionName "1.3.7"
+        versionCode 10
+        versionName "1.3.8"
         ndk{
-            abiFilters "armeabi-v7a"
+            abiFilters "armeabi-v7a", "x86"
         }
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -201,15 +202,27 @@ dependencies {
 //    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
     implementation project(':react-native-video')
 
-
     // 友盟基础组件库（所有友盟业务SDK都依赖基础组件库）
-//    implementation  'com.umeng.umsdk:common:2.1.0'
+// OAID目前为目前国内市场主流的Android Q设备标识，可根据需要选择。
+//    implementation "com.umeng.umsdk:common:9.1.0" //（必选）
+//    implementation "com.umeng.umsdk:asms:1.1.3" // asms包依赖(必选)
+//    implementation "com.umeng.umsdk:crash:0.0.4" // native crash包依赖(必选)
+//    implementation "com.umeng.umsdk:oaid_lenovo:1.0.0" // (可选)
+//    implementation "com.umeng.umsdk:oaid_mi:1.0.0" // (可选)
+//    implementation "com.umeng.umsdk:oaid_oppo:1.0.4" // (可选)
+//    implementation "com.umeng.umsdk:oaid_vivo:1.0.0.1" // (可选)
 
-    // 下面各SDK根据宿主App是否使用相关业务按需引入。
-    // 友盟统计SDK
-//    implementation  'com.umeng.umsdk:analytics:8.1.3'
+    implementation files("libs/umeng-common-9.1.6.jar")
+    implementation files("libs/umeng-asms-armeabi-v1.1.3.aar")
+    implementation files("libs/umeng-crash-armeabi-v0.0.5.aar")
+
+// 下面各SDK根据宿主App是否使用相关业务按需引入。
+// 友盟统计SDK
+//    implementation "com.umeng.umsdk:game:9.1.0+G" // 游戏统计SDK依赖(可选)
 
     implementation (name: 'alipaySdk-15.7.9-20200727142846', ext: 'aar')
+
+    implementation 'com.android.support:multidex:1.0.3'
 
     if (enableHermes) {
         def hermesPath = "../../node_modules/hermes-engine/android/";

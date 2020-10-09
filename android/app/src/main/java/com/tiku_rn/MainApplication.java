@@ -9,11 +9,14 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.tiku_rn.bridge.AlipayPackage;
+import com.tiku_rn.bridge.AnalyticsPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-//import com.umeng.commonsdk.UMConfigure;
+import com.umeng.commonsdk.UMConfigure;
+import com.umeng.analytics.MobclickAgent;
 //import com.umeng.soexample.invokenative.RNUMConfigure;
+import com.tiku_rn.bridge.RNUMConfigure;
 //import com.umeng.socialize.PlatformConfig;
 //import com.tiku_rn.bridge.DplusReactPackage;
 
@@ -34,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
 //           packages.add(new DplusReactPackage());
             packages.add(new AlipayPackage());
+            packages.add(new AnalyticsPackage());
 
           return packages;
         }
@@ -54,8 +58,9 @@ public class MainApplication extends Application implements ReactApplication {
     super.onCreate();
      SoLoader.init(this, /* native exopackage */ false);
       //初始化组件化基础库, 所有友盟业务SDK都必须调用此初始化接口。
-    //建议在宿主App的Application.onCreate函数中调用基础组件库初始化函数。
-//      RNUMConfigure.init(this, "5e4282db65b5ec273b5ae8e0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
+      RNUMConfigure.init(this, "5e4282db65b5ec273b5ae8e0", "Umeng", UMConfigure.DEVICE_TYPE_PHONE, "");
+      //选择AUTO页面采集模式，统计SDK基础指标无需手动埋点可自动采集。
+      MobclickAgent.setPageCollectionMode(MobclickAgent.PageMode.AUTO);
     initializeFlipper(this); // Remove this line if you don't want Flipper enabled
   }
 

@@ -22,7 +22,7 @@ export default class Contact extends Component {
         this.state = {
         	tel: '',
         	email: 'service@youzhi.tech',
-        	account: '有知学堂',//I18n.t('common.name')
+        	account: '有知教育',//I18n.t('common.name')
           qq: '878332066'
         };
     }

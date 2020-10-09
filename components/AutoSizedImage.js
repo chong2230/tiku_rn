@@ -24,10 +24,13 @@ export default class AutoSizedImage extends PureComponent {
 
   componentDidMount() {
     //avoid repaint if width/height is given
+    console.log('this.props.style.width ', this.props.style.width);
     if (this.props.style.width || this.props.style.height) {
       return;
     }
+    // 会出现第一次加载时图片不显示的问题
     Image.getSize(this.props.source.uri, (w, h) => {
+      console.log(w, h);
       this.setState({width: w, height: h});
     });
   }
@@ -52,8 +55,10 @@ export default class AutoSizedImage extends PureComponent {
       finalSize
     );
     let source = {};
+    console.log('finalSize.width ', finalSize.width);
     if (!finalSize.width || !finalSize.height) {
       source = Object.assign(source, this.props.source, this.state);
+      return null;
     } else {
       source = Object.assign(source, this.props.source, finalSize);
     }
