@@ -105,15 +105,12 @@ https://static.youzhi.tech/assets/app/download.html
 
 
 #### 屏幕截图
+
 ![图1](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/1.png)
+
 ![图2](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/2.png)
+
 ![图3](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/3.png)
+
 ![图4](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/4.png)
-![图5](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/5.png)
-![图6](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/6.png)
-![图7](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/7.png)
-![图8](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/8.png)
-![图9](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/9.png)
-![图10](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/10.png)
-![图11](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/11.png)
-![图12](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/12.png)
+
