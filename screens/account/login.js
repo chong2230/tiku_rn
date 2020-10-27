@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    AppRegistry,
     StyleSheet,
     Text,
     TextInput,
@@ -139,11 +138,9 @@ export default class Login extends Component {
         return (
             <View style={styles.container}>
                 <Bar />
-                {/*<Navigator1 leftText = '返回' centerText = '密码登录'  rightText = '' leftAction = {()=>this.leftAction()} rightAction = {() => this.rightAction()}/>*/}
                 <Header
                     leftBtnIsHidden={true}
                     title={'登录'}
-                    // goBack={()=>{this.leftAction()}}
                     rightSource={require('../../images/account/loginDismiss.png')}
                     onRight={()=>{
                         this.leftAction();

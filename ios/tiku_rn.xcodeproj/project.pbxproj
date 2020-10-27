@@ -852,7 +852,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development: yuanyong wei (HC533M5KTV)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U42K255SH7;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -914,7 +914,7 @@
 				CODE_SIGN_ENTITLEMENTS = "tiku_rn/有知学堂.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 27;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_TEAM = U42K255SH7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

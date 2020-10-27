@@ -1,23 +1,55 @@
 # tiku_rn
 
 #### 介绍
-题库RN版
+有知学堂App
 
 #### 软件架构
-软件架构说明
+软件架构说明 
+React Native 0.61.4
 
+#### 环境说明
+Xcode 11.3 
+Android Studio 3.6.3
+
+#### 第三方依赖
+"@react-native-community/cameraroll": "^1.5.2",
+"htmlparser2-without-node-native": "^3.9.2",
+"react": "16.9.0",
+"react-native": "0.61.4",
+"react-native-device-info": "^5.4.0",
+"react-native-gesture-handler": "^1.5.0",
+"react-native-iap": "^4.3.0",
+"react-native-image-picker": "^1.1.0",
+"react-native-image-zoom-viewer": "^2.2.27",
+"react-native-open-share": "git+https://github.com/mozillo/react-native-open-share.git",
+"react-native-reanimated": "^1.4.0",
+"react-native-screens": "^1.0.0-alpha.23",
+"react-native-splash-screen": "^3.2.0",
+"react-native-update": "^5.6.0",
+"react-native-vector-icons": "^6.6.0",
+"react-native-video": "^5.0.2",
+"react-native-webview": "^7.5.2",
+"react-navigation": "^4.0.10",
+"react-navigation-stack": "^1.10.3",
+"react-navigation-tabs": "^2.5.6",
+"react-timer-mixin": "^0.13.4"
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1. git clone xxx/tiku_rn
+2. cd tiku_rn
+3. npm install
+4. react-native run-ios
 
 #### 使用说明
 
 1.  xxxx
 2.  xxxx
 3.  xxxx
+
+#### 屏幕截图
+![PC效果图](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/1.png)
+![H5效果图](https://gitee.com/chong2230/tiku_rn/raw/master/screenshot/2.png)
 
 #### 参与贡献
 
@@ -27,11 +59,9 @@
 4.  新建 Pull Request
 
 
-#### 码云特技
+#### 写在最后
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+有知学堂App已上线，可在App Store和官网上下载。
+官网地址：https://www.youzhi.tech
+有知题库地址：https://www.youzhi.tech/shiti
+

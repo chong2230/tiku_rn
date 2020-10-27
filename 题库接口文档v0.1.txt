@@ -1,4 +1,6 @@
-题库接口文档v0.2
+题库接口文档v0.2（废弃，未使用）
+实际接口参考：https://practice.youzhi.tech/swagger-ui.html
+
 v0.2 修改点：
 1. /home/list接口中添加subtype
 

@@ -83,7 +83,8 @@ export default  class ThirdPartyLogin extends Component {
             }
         });
         let systemVersion = DeviceInfo.getSystemVersion();
-        if (Platform.OS == 'ios' && compareVer(systemVersion, '13.0') >= 0) {
+        // 审核期间不显示苹果登录按钮
+        if (Platform.OS == 'ios' && !global.isAudit && compareVer(systemVersion, '13.0') >= 0) {
             this.setState({
                 showAppleBtn: true
             })

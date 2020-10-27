@@ -145,21 +145,18 @@ export default class Common {
 
     static getBanners(params, cb) {
         Common.httpRequest('/home/slide', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
 
     static getHomeFunc(params, cb) {
         Common.httpRequest('/home/functions', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
 
     static getHomeMy(params, cb) {
         Common.httpRequest('/home/my', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -168,7 +165,6 @@ export default class Common {
     static getSubjectList(params, cb) {
         let url = params.from == 'purchase' ? '/pay/hadBuyPapers' : '/home/functionInfo';
         Common.httpRequest(url, params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -176,7 +172,6 @@ export default class Common {
     // 获取考试科目
     static getExamList(params, cb) {
         Common.httpRequest('/course/list', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -184,7 +179,6 @@ export default class Common {
     // 获取参加的考试（专业列表）
     static getCategoryList(params, cb) {
         Common.httpRequest('/profession/list', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -192,7 +186,6 @@ export default class Common {
     // 获取课程
     static getClassesList(params, cb) {
         Common.httpRequest('/course/curriculumList', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -200,7 +193,6 @@ export default class Common {
     // 获取题目列表
     static getTimuList(params, cb) {
         Common.httpRequest('/question/list', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -208,7 +200,6 @@ export default class Common {
     // 获取答题卡信息
     static getScantron(params, cb) {
         Common.httpRequest('/question/scantron', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -216,7 +207,6 @@ export default class Common {
     // 获取题目
     static getTimu(params, cb) {
         Common.httpRequest('/question/info', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -224,7 +214,6 @@ export default class Common {
     // 获取题目解析
     static getTimuAnalyse(params, cb) {
         Common.httpRequest('/timu/analyse', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -232,7 +221,6 @@ export default class Common {
     // 收藏题目
     static collectTimu(params, cb) {
         Common.httpRequest('/question/collect', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -240,7 +228,6 @@ export default class Common {
     // 保存题目
     static saveTimu(params, cb) {
         Common.post('/question/saveDoRecord', params, 'application/json').then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -248,7 +235,6 @@ export default class Common {
     // 交卷
     static handlePaper(params, cb) {
         Common.httpRequest('/exam/submit', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -256,7 +242,6 @@ export default class Common {
     // 我的收藏
     static getMyCollect(params, cb) {
         Common.httpRequest('/question/collection', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -264,7 +249,6 @@ export default class Common {
     // 我的做题记录
     static getMyRecord(params, cb) {
         Common.httpRequest('/question/doRecord', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -272,7 +256,6 @@ export default class Common {
     // 获取错题列表
     static getWrongTimuList(params, cb) {
         Common.httpRequest('/question/wrong', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -280,7 +263,6 @@ export default class Common {
     // 获取正确题目列表
     static getCorrectTimuList(params, cb) {
         Common.httpRequest('/exam/detail/rightQuestions', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -288,7 +270,6 @@ export default class Common {
     // 获取错误题目列表
     static getIncorrectTimuList(params, cb) {
         Common.httpRequest('/exam/detail/wrongQuestions', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -296,7 +277,6 @@ export default class Common {
     // 获取未做列表
     static getUndoTimuList(params, cb) {
         Common.httpRequest('/exam/detail/undoQuestions', params).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -305,7 +285,6 @@ export default class Common {
         Common.httpRequest('/home/list', {
             pageSize: 4
         }).then((result)=>{
-            // console.log(result);
             cb(result);
         })
     }
@@ -455,7 +434,6 @@ export default class Common {
         Common.httpRequest('/recharge/list', {
             
         }).then((result)=>{
-            // result = Mockdata['/recharge/list'];
             cb(result);
         })
     }   
@@ -577,7 +555,6 @@ export default class Common {
     // 我的留言
     static getMyMessages(params, cb) {
         Common.httpRequest('/comment/my', params).then((result)=>{
-            // console.log('message ', result);
             cb(result);
         })
     }

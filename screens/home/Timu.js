@@ -119,6 +119,7 @@ export default class Timu extends Component {
 			questionId: id,
 			paperId: state.params.id || state.params.paperId
 		};
+		// 签名，未打开
 		// let cloneParams = Object.assign({}, params, {dt: params.dt + '', nonce: params.nonce + ''});
 		// if (ApiUtilBridgeModule) {
   //           ApiUtilBridgeModule.getSignature(cloneParams).then((sign)=>{
@@ -189,6 +190,7 @@ export default class Timu extends Component {
 		global.mLoadingComponentRef && global.mLoadingComponentRef.setState({ showLoading: bool });
 	}
 
+	// 后台返回的数据改版过一次，需要进行转化
 	_convertAnswers = (list) => {
 		let currentAnswers = [];
 		for (let i in list) {
@@ -288,7 +290,6 @@ export default class Timu extends Component {
             }
             currentAnswers[index] = answers.join('');
 		}
-		// console.log(currentAnswers);
         this.setState({
             currentAnswers: currentAnswers,
         });
@@ -395,7 +396,7 @@ export default class Timu extends Component {
 					list: list
 				});
                 if (this.state.info.type == '单选题'|| this.state.info.type == '单项选择题'
-					|| this.state.info.type == '判断题') {
+					|| this.state.info.type == '判断题' && (this.state.info.choices.length == 1)) {
                 	clearTimeout(this.nextTimeout);
                 	this.nextTimeout = setTimeout(()=>{
                         this._getNext();
@@ -414,6 +415,7 @@ export default class Timu extends Component {
         return this.state.currentAnswers;
 	}
 
+	// 显示答题卡
 	_showCard = () => {
 		this.setState({
 			showModal: true,
@@ -431,7 +433,6 @@ export default class Timu extends Component {
 				paperId: state.params.id,
 			};
 			Common.getScantron(params, (result)=>{
-				// console.log('getTimuList ', result);
 				if (result.code == 0) {
 					this.isFetchScantron = true;
 					this.setState({
@@ -457,11 +458,13 @@ export default class Timu extends Component {
         });
     }
 
+	// 选择要做的题目
     _chooseTimu = (index) => {
     	let id = this.state.list[index-1].id;
 		this._getTimu(id, index);
     }
 
+	// 交卷
     _handlePaper = () => {
     	let info = this.state.info;
 		let params = {
@@ -477,7 +480,6 @@ export default class Timu extends Component {
 	            if (state.params.callback instanceof Function) {
                     state.params.callback(3);
                 }
-                console.log('handlePaper ', result.data);
 	            navigate('Report', {info: JSON.stringify(result.data), 
 	            	paperId: info.paperId, returnKey: state.key, isVisible: false});
 			} else if (result.code == 2) {
@@ -523,6 +525,7 @@ export default class Timu extends Component {
 		}
 	}
 
+	// 查看图片
     _goViewImage = (data) => {
         if (data) {
         	let imgs = data.split(',');
@@ -540,8 +543,8 @@ export default class Timu extends Component {
         }
 	}
 
+	// 保存图片
     savePhoto(url) {
-		console.log('savePhoto ', url);
         let promise = CameraRoll.saveToCameraRoll(url);
         promise.then(function (result) {
             alert("已保存到系统相册")
@@ -1047,7 +1050,6 @@ const styles = StyleSheet.create({
     htmlStyle: {
         flex: 1,
         flexDirection: 'column',
-        // padding: 10,
         marginVertical: 5,
         backgroundColor: 'white'
     },
@@ -1071,7 +1073,6 @@ const styles = StyleSheet.create({
         color: '#1a1a1a',
         width: width - 30,
 		height: 44,
-        // marginRight: 15,
         padding: 3,
         borderColor: '#e2e3e4',
         borderWidth: 0.5,
@@ -1081,7 +1082,6 @@ const styles = StyleSheet.create({
 		height: 300
 	},
 	analyseView: {
-		// height: 20,
 		marginTop: 10,
 		marginBottom: 10
 	},
@@ -1093,17 +1093,13 @@ const styles = StyleSheet.create({
 	},
 	analyseAnswer: {
 		fontSize: 16,
-		// height: 20,
         color: Colors.highlight,
         width: width - 20,
-        // marginTop: 10,
-        // marginBottom: 10,
         paddingRight: 10
 	},
 	analyseContent: {
 		width: width - 20,
 		fontSize: 16,
-		// height: 20,
         lineHeight: 20,
 		marginTop: 10,
         paddingRight: 10

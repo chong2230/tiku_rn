@@ -101,23 +101,14 @@ export default class AccountLogoff extends Page {
     }
 
     render() {
-        let info = this.state.info;
-        // let label1 = '申请注销前，你的账号需要满足以下条件：';
-        let day = global.hesitation_period;
         let label1 = '帐号一旦被注销将不可恢复，请你在操作之前自行备份帐号相关的所有信息和数据。注销帐号，你将无法再使用本帐号，也将无法找回你帐号及与帐号相关的任何内容或信息（即使你使用相同的手机号码再次注册并使用）。'
-        // let alertTip = '·若审核通过，'+day+'天后你的账号将被注销，同时手机号、第三方授权释放。\n' + '\n' +
-        //     '·如需放弃，'+day+'天内再次登录，按照指引操作即可放弃注销。';
         let alertTip = '您的账号将被注销，同时手机号、第三方授权释放。您确定要注销吗？';
         return (
             <View style={styles.container}>
                 <Bar />
                 {this._renderNavBar()}
                 <Text numberOfLines={10} style={styles.title}>{label1}</Text>
-                {/*{this._renderLabel('账号处于安全状态', '账号为正常使用中，且未发生过被盗、被封禁的限制。')}*/}
-                {/*{this._renderLabel('账号权限解除', '已解除与第三方账号的绑定关系，如微信、QQ等。')}*/}
-                {/*{this._renderLabel('账号无任何纠纷包括投诉举报')}*/}
                 <Text style={styles.tip}>重要提示：若账号内有账户余额等资产，注销账号后资产清零永久性无法找回！</Text>
-                {/*<View style={{flex: 1}}></View>*/}
                 {this._renderButtons()}
                 {this._renderAgree()}
                 <View style={styles.safeBottom}></View>
@@ -137,8 +128,6 @@ export default class AccountLogoff extends Page {
 
                 />
                 <Toast ref="toast" position="center" />
-                {/*<Toast ref={(ref)=>{this.iconToast = ref}} showIcon={true}*/}
-                       {/*position="center" style={{width: 160, height: 109}} />*/}
                 <ShadowToast ref={(ref)=>{this.iconToast = ref}}></ShadowToast>
             </View>
         );
