@@ -15,7 +15,7 @@
         "@react-native-community/cameraroll": "^1.5.2",
         "htmlparser2-without-node-native": "^3.9.2",
         "react": "16.9.0",
-        "react-native": "0.61.4",
+        "react-native": "0.62.3",
         "react-native-device-info": "^5.4.0",
         "react-native-gesture-handler": "^1.5.0",
         "react-native-iap": "^4.3.0",
